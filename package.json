@@ -7,6 +7,10 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "bootstrap": "^4.6.0",
+    "electron-is-dev": "^1.1.0",
+    "electron-log": "^3.0.8",
+    "electron-settings": "^3.2.0",
+    "electron-updater": "^4.3.8",
     "list-react-files": "^0.2.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
@@ -16,16 +20,12 @@
     "react-icons": "^4.2.0",
     "react-scripts": "4.0.2",
     "styled-components": "^5.2.1",
-    "web-vitals": "^1.0.1",
-    "electron-is-dev": "^1.1.0",
-    "electron-log": "^3.0.8",
-    "electron-settings": "^3.2.0",
-    "electron-updater": "^3.2.3"
+    "web-vitals": "^1.0.1"
   },
   "devDependencies": {
     "concurrently": "^4.1.2",
     "electron": "^6.0.7",
-    "electron-builder": "^20.34.0",
+    "electron-builder": "^20.44.4",
     "wait-on": "^3.3.0"
   },
   "scripts": {

@@ -1,0 +1,97 @@
+.table{
+    overflow: auto;
+    table-layout: auto !important;
+  }
+
+tbody {
+  white-space: normal;
+}
+
+th {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: white;
+  color: black;
+  outline: 1px solid #dee2e6;
+  outline-offset: -1px;
+}
+
+/*.table-container {
+  height: 10em;
+}
+table {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+  width: 100%;
+}
+table thead {
+  flex: 0 0 auto;
+  width: calc(100% - 0.9em);
+}
+table tbody {
+  flex: 1 1 auto;
+  display: block;
+  overflow-y: scroll;
+}
+table tbody tr {
+  width: 100%;
+}
+table thead, table tbody tr {
+  display: table;
+  table-layout: fixed;
+}*/
+
+
+  .caret {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: 2px;
+    vertical-align: middle;
+    border-top: 4px dashed;
+    border-top: 4px solid \9;
+    border-right: 4px solid transparent;
+    border-left: 4px solid transparent;
+  }
+  
+  .dropup .caret, .navbar-fixed-bottom .dropdown .caret {
+    border-top: 0;
+    border-bottom: 4px dashed;
+    border-bottom: 4px solid \9;
+    content: "";
+  }
+/*.table {
+    overflow: auto;
+    display: block;
+    table-layout: auto;
+}*/
+
+.scrolling-wrapper {
+    overflow-x: scroll;
+    overflow-y: scroll;
+    white-space: nowrap;
+    height:calc(100vh - 172px);
+}
+
+.expandedRow {
+	/*flex: 0 0 40px;*/
+  max-width: 95vw;
+  max-height: 75vh;
+	height: 60vh;
+	position: -webkit-sticky;
+	position: sticky;
+	left: 0;
+  /*overflow-y: scroll;*/
+  white-space: normal;
+}
+
+.expandedRowFileViewer {
+  height: 100%;
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-height: 100%;
+  max-width: 600px;
+  min-width: 350px;
+}

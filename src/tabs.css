@@ -1,0 +1,36 @@
+.nav {
+    display: block;
+    white-space: nowrap;
+    overflow-x: scroll;
+    overflow-y: hidden;
+}
+
+.nav-item {
+    position: relative;
+    display: inline-block;
+    /*padding: 0.5rem 1rem;*/
+}
+
+.tab-content {
+    height: 95%;
+}
+
+.tab-pane {
+    height: inherit;
+}
+
+/*.nav-link.active {
+    padding: 0;
+}*/
+
+.nav-link {
+    padding: 0;
+}
+
+#closeTab {
+    position: absolute;
+    color: red;
+    top: 0px;
+    right: -0px;
+    padding-left: 4px;
+}

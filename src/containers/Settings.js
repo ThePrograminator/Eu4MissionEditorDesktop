@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState} from 'react';
 import { Button, Tab, Container, Row, Col, ListGroup } from 'react-bootstrap';
 import Reader from '../Reader';
 
@@ -8,6 +8,8 @@ const ipcRenderer = electron.ipcRenderer;
 var path = require('path');
 
 const Settings = (props) => {
+	const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(0);
+
 	ipcRenderer.on('update-available', (event) => {
 		console.log('Settings update-available');
 		console.log('Settings update-available', event);
@@ -21,10 +23,8 @@ const Settings = (props) => {
 		console.log('handleCheckUpdate');
 		//ipcRenderer.send('checking-for-update');
 		//ipcRenderer.sendSync('runCommand', "check");
-		//const res = ipcRenderer.sendSync('runCommand', "check");
-		ipcRenderer.invoke('runCommand').then((result) => {
-			console.log('response', result);
-		});
+		const res = ipcRenderer.sendSync('runCommand');
+		console.log('response', res);
 	};
 
 	return (

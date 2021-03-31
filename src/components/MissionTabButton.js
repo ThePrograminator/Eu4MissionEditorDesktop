@@ -14,7 +14,7 @@ const MissionTabButton = (props) => {
   const [id, setID] = useState(props.id);
   return (
     <OverlayTrigger
-      placement="right"
+      placement="bottom"
       delay={{ show: 250, hide: 400 }}
       overlay={<Tooltip id="button-tooltip">{props.toolTipText}</Tooltip>}
     >

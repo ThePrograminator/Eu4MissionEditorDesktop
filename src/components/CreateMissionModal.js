@@ -4,7 +4,7 @@ import { Modal, Button, Form, FormControl } from "react-bootstrap";
 
 const CreateMissionModal = (props) => {
   const [fileName, setFileName] = useState("");
-  const [validated, setValidated] = useState(true);
+  const [validated, setValidated] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
   const handleInput = (event) => {
@@ -74,6 +74,7 @@ const CreateMissionModal = (props) => {
         <Button
           variant="primary"
           onClick={() => (props.setShow(0), props.createFile(fileName))}
+          disabled={!validated}
         >
           Create Mission File
         </Button>

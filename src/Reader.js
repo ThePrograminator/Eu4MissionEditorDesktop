@@ -17,11 +17,8 @@ const singleVariableMapping = [
 let seriesId = 0;
 let missionId = 0;
 
-let id = 1;
-const getFileId = () => `file_${(id++).toString()}`;
-
 const Reader = {
-  asyncHandleFile: async (file, callback) => {
+  asyncHandleFile: async (file, availableId, callback) => {
     const fileContent = fs.readFileSync(file).toString();
     const correctedPath = file.replace(/\\/g, "/");
     var fileName = path.basename(correctedPath);
@@ -79,7 +76,7 @@ const Reader = {
     );
     const connections = Reader.createConnections(allMissions);
     const newMissionTab = {
-      id: getFileId(),
+      id: availableId,
       name: fileName.substring(0, fileName.indexOf(".")),
       fileName: fileName + extName,
       series: allSeries,

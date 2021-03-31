@@ -200,11 +200,6 @@ const MissionTab = (props) => {
                     Add Mission
                   </Button>
                 </Col>
-                <Col lg={5}>
-                  <Button onClick={onExport} className="mb-2">
-                    Export Mission tree
-                  </Button>
-                </Col>
               </Form.Row>
             </Form>
           </div>

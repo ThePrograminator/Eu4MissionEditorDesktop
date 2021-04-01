@@ -1,6 +1,6 @@
-import React, { useState} from 'react';
+import React, { useState } from 'react';
 import { Button, Tab, Container, Row, Col, ListGroup } from 'react-bootstrap';
-import Reader from '../Reader';
+import UpdateModal from '../components/UpdateModal';
 
 const electron = window.require('electron');
 const appVersion = electron.remote.app.getVersion();
@@ -8,23 +8,15 @@ const ipcRenderer = electron.ipcRenderer;
 var path = require('path');
 
 const Settings = (props) => {
-	const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(0);
+	const [ showUpdateModal, setShowUpdateModal ] = useState(false);
+	const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
 
-	ipcRenderer.on('update-available', (event) => {
-		console.log('Settings update-available');
-		console.log('Settings update-available', event);
-	});
-	ipcRenderer.on('update-not-available', (event) => {
-		console.log('Settings update-not-available');
-		console.log('Settings update-not-available', event);
-	});
 	//ipcRenderer.sendto(,'checking-for-update');
 	const handleCheckUpdate = () => {
 		console.log('handleCheckUpdate');
-		//ipcRenderer.send('checking-for-update');
-		//ipcRenderer.sendSync('runCommand', "check");
-		const res = ipcRenderer.sendSync('runCommand');
-		console.log('response', res);
+		setShowUpdateModal(true);
+		//const res = ipcRenderer.sendSync('runCommand');
+		//console.log('response', res);
 	};
 
 	return (
@@ -57,6 +49,12 @@ const Settings = (props) => {
 					</Tab.Content>
 				</Col>
 			</Row>
+			<UpdateModal
+				isCheckingForUpdate={isCheckingForUpdate}
+				setIsCheckingForUpdate={setIsCheckingForUpdate}
+				showUpdateModal={showUpdateModal}
+				setShowUpdateModal={setShowUpdateModal}
+			/>
 		</Tab.Container>
 	);
 };

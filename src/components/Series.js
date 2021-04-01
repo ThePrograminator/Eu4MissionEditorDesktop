@@ -95,6 +95,8 @@ const Series = (props) => {
             aria-label="slot"
             value={slot}
             aria-describedby="basic-addon1"
+            min ={1}
+            max ={5}
             onChange={(evt) => setSlot(parseInt(evt.target.value))}
           />
           <Form.Text className="text-muted">

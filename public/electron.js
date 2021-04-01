@@ -26,8 +26,40 @@ autoUpdater.on('checking-for-update', () => {
 });
 
 ipcMain.on('runCommand', async (event, arg) => {
-	console.log('Checking for updates...');
-	event.returnValue = 'Checking for Updates';
+	console.log('test...');
+	const result = autoUpdater.checkForUpdates();
+	console.log('past check...');
+	result
+		.then((checkResult) => {
+			const { updateInfo } = checkResult;
+			console.log('updateInfo...', updateInfo);
+			event.returnValue = updateInfo;
+			//sender.send(IPCConstants.CHECK_FOR_UPDATE_SUCCESS, updateInfo);
+		})
+		.catch((error) => {
+			console.log('error...', error);
+			event.returnValue = error;
+			//sender.send(IPCConstants.CHECK_FOR_UPDATE_FAILURE);
+		});
+});
+
+ipcMain.on('check-for-update', async (event, arg) => {
+	console.log('Check for updates...');
+	async = () => {
+		console.log('test...');
+		const result = autoUpdater.checkForUpdates();
+
+		result
+			.then((checkResult) => {
+				const { updateInfo } = checkResult;
+				console.log('updateInfo...', updateInfo);
+				//sender.send(IPCConstants.CHECK_FOR_UPDATE_SUCCESS, updateInfo);
+			})
+			.catch((error) => {
+				console.log('error...', error);
+				//sender.send(IPCConstants.CHECK_FOR_UPDATE_FAILURE);
+			});
+	};
 });
 
 autoUpdater.on('update-available', (info) => {
@@ -57,7 +89,7 @@ autoUpdater.on('update-downloaded', (info) => {
 });
 
 autoUpdater.on('error', (error) => {
-	console.log(error);
+	console.log('error', error);
 	//sendStatusToWindow("Error in auto-updater. " + error);
 });
 
@@ -90,9 +122,9 @@ function createWindow() {
     settings.set("quessColumnFilters", false);
   }*/
 
-	if (isDev) {
-		mainWindow.webContents.openDevTools();
-	}
+	//if (isDev) {
+	mainWindow.webContents.openDevTools();
+	//}
 
 	mainWindow.setMenuBarVisibility(false);
 

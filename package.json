@@ -1,6 +1,6 @@
 {
   "name": "eu4missioneditordesktop",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -11,6 +11,7 @@
     "electron-log": "^3.0.8",
     "electron-settings": "^3.2.0",
     "electron-updater": "^4.3.8",
+    "is-online": "^9.0.0",
     "list-react-files": "^0.2.0",
     "react": "^17.0.1",
     "react-bootstrap": "^1.4.3",
@@ -62,7 +63,9 @@
     "target": "NSIS",
     "publish": [
       {
-        "provider": "github"
+        "provider": "github",
+        "owner": "ThePrograminator",
+        "repo": "Eu4MissionEditorDesktop"
       }
     ],
     "files": [

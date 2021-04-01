@@ -189,6 +189,7 @@ const Mission = (props) => {
           aria-label="position"
           value={position}
           aria-describedby="basic-addon1"
+          min={1}
           onChange={(evt) => setPosition(evt.target.value)}
         />
         <Form.Text className="text-muted">

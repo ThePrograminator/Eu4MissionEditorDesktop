@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 
 import { Modal, Spinner, Container, Row, ProgressBar, Button } from 'react-bootstrap';
 
+import UpdateBody from './UpdateBody';
+import UpdateButton from './UpdateButton';
+
 const electron = window.require('electron');
 
 const ipcRenderer = electron.ipcRenderer;
@@ -14,8 +17,10 @@ const UpdateModal = (props) => {
 	const [ checkedUpdate, setCheckedUpdate ] = useState(false);
 	const [ isUpdateAvailable, setIsUpdateAvailable ] = useState(false);
 	const [ isDownloadingUpdate, setIsDownloadingUpdate ] = useState(false);
+	const [ newVersion, setNewVersion ] = useState(null);
 
 	ipcRenderer.on('download-progress', (event, data) => {
+		setIsDownloadingUpdate(true);
 		setDownloadProgress(data);
 		console.log('Download Progress', data);
 	});
@@ -23,6 +28,7 @@ const UpdateModal = (props) => {
 	ipcRenderer.on('update-available', (event, info) => {
 		console.log('Settings update-available info', info);
 		console.log('Settings update-available', event);
+		setNewVersion(info);
 		setIsUpdateAvailable(true);
 		setCheckedUpdate(true);
 	});
@@ -62,6 +68,12 @@ const UpdateModal = (props) => {
 		})();
 	};
 
+	const showDialog = () => {
+		if (isUpdateAvailable && checkedUpdate) {
+			return true;
+		}
+	};
+
 	return (
 		<Modal
 			show={props.showUpdateModal || props.updateIsAvailable}
@@ -72,7 +84,32 @@ const UpdateModal = (props) => {
 				<Modal.Title>Eu4 Mission Editor Updater</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
-				<Container>
+				<UpdateBody
+					isUpdateAvailable={isUpdateAvailable}
+					checkedUpdate={checkedUpdate}
+					isDownloadingUpdate={isDownloadingUpdate}
+					newVersion={newVersion}
+					downloadProgress={downloadProgress}
+				/>
+			</Modal.Body>
+			<Modal.Footer>
+				<Button variant="secondary" onClick={handleClose} disabled={props.isCheckingForUpdate}>
+					Close
+				</Button>
+				<UpdateButton
+					handleClick={handleClick}
+					isDownloadingUpdate={isDownloadingUpdate}
+					isUpdateAvailable={isUpdateAvailable}
+					checkedUpdate={checkedUpdate}
+				/>
+			</Modal.Footer>
+		</Modal>
+	);
+};
+
+export default UpdateModal;
+/*
+<Container>
 					<Row
 						style={{
 							display: 'flex',
@@ -90,8 +127,6 @@ const UpdateModal = (props) => {
 							alignItems: 'center'
 						}}
 					>
-						<h3>checkedUpdate : {String(checkedUpdate)}</h3>
-						<h3>isUpdateAvailable : {String(isUpdateAvailable)}</h3>
 						<h3>
 							{isUpdateAvailable && checkedUpdate ? downloadProgress < 100 ? (
 								'Downloading...'
@@ -101,20 +136,4 @@ const UpdateModal = (props) => {
 								'Checking For Updates...'
 							)}
 						</h3>
-					</Row>
-					{props.updateIsAvailable ? <ProgressBar animated now={downloadProgress} /> : null}
-				</Container>
-			</Modal.Body>
-			<Modal.Footer>
-				<Button variant="secondary" onClick={handleClose} disabled={props.isCheckingForUpdate}>
-					Close
-				</Button>
-				<Button variant="primary" onClick={handleClick} disabled={props.isCheckingForUpdate}>
-					{props.isCheckingForUpdate ? 'Updating' : 'Check for Update'}
-				</Button>
-			</Modal.Footer>
-		</Modal>
-	);
-};
-
-export default UpdateModal;
+					</Row>*/

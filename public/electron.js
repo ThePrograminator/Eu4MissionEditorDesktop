@@ -27,20 +27,9 @@ autoUpdater.on('checking-for-update', () => {
 
 ipcMain.on('runCommand', async (event, arg) => {
 	console.log('test...');
-	const result = autoUpdater.checkForUpdates();
+	autoUpdater.checkForUpdates();
 	console.log('past check...');
-	result
-		.then((checkResult) => {
-			const { updateInfo } = checkResult;
-			console.log('updateInfo...', updateInfo);
-			event.returnValue = updateInfo;
-			//sender.send(IPCConstants.CHECK_FOR_UPDATE_SUCCESS, updateInfo);
-		})
-		.catch((error) => {
-			console.log('error...', error);
-			event.returnValue = error;
-			//sender.send(IPCConstants.CHECK_FOR_UPDATE_FAILURE);
-		});
+	event.returnValue = 'past check...';
 });
 
 ipcMain.on('check-for-update', async (event, arg) => {
@@ -67,7 +56,7 @@ autoUpdater.on('update-available', (info) => {
 	console.log('Version', info.version);
 	console.log('Release Date', info.releaseDate);
 	//sendStatusToWindow("Update available.");
-	mainWindow.webContents.send('update-available');
+	mainWindow.webContents.send(info);
 });
 
 autoUpdater.on('update-not-available', () => {

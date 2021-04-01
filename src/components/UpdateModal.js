@@ -20,8 +20,8 @@ const UpdateModal = (props) => {
 		console.log('Download Progress', data);
 	});
 
-	ipcRenderer.on('update-available', (event) => {
-		console.log('Settings update-available');
+	ipcRenderer.on('update-available', (event, info) => {
+		console.log('Settings update-available info', info);
 		console.log('Settings update-available', event);
 		setIsUpdateAvailable(true);
 		setCheckedUpdate(true);
@@ -57,7 +57,7 @@ const UpdateModal = (props) => {
 			console.log('check-for-update');
 			props.setIsCheckingForUpdate(true);
 			//ipcRenderer.sendSync('runCommand', "test");
-			const res = await ipcRenderer.sendSync('runCommand', "test");
+			const res = await ipcRenderer.sendSync('runCommand', 'test');
 			console.log(res);
 		})();
 	};
@@ -90,14 +90,10 @@ const UpdateModal = (props) => {
 							alignItems: 'center'
 						}}
 					>
+						<h3>checkedUpdate : {String(checkedUpdate)}</h3>
+						<h3>isUpdateAvailable : {String(isUpdateAvailable)}</h3>
 						<h3>
-						checkedUpdate : {String(checkedUpdate)}
-						</h3>
-						<h3>
-						isUpdateAvailable : {String(isUpdateAvailable)}
-						</h3>
-						<h3>
-							{props.updateIsAvailable ? downloadProgress < 100 ? (
+							{isUpdateAvailable && checkedUpdate ? downloadProgress < 100 ? (
 								'Downloading...'
 							) : (
 								'Update Downloaded, Starting Installer...'

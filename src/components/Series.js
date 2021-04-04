@@ -8,7 +8,6 @@ import {
   Tooltip,
 } from "react-bootstrap";
 import { SketchPicker } from "react-color";
-import RenderToolTip from "./RenderToolTip";
 import "../Editor.css";
 
 const Series = (props) => {

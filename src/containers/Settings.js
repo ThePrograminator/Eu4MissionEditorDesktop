@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Button, Tab, Container, Row, Col, ListGroup } from 'react-bootstrap';
-import UpdateModal from '../components/UpdateModal';
+import UpdateModal from '../components/Update/UpdateModal';
 
 const electron = window.require('electron');
 const appVersion = electron.remote.app.getVersion();

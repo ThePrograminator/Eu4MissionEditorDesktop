@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import MissionTab from './MissionTab';
-import MissionTabHeader from './MissionTabHeader';
 import MissionTabButton from '../components/MissionTabButton';
 import ExportMissionModal from '../components/Modals/ExportMissionModal';
 import CreateMissionModal from '../components/Modals/CreateMissionModal';
@@ -9,8 +7,6 @@ import RemoveMissionModal from '../components/Modals/RemoveMissionModal';
 import Reader from '../Reader';
 import Writer from '../Writer';
 import { Container, Row, Tabs, Tab, ButtonGroup, Button, ButtonToolbar, Nav, Col } from 'react-bootstrap';
-
-import '../tabs.css';
 
 import {
 	FaFileDownload,
@@ -26,10 +22,9 @@ const fs = electron.remote.require('fs');
 const dialog = electron.remote.dialog;
 var path = require('path');
 
-const inProgressIDMap = { import: 1, export: 2, create: 3, duplicate: 4, remove: 5 };
+const inProgressIDMap = { import: 1, export: 2, create: 3, duplicate: 4, remove: 5, addMission: 6 };
 
-const MissionList = (props) => {
-	const [ key, setKey ] = useState('home');
+const MissionTabHeader = (props) => {
 	const [ inProgressID, setinProgressID ] = useState(0);
 	const [ show, setShow ] = useState(0);
 
@@ -54,7 +49,11 @@ const MissionList = (props) => {
 				break;
 			//Remove
 			case 5:
-				handleRemoveMissionFile();
+                handleRemoveMissionFile();
+				break;
+			//Remove
+			case 6:
+				handleCreateMission();
 				break;
 			default:
 				break;
@@ -175,107 +174,82 @@ const MissionList = (props) => {
 		setShow(5);
 	};
 
+	const handleCreateMission = () => {
+		console.log('Create Mission');
+	};
+
 	return (
-		<Container fluid style={{ minHeight: 'inherit' }}>
-			<Tab.Container id="left-tabs-example" defaultActiveKey="first">
-				<Row style={{ marginBottom: '10px' }}>
-					<Col lg={true} className="mr-2">
-						<MissionTabHeader
-							missionTabs={props.missionTabs}
-							setMissionTabs={props.setMissionTabs}
-							getAvailableFileId={props.getAvailableFileId}
-						/>
-					</Col>
-				</Row>
-				{props.missionTabs.length > 0 ? (
-					<Row>
-						<Col sm={2}>
-							<Nav variant="pills" className="flex-column">
-								{props.missionTabs.map((missionTab) => {
-									console.log('MissionTabs loaded', props.missionTabs);
-									return (
-										<Nav.Item>
-											<Nav.Link eventKey={'missionTab_' + missionTab.id}>
-												{missionTab.name}
-											</Nav.Link>
-										</Nav.Item>
-									);
-								})}
-							</Nav>
-						</Col>
-						<Col lg={true}>
-							<Tab.Content>
-								{props.missionTabs.map((missionTab) => {
-									console.log('MissionTabs loaded', props.missionTabs);
-									return (
-										<Tab.Pane key={missionTab.name} eventKey={'missionTab_' + missionTab.id}>
-											<Container fluid style={{ minHeight: '78vh', maxHeight: '78vh' }}>
-												<Row style={{ minHeight: '78vh', maxHeight: '78vh' }}>
-													<MissionTab
-														missions={missionTab.missions}
-														series={missionTab.series}
-														edges={missionTab.edges}
-														missionTabs={props.missionTabs}
-														setMissionTabs={props.setMissionTabs}
-														fileID={missionTab.id}
-													/>
-												</Row>
-											</Container>
-										</Tab.Pane>
-									);
-								})}
-							</Tab.Content>
-						</Col>
-					</Row>
-				) : null}
-			</Tab.Container>
-		</Container>
+		<div>
+			<ButtonToolbar aria-label="Toolbar with button groups">
+				<ButtonGroup className="mr-2" aria-label="Second group">
+					<MissionTabButton
+						id={inProgressIDMap.create}
+						inProgress={inProgressID}
+						handleClick={handleClick}
+						buttonText={'Create Mission File'}
+						toolTipText={'Create Mission File'}
+						icon={<FaFileMedical />}
+					/>
+					<MissionTabButton
+						id={inProgressIDMap.duplicate}
+						inProgress={inProgressID}
+						handleClick={handleClick}
+						buttonText={'Duplicate Mission File'}
+						toolTipText={'Duplicate Mission File'}
+						icon={<FaFileImport />}
+					/>
+					<MissionTabButton
+						id={inProgressIDMap.remove}
+						inProgress={inProgressID}
+						handleClick={handleClick}
+						buttonText={'Remove Mission File'}
+						toolTipText={'Remove Mission File'}
+						icon={<FaFileExcel />}
+					/>
+				</ButtonGroup>
+				<ButtonGroup className="mr-2" aria-label="First group">
+					<MissionTabButton
+						id={inProgressIDMap.import}
+						inProgress={inProgressID}
+						handleClick={handleClick}
+						buttonText={'Import Mission File'}
+						toolTipText={'Import Mission File'}
+						icon={<FaFileDownload />}
+					/>
+					<MissionTabButton
+						id={inProgressIDMap.export}
+						inProgress={inProgressID}
+						handleClick={handleClick}
+						buttonText={'Export Mission File'}
+						toolTipText={'Export Mission File'}
+						icon={<FaFileUpload />}
+					/>
+				</ButtonGroup>
+
+                <div style={{borderLeft: "2px solid lightgrey"}}></div>
+
+                <ButtonGroup className="mr-2" aria-label="First group">
+					<MissionTabButton
+						id={inProgressIDMap.addMission}
+						inProgress={inProgressID}
+						handleClick={handleClick}
+						buttonText={'Add Mission'}
+						toolTipText={'Add Mission'}
+						icon={<FaFileDownload />}
+					/>
+				</ButtonGroup>
+			</ButtonToolbar>
+			<ExportMissionModal show={show} setShow={setShow} exportFile={exportFile} missionTabs={props.missionTabs} />
+			<CreateMissionModal show={show} setShow={setShow} createFile={createFile} missionTabs={props.missionTabs} />
+			<RemoveMissionModal show={show} setShow={setShow} removeFile={removeFile} missionTabs={props.missionTabs} />
+			<DuplicateMissionModal
+				show={show}
+				setShow={setShow}
+				duplicateFile={duplicateFile}
+				missionTabs={props.missionTabs}
+			/>
+		</div>
 	);
 };
 
-export default MissionList;
-
-/*
-
-
-<NodeEditor
-                        missions={props.missions}
-                        setMissions={props.setMissions}
-                        series={props.series}
-                        setSeries={props.setSeries}
-                        edges={props.edges}
-                      />
-                      */
-
-/*
-					  {props.missionTabs.length > 0 ? (
-				<div>
-					<hr />
-					<Tabs defaultActiveKey="createMissionFile" id="uncontrolled-tab-example">
-						{props.missionTabs.map((missionTab) => {
-							console.log('MissionTabs loaded', props.missionTabs);
-							return (
-								<Tab
-									key={missionTab.name}
-									eventKey={'missionTab_' + missionTab.id}
-									title={missionTab.name}
-									style={{ minHeight: 'inherit' }}
-								>
-									<Container fluid style={{ minHeight: '90vh' }}>
-										<Row style={{ minHeight: '90vh' }}>
-											<MissionTab
-												missions={missionTab.missions}
-												series={missionTab.series}
-												edges={missionTab.edges}
-												missionTabs={props.missionTabs}
-												setMissionTabs={props.setMissionTabs}
-												fileID={missionTab.id}
-											/>
-										</Row>
-									</Container>
-								</Tab>
-							);
-						})}
-					</Tabs>
-				</div>
-			) : null}*/
+export default MissionTabHeader;

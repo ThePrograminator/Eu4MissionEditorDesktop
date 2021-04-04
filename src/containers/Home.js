@@ -25,12 +25,12 @@ const Home = (props) => {
 					<Container
 						fluid
 						style={{
-							minHeight: '90vh',
+							minHeight: '78vh',
 							padding: '20px',
 							paddingLeft: '0px'
 						}}
 					>
-						<Row style={{ minHeight: '90vh' }}>
+						<Row style={{ minHeight: '78vh' }}>
 							<MissionTabList
 								missionTabs={missionTabs}
 								setMissionTabs={setMissionTabs}
@@ -40,8 +40,8 @@ const Home = (props) => {
 					</Container>
 				</Tab>
 				<Tab eventKey="settings" title="Settings" style={{ minHeight: 'inherit' }}>
-					<Container fluid style={{ minHeight: '90vh' }}>
-						<Row style={{ minHeight: '90vh' }}>
+					<Container fluid style={{ minHeight: '78vh' }}>
+						<Row style={{ minHeight: '78vh' }}>
 							<Settings
 								setMissions={setMissions}
 								setSeries={setSeries}

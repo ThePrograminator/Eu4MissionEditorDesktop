@@ -10,6 +10,7 @@ import ReactFlow, {
 } from "react-flow-renderer";
 import { Button, Form, Col } from "react-bootstrap";
 import Writer from "../Writer";
+import AddMissionModal from "../components/Modals/AddMissionModal";
 
 import CodeEditor from "./CodeEditor";
 import "../Provider.css";
@@ -131,12 +132,12 @@ const MissionTab = (props) => {
     }
   };
 
-  const onAdd = useCallback(() => {
+  const onAdd = useCallback((name) => {
     console.log("Elements start", elements);
     const newNode = {
       id: getNodeId(),
       data: {
-        label: "sadfasdf",
+        label: name,
       },
       position: {
         x: 0,
@@ -156,16 +157,6 @@ const MissionTab = (props) => {
     console.log("Elements End", elements);
   }, [setElements]);
 
-  const onExport = useCallback(() => {
-    const fileData = Writer.exportMissionTree(series, elements);
-    const blob = new Blob([fileData], { type: "text/plain" });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.download = "filename.txt";
-    link.href = url;
-    link.click();
-  }, []);
-
   const onUpdate = useCallback(() => {
     console.log("OnUpdate elements", elements)
     let missionTabsCopy = [...props.missionTabs];
@@ -184,25 +175,6 @@ const MissionTab = (props) => {
     <div className="providerflow">
       <ReactFlowProvider>
         <div className="reactflow-wrapper">
-          <div style={{ position: "static", left: 10, top: 10, zIndex: 4 }}>
-            <Form>
-              <Form.Row className="align-items-center">
-                <Col lg={true} style={{ maxWidth: "350px" }}>
-                  <Form.Group controlId="formMissionName" className="mb-2">
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter Mission Name"
-                    />
-                  </Form.Group>
-                </Col>
-                <Col lg={2}>
-                  <Button onClick={onAdd} className="mb-2">
-                    Add Mission
-                  </Button>
-                </Col>
-              </Form.Row>
-            </Form>
-          </div>
           <ReactFlow
             elements={elements}
             elementsSelectable={true}
@@ -236,6 +208,12 @@ const MissionTab = (props) => {
           onUpdate={onUpdate}
         />
       </ReactFlowProvider>
+      <AddMissionModal
+				show={props.show}
+				setShow={props.setShow}
+        addMission={onAdd}
+				missions={elements}
+			/>
     </div>
   );
 };

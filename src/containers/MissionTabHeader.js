@@ -8,6 +8,8 @@ import Reader from '../Reader';
 import Writer from '../Writer';
 import { Container, Row, Tabs, Tab, ButtonGroup, Button, ButtonToolbar, Nav, Col } from 'react-bootstrap';
 
+import InProgressIDMap from "../InProgressIDMap";
+
 import {
 	FaFileDownload,
 	FaFileUpload,
@@ -22,12 +24,8 @@ const fs = electron.remote.require('fs');
 const dialog = electron.remote.dialog;
 var path = require('path');
 
-const inProgressIDMap = { import: 1, export: 2, create: 3, duplicate: 4, remove: 5, addMission: 6 };
-
 const MissionTabHeader = (props) => {
-	const [ inProgressID, setinProgressID ] = useState(0);
-	const [ show, setShow ] = useState(0);
-
+	
 	const handleClick = (id) => {
 		console.log('clicked id', id);
 		switch (id) {
@@ -72,7 +70,7 @@ const MissionTabHeader = (props) => {
 			]
 		});
 		if (!files) return;
-		setinProgressID(inProgressIDMap.import);
+		props.setinProgressID(InProgressIDMap.import);
 
 		const file = files[0];
 
@@ -80,7 +78,7 @@ const MissionTabHeader = (props) => {
 
 		Reader.asyncHandleFile(file, props.getAvailableFileId(), (allMissionTabs) => {
 			props.setMissionTabs((els) => els.concat(allMissionTabs));
-			setinProgressID(0);
+			props.setinProgressID(0);
 		});
 	};
 
@@ -104,10 +102,10 @@ const MissionTabHeader = (props) => {
 		var window = electron.remote.getCurrentWindow();
 		dialog.showSaveDialog(window, options).then(({ filePath }) => {
 			if (!filePath) return;
-			setinProgressID(inProgressIDMap.export);
+			props.setinProgressID(InProgressIDMap.export);
 			console.log('saving');
 			fs.writeFileSync(filePath, fileData, 'utf-8');
-			setinProgressID(0);
+			props.setinProgressID(0);
 		});
 	};
 
@@ -153,29 +151,31 @@ const MissionTabHeader = (props) => {
 	const handleExportMissionFile = () => {
 		console.log('Export Mission');
 		//saveFile();
-		setShow(2);
+		props.setShow(2);
 	};
 
 	const handleCreateMissionFile = () => {
 		console.log('Added Mission');
 
-		setShow(3);
+		props.setShow(3);
 	};
 
 	const handleDuplicateMissionFile = () => {
 		console.log('Duplicate Mission');
 
-		setShow(4);
+		props.setShow(4);
 	};
 
 	const handleRemoveMissionFile = () => {
 		console.log('Removed Mission');
 
-		setShow(5);
+		props.setShow(5);
 	};
 
 	const handleCreateMission = () => {
 		console.log('Create Mission');
+
+		props.setShow(6);
 	};
 
 	return (
@@ -183,24 +183,24 @@ const MissionTabHeader = (props) => {
 			<ButtonToolbar aria-label="Toolbar with button groups">
 				<ButtonGroup className="mr-2" aria-label="Second group">
 					<MissionTabButton
-						id={inProgressIDMap.create}
-						inProgress={inProgressID}
+						id={InProgressIDMap.create}
+						inProgress={props.inProgressID}
 						handleClick={handleClick}
 						buttonText={'Create Mission File'}
 						toolTipText={'Create Mission File'}
 						icon={<FaFileMedical />}
 					/>
 					<MissionTabButton
-						id={inProgressIDMap.duplicate}
-						inProgress={inProgressID}
+						id={InProgressIDMap.duplicate}
+						inProgress={props.inProgressID}
 						handleClick={handleClick}
 						buttonText={'Duplicate Mission File'}
 						toolTipText={'Duplicate Mission File'}
 						icon={<FaFileImport />}
 					/>
 					<MissionTabButton
-						id={inProgressIDMap.remove}
-						inProgress={inProgressID}
+						id={InProgressIDMap.remove}
+						inProgress={props.inProgressID}
 						handleClick={handleClick}
 						buttonText={'Remove Mission File'}
 						toolTipText={'Remove Mission File'}
@@ -209,16 +209,16 @@ const MissionTabHeader = (props) => {
 				</ButtonGroup>
 				<ButtonGroup className="mr-2" aria-label="First group">
 					<MissionTabButton
-						id={inProgressIDMap.import}
-						inProgress={inProgressID}
+						id={InProgressIDMap.import}
+						inProgress={props.inProgressID}
 						handleClick={handleClick}
 						buttonText={'Import Mission File'}
 						toolTipText={'Import Mission File'}
 						icon={<FaFileDownload />}
 					/>
 					<MissionTabButton
-						id={inProgressIDMap.export}
-						inProgress={inProgressID}
+						id={InProgressIDMap.export}
+						inProgress={props.inProgressID}
 						handleClick={handleClick}
 						buttonText={'Export Mission File'}
 						toolTipText={'Export Mission File'}
@@ -230,8 +230,8 @@ const MissionTabHeader = (props) => {
 
 				<ButtonGroup className="mr-2" aria-label="First group">
 					<MissionTabButton
-						id={inProgressIDMap.addMission}
-						inProgress={inProgressID}
+						id={InProgressIDMap.addMission}
+						inProgress={props.inProgressID}
 						handleClick={handleClick}
 						buttonText={'Add Mission'}
 						toolTipText={'Add Mission'}
@@ -239,12 +239,12 @@ const MissionTabHeader = (props) => {
 					/>
 				</ButtonGroup>
 			</ButtonToolbar>
-			<ExportMissionModal show={show} setShow={setShow} exportFile={exportFile} missionTabs={props.missionTabs} />
-			<CreateMissionModal show={show} setShow={setShow} createFile={createFile} missionTabs={props.missionTabs} />
-			<RemoveMissionModal show={show} setShow={setShow} removeFile={removeFile} missionTabs={props.missionTabs} />
+			<ExportMissionModal show={props.show} setShow={props.setShow} exportFile={exportFile} missionTabs={props.missionTabs} />
+			<CreateMissionModal show={props.show} setShow={props.setShow} createFile={createFile} missionTabs={props.missionTabs} />
+			<RemoveMissionModal show={props.show} setShow={props.setShow} removeFile={removeFile} missionTabs={props.missionTabs} />
 			<DuplicateMissionModal
-				show={show}
-				setShow={setShow}
+				show={props.show}
+				setShow={props.setShow}
 				duplicateFile={duplicateFile}
 				missionTabs={props.missionTabs}
 			/>

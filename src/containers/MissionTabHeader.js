@@ -49,7 +49,7 @@ const MissionTabHeader = (props) => {
 				break;
 			//Remove
 			case 5:
-                handleRemoveMissionFile();
+				handleRemoveMissionFile();
 				break;
 			//Remove
 			case 6:
@@ -226,9 +226,9 @@ const MissionTabHeader = (props) => {
 					/>
 				</ButtonGroup>
 
-                <div style={{borderLeft: "2px solid lightgrey"}}></div>
+				<div className="mr-2" style={{ borderLeft: '2px solid lightgrey' }} />
 
-                <ButtonGroup className="mr-2" aria-label="First group">
+				<ButtonGroup className="mr-2" aria-label="First group">
 					<MissionTabButton
 						id={inProgressIDMap.addMission}
 						inProgress={inProgressID}

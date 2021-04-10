@@ -6,7 +6,7 @@ import DuplicateMissionModal from '../components/Modals/DuplicateMissionModal';
 import RemoveMissionModal from '../components/Modals/RemoveMissionModal';
 import Reader from '../Reader';
 import Writer from '../Writer';
-import { Container, Row, Tabs, Tab, ButtonGroup, Button, ButtonToolbar, Nav, Col } from 'react-bootstrap';
+import { ButtonGroup, ButtonToolbar } from 'react-bootstrap';
 
 import InProgressIDMap from '../InProgressIDMap';
 
@@ -16,7 +16,7 @@ import {
 	FaFileImport,
 	FaFileMedical,
 	FaFileExcel,
-	FaFileMedicalAlt
+	FaPlusSquare
 } from 'react-icons/fa';
 
 const electron = window.require('electron');
@@ -232,7 +232,7 @@ const MissionTabHeader = (props) => {
 						handleClick={handleClick}
 						buttonText={'Add Mission'}
 						toolTipText={'Add Mission'}
-						icon={<FaFileDownload />}
+						icon={<FaPlusSquare />}
 						disabled={props.missionTabs.length === 0 || props.fileKey == null}
 					/>
 				</ButtonGroup>

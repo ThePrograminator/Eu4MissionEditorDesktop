@@ -8,7 +8,7 @@ import Reader from '../Reader';
 import Writer from '../Writer';
 import { Container, Row, Tabs, Tab, ButtonGroup, Button, ButtonToolbar, Nav, Col } from 'react-bootstrap';
 
-import InProgressIDMap from "../InProgressIDMap";
+import InProgressIDMap from '../InProgressIDMap';
 
 import {
 	FaFileDownload,
@@ -25,7 +25,6 @@ const dialog = electron.remote.dialog;
 var path = require('path');
 
 const MissionTabHeader = (props) => {
-	
 	const handleClick = (id) => {
 		console.log('clicked id', id);
 		switch (id) {
@@ -113,10 +112,6 @@ const MissionTabHeader = (props) => {
 		console.log('name', name);
 		let missionTabsCopy = [ ...props.missionTabs ];
 
-		/*var length = 0;
-		if (missionTabsCopy.length !== 0) length = missionTabsCopy.length + 1;
-		var id = `file_${length.toString()}`;*/
-
 		const newMissionTab = {
 			id: props.getAvailableFileId(),
 			name: name,
@@ -197,6 +192,7 @@ const MissionTabHeader = (props) => {
 						buttonText={'Duplicate Mission File'}
 						toolTipText={'Duplicate Mission File'}
 						icon={<FaFileImport />}
+						disabled={props.missionTabs.length === 0}
 					/>
 					<MissionTabButton
 						id={InProgressIDMap.remove}
@@ -205,6 +201,7 @@ const MissionTabHeader = (props) => {
 						buttonText={'Remove Mission File'}
 						toolTipText={'Remove Mission File'}
 						icon={<FaFileExcel />}
+						disabled={props.missionTabs.length === 0}
 					/>
 				</ButtonGroup>
 				<ButtonGroup className="mr-2" aria-label="First group">
@@ -223,11 +220,11 @@ const MissionTabHeader = (props) => {
 						buttonText={'Export Mission File'}
 						toolTipText={'Export Mission File'}
 						icon={<FaFileUpload />}
+						disabled={props.missionTabs.length === 0}
 					/>
 				</ButtonGroup>
 
 				<div className="mr-2" style={{ borderLeft: '2px solid lightgrey' }} />
-
 				<ButtonGroup className="mr-2" aria-label="First group">
 					<MissionTabButton
 						id={InProgressIDMap.addMission}
@@ -236,12 +233,28 @@ const MissionTabHeader = (props) => {
 						buttonText={'Add Mission'}
 						toolTipText={'Add Mission'}
 						icon={<FaFileDownload />}
+						disabled={props.missionTabs.length === 0 || props.fileKey == null}
 					/>
 				</ButtonGroup>
 			</ButtonToolbar>
-			<ExportMissionModal show={props.show} setShow={props.setShow} exportFile={exportFile} missionTabs={props.missionTabs} />
-			<CreateMissionModal show={props.show} setShow={props.setShow} createFile={createFile} missionTabs={props.missionTabs} />
-			<RemoveMissionModal show={props.show} setShow={props.setShow} removeFile={removeFile} missionTabs={props.missionTabs} />
+			<ExportMissionModal
+				show={props.show}
+				setShow={props.setShow}
+				exportFile={exportFile}
+				missionTabs={props.missionTabs}
+			/>
+			<CreateMissionModal
+				show={props.show}
+				setShow={props.setShow}
+				createFile={createFile}
+				missionTabs={props.missionTabs}
+			/>
+			<RemoveMissionModal
+				show={props.show}
+				setShow={props.setShow}
+				removeFile={removeFile}
+				missionTabs={props.missionTabs}
+			/>
 			<DuplicateMissionModal
 				show={props.show}
 				setShow={props.setShow}

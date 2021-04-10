@@ -9,7 +9,7 @@ const SeriesEditor = (props) => {
     const newNode = {
       id: id,
       name: "new Series",
-      slot: 0,
+      slot: 1,
       generic: false,
       ai: true,
       hasCountryShield: false,

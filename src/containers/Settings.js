@@ -9,7 +9,7 @@ var path = require('path');
 
 const Settings = (props) => {
 	const [ showUpdateModal, setShowUpdateModal ] = useState(false);
-	const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
+	//const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
 
 	//ipcRenderer.sendto(,'checking-for-update');
 	const handleCheckUpdate = () => {
@@ -50,8 +50,6 @@ const Settings = (props) => {
 				</Col>
 			</Row>
 			<UpdateModal
-				isCheckingForUpdate={isCheckingForUpdate}
-				setIsCheckingForUpdate={setIsCheckingForUpdate}
 				showUpdateModal={showUpdateModal}
 				setShowUpdateModal={setShowUpdateModal}
 			/>

@@ -1,6 +1,6 @@
 {
   "name": "eu4missioneditordesktop",
-  "version": "1.0.3",
+  "version": "1.0.5",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -30,11 +30,12 @@
     "wait-on": "^3.3.0"
   },
   "scripts": {
+    "start electron": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && C:/Users/Christian/Documents/Eu4MissionEditorDesktop/build/electon .\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron-dev": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-dev": "concurrently \"SET BROWSER=none&&npm start\" \"wait-on http://localhost:3000 && electron .\" --enable-logging",
     "electron-pack": "electron-builder -c.extraMetadata.main=build/electron.js",
     "publish": "electron-builder -c.extraMetadata.main=build/electron.js -p always",
     "preelectron-pack": "yarn build"
@@ -65,7 +66,8 @@
       {
         "provider": "github",
         "owner": "ThePrograminator",
-        "repo": "Eu4MissionEditorDesktop"
+        "repo": "Eu4MissionEditorDesktop",
+        "channel": "latest"
       }
     ],
     "files": [

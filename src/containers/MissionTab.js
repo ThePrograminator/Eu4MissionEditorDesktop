@@ -8,6 +8,10 @@ import ReactFlow, {
 	Background,
 	isNode
 } from 'react-flow-renderer';
+
+import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
+import MissionTabButton from '../components/MissionTabButton';
+
 import AddMissionModal from '../components/Modals/AddMissionModal';
 
 import CodeEditor from './CodeEditor';
@@ -29,6 +33,30 @@ const MissionTab = (props) => {
 	const [ elements, setElements ] = useState([]);
 	const [ selectedElement, setSelectedElement ] = useState(null);
 	const [ series, setSeries ] = useState(props.series);
+
+	const [ closed, setClosed ] = useState({
+		maxWidth: '40%',
+		visibility: 'visible',
+		maxHeight: '-webkit-fill-available'
+	});
+
+	const handleClose = () => {
+		console.log('Clicked Closed');
+		if (closed.maxWidth === '40%')
+			setClosed({
+				...closed,
+				maxWidth: '5%',
+				visibility: 'hidden'
+			});
+		else
+			setClosed({
+				...closed,
+				maxWidth: '40%',
+				visibility: 'visible'
+			});
+		console.log(closed);
+	};
+
 	const onConnect = (params) =>
 		setElements((els) => (console.log('newConnection:', params), applyEdgeStyle(params), addEdge(params, els)));
 	useEffect(
@@ -183,7 +211,16 @@ const MissionTab = (props) => {
 						<Background style={{ borderStyle: 'solid' }} />
 					</ReactFlow>
 				</div>
+				<div style={{ minHeight: '100%', margin: 'auto' }}>
+					<MissionTabButton
+						handleClick={handleClose}
+						buttonText={closed.maxWidth === '40%' ? 'Shrink' : 'Expand'}
+						toolTipText={closed.maxWidth === '40%' ? 'Shrink' : 'Expand'}
+						icon={closed.maxWidth === '40%' ? <FaAngleRight /> : <FaAngleLeft />}
+					/>
+				</div>
 				<CodeEditor
+					closed={closed}
 					missions={elements}
 					setMissions={setElements}
 					selectedElement={selectedElement}

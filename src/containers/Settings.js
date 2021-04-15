@@ -1,63 +1,59 @@
-import React, { useState } from "react";
-import { Nav, Tab, Container, Row, Col, ListGroup } from "react-bootstrap";
-import UpdateModal from "../components/Update/UpdateModal";
-import Version from "./Settings/Version";
-import Preferences from "./Settings/Preferences";
+import React, { useState } from 'react';
+import { Nav, Tab, Container, Row, Col, ListGroup } from 'react-bootstrap';
+import UpdateModal from '../components/Update/UpdateModal';
+import Version from './Settings/Version';
+import Preferences from './Settings/Preferences';
 
-const electron = window.require("electron");
+const electron = window.require('electron');
 const appVersion = electron.remote.app.getVersion();
 const ipcRenderer = electron.ipcRenderer;
-var path = require("path");
+var path = require('path');
 
 const Settings = (props) => {
-  const [showUpdateModal, setShowUpdateModal] = useState(false);
-  //const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
+	const [ showUpdateModal, setShowUpdateModal ] = useState(false);
+	//const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
 
-  //ipcRenderer.sendto(,'checking-for-update');
-  const handleCheckUpdate = () => {
-    console.log("handleCheckUpdate");
-    setShowUpdateModal(true);
-    //const res = ipcRenderer.sendSync('runCommand');
-    //console.log('response', res);
-  };
+	//ipcRenderer.sendto(,'checking-for-update');
+	const handleCheckUpdate = () => {
+		console.log('handleCheckUpdate');
+		setShowUpdateModal(true);
+		//const res = ipcRenderer.sendSync('runCommand');
+		//console.log('response', res);
+	};
 
-  return (
-    <Container fluid style={{ minHeight: "inherit" }}>
-      <br />
-      <Tab.Container
-        unmountOnExit={true}
-        id="left-tabs-example"
-        defaultActiveKey="#link1"
-      >
-        <Row>
-          <Col sm={2}>
-            <Nav variant="pills" className="flex-column">
-              <Nav.Item>
-                <Nav.Link eventKey={"#link1"}>Version</Nav.Link>
-              </Nav.Item>
-              <Nav.Item>
-                <Nav.Link eventKey={"#link2"}>Preferences</Nav.Link>
-              </Nav.Item>
-            </Nav>
-          </Col>
-          <Col lg={true}>
-            <Tab.Content>
-              <Tab.Pane eventKey={"#link1"}>
-                <Version handleCheckUpdate={handleCheckUpdate} />
-              </Tab.Pane>
-              <Tab.Pane eventKey={"#link2"}>
-                <Preferences
-                  currentTheme={props.currentTheme}
-                  setCurrentTheme={props.setCurrentTheme}
-                  themesList={props.themesList}
-                />
-              </Tab.Pane>
-            </Tab.Content>
-          </Col>
-        </Row>
-      </Tab.Container>
-    </Container>
-  );
+	return (
+		<Container fluid style={{ minHeight: 'inherit' }}>
+			<br />
+			<Tab.Container unmountOnExit={true} id="left-tabs-example" defaultActiveKey="#link1">
+				<Row>
+					<Col sm={2}>
+						<Nav variant="pills" className="flex-column">
+							<Nav.Item>
+								<Nav.Link eventKey={'#link1'}>Version</Nav.Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Nav.Link eventKey={'#link2'}>Preferences</Nav.Link>
+							</Nav.Item>
+						</Nav>
+					</Col>
+					<Col lg={true}>
+						<Tab.Content>
+							<Tab.Pane eventKey={'#link1'}>
+								<Version handleCheckUpdate={handleCheckUpdate} />
+							</Tab.Pane>
+							<Tab.Pane eventKey={'#link2'}>
+								<Preferences
+									currentTheme={props.currentTheme}
+									setCurrentTheme={props.setCurrentTheme}
+									themesList={props.themesList}
+								/>
+							</Tab.Pane>
+						</Tab.Content>
+					</Col>
+				</Row>
+			</Tab.Container>
+		</Container>
+	);
 };
 
 export default Settings;

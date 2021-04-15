@@ -72,7 +72,6 @@ const Series = (props) => {
   );
 
   return (
-    <div style={{ minWidth: "500px" }}>
       <Form>
         <Form.Group controlId="formName">
           <Form.Label>Series Name</Form.Label>
@@ -180,7 +179,6 @@ const Series = (props) => {
           </Form.Text>
         </Form.Group>
       </Form>
-    </div>
   );
 };
 

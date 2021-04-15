@@ -17,7 +17,7 @@ const themesList = [
 ];
 
 const App = () => {
-  const [currentTheme, setCurrentTheme] = useState(darkTheme);
+  const [currentTheme, setCurrentTheme] = useState(themesList[1]);
   return (
     <ThemeProvider theme={currentTheme}>
       <GlobalStyles />

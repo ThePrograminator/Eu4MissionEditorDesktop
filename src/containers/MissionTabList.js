@@ -49,13 +49,13 @@ const MissionList = (props) => {
 							</Nav>
 						</Col>
 						<Col lg={true}>
-							<Tab.Content>
+							<Tab.Content style={{ maxHeight: '200px' }}>
 								{props.missionTabs.map((missionTab) => {
 									console.log('MissionTabs loaded', props.missionTabs);
 									return (
 										<Tab.Pane key={missionTab.id} eventKey={missionTab.id}>
-											<Container fluid style={{ minHeight: '78vh', maxHeight: '78vh' }}>
-												<Row style={{ minHeight: '78vh', maxHeight: '78vh' }}>
+											<Container fluid style={{ minHeight: '83vh', maxHeight: '83vh' }}>
+												<Row style={{ minHeight: '83vh', maxHeight: '83vh' }}>
 													<MissionTab
 														missions={missionTab.missions}
 														series={missionTab.series}

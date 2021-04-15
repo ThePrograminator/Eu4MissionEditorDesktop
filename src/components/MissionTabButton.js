@@ -2,14 +2,6 @@ import React, { useState } from 'react';
 
 import { Button, Spinner, Tooltip, OverlayTrigger } from 'react-bootstrap';
 
-import { FaFileImport } from 'react-icons/fa';
-
-const renderTooltip = (props) => (
-	<Tooltip id="button-tooltip" {...props}>
-		{props.toolTipText}
-	</Tooltip>
-);
-
 const MissionTabButton = (props) => {
 	const [ id, setID ] = useState(props.id);
 	return (

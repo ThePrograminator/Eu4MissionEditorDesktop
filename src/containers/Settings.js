@@ -1,60 +1,63 @@
-import React, { useState } from 'react';
-import { Button, Tab, Container, Row, Col, ListGroup } from 'react-bootstrap';
-import UpdateModal from '../components/Update/UpdateModal';
+import React, { useState } from "react";
+import { Nav, Tab, Container, Row, Col, ListGroup } from "react-bootstrap";
+import UpdateModal from "../components/Update/UpdateModal";
+import Version from "./Settings/Version";
+import Preferences from "./Settings/Preferences";
 
-const electron = window.require('electron');
+const electron = window.require("electron");
 const appVersion = electron.remote.app.getVersion();
 const ipcRenderer = electron.ipcRenderer;
-var path = require('path');
+var path = require("path");
 
 const Settings = (props) => {
-	const [ showUpdateModal, setShowUpdateModal ] = useState(false);
-	//const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
+  const [showUpdateModal, setShowUpdateModal] = useState(false);
+  //const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
 
-	//ipcRenderer.sendto(,'checking-for-update');
-	const handleCheckUpdate = () => {
-		console.log('handleCheckUpdate');
-		setShowUpdateModal(true);
-		//const res = ipcRenderer.sendSync('runCommand');
-		//console.log('response', res);
-	};
+  //ipcRenderer.sendto(,'checking-for-update');
+  const handleCheckUpdate = () => {
+    console.log("handleCheckUpdate");
+    setShowUpdateModal(true);
+    //const res = ipcRenderer.sendSync('runCommand');
+    //console.log('response', res);
+  };
 
-	return (
-		<Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
-			<Row style={{ minWidth: '100%' }}>
-				<Col lg={true} style={{ maxWidth: '250px' }}>
-					<ListGroup>
-						<ListGroup.Item action href={'#link1'} style={{ minWidth: '200px' }}>
-							Version
-						</ListGroup.Item>
-					</ListGroup>
-				</Col>
-				<Col lg={true}>
-					<Tab.Content>
-						<Container fluid>
-							<Row lg={true} style={{ margin: 'auto', textAlign: 'center', width: '50%' }}>
-								<h1 style={{ width: '100%' }}>Version</h1>
-							</Row>
-							<Row lg={true}>
-								<Col lg={true}>
-									<p>Current version: {appVersion}</p>
-								</Col>
-							</Row>
-							<Row lg={true}>
-								<Col lg={true}>
-									<Button onClick={handleCheckUpdate}>Check for Update</Button>
-								</Col>
-							</Row>
-						</Container>
-					</Tab.Content>
-				</Col>
-			</Row>
-			<UpdateModal
-				showUpdateModal={showUpdateModal}
-				setShowUpdateModal={setShowUpdateModal}
-			/>
-		</Tab.Container>
-	);
+  return (
+    <Container fluid style={{ minHeight: "inherit" }}>
+      <br />
+      <Tab.Container
+        unmountOnExit={true}
+        id="left-tabs-example"
+        defaultActiveKey="#link1"
+      >
+        <Row>
+          <Col sm={2}>
+            <Nav variant="pills" className="flex-column">
+              <Nav.Item>
+                <Nav.Link eventKey={"#link1"}>Version</Nav.Link>
+              </Nav.Item>
+              <Nav.Item>
+                <Nav.Link eventKey={"#link2"}>Preferences</Nav.Link>
+              </Nav.Item>
+            </Nav>
+          </Col>
+          <Col lg={true}>
+            <Tab.Content>
+              <Tab.Pane eventKey={"#link1"}>
+                <Version handleCheckUpdate={handleCheckUpdate} />
+              </Tab.Pane>
+              <Tab.Pane eventKey={"#link2"}>
+                <Preferences
+                  currentTheme={props.currentTheme}
+                  setCurrentTheme={props.setCurrentTheme}
+                  themesList={props.themesList}
+                />
+              </Tab.Pane>
+            </Tab.Content>
+          </Col>
+        </Row>
+      </Tab.Container>
+    </Container>
+  );
 };
 
 export default Settings;
@@ -73,4 +76,46 @@ export default Settings;
         </Col>
       </Row>
     </Container>
+
+
+	<Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
+      <Row style={{ minWidth: "100%" }}>
+        <Col lg={true} style={{ maxWidth: "250px" }}>
+          <ListGroup>
+            <ListGroup.Item
+              action
+              href={"#link1"}
+              style={{ minWidth: "200px" }}
+            >
+              Version
+            </ListGroup.Item>
+            <ListGroup.Item
+              action
+              href={"#link2"}
+              style={{ minWidth: "200px" }}
+            >
+              Preferences
+            </ListGroup.Item>
+          </ListGroup>
+        </Col>
+        <Col lg={true}>
+          <Tab.Content>
+            <Tab.Pane eventKey={"#link1"}>
+              <Version handleCheckUpdate={handleCheckUpdate} />
+            </Tab.Pane>
+            <Tab.Pane eventKey={"#link2"}>
+              <Preferences
+                currentTheme={props.currentTheme}
+                setCurrentTheme={props.setCurrentTheme}
+                themesList={props.themesList}
+              />
+            </Tab.Pane>
+          </Tab.Content>
+        </Col>
+      </Row>
+      <UpdateModal
+        showUpdateModal={showUpdateModal}
+        setShowUpdateModal={setShowUpdateModal}
+      />
+    </Tab.Container>
 */

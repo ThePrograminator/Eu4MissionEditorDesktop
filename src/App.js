@@ -1,4 +1,6 @@
-import 'bootstrap/dist/css/bootstrap.min.css';
+import React, { useState } from "react";
+
+import "bootstrap/dist/css/bootstrap.min.css";
 import Home from "./containers/Home";
 // you need these styles for React Flow to work properly
 import "react-flow-renderer/dist/style.css";
@@ -9,16 +11,26 @@ import { GlobalStyles } from "./components/GlobalStyles";
 import { lightTheme, darkTheme } from "./components/Themes";
 import Logger from "./components/Logger";
 
-function App() {
+const themesList = [
+  lightTheme,
+  darkTheme,
+];
+
+const App = () => {
+  const [currentTheme, setCurrentTheme] = useState(darkTheme);
   return (
-    <ThemeProvider theme={lightTheme}>
+    <ThemeProvider theme={currentTheme}>
       <GlobalStyles />
       <div style={{ minHeight: "100vh" }}>
-        <Home />
+        <Home
+          currentTheme={currentTheme}
+          setCurrentTheme={setCurrentTheme}
+          themesList={themesList}
+        />
       </div>
-      <Logger/>
+      <Logger />
     </ThemeProvider>
   );
-}
+};
 
 export default App;

@@ -96,6 +96,7 @@ const Series = (props) => {
             min ={1}
             max ={5}
             onChange={(evt) => setSlot(parseInt(evt.target.value))}
+            style={{ width: '20%' }}
           />
           <Form.Text className="text-muted">
             Which column the missions will appear in. 1 to 5.

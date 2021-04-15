@@ -156,11 +156,12 @@ const MissionTab = (props) => {
 			const newNode = {
 				id: getNodeId(),
 				data: {
-					label: name
+					label: name,
+					position: 1
 				},
 				position: {
 					x: 0,
-					y: 0
+					y: 150
 				}
 			};
 			elements.push(newNode);

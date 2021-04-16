@@ -1,24 +1,16 @@
 import React, { useState } from 'react';
-import { Nav, Tab, Container, Row, Col, ListGroup } from 'react-bootstrap';
-import UpdateModal from '../components/Update/UpdateModal';
+import { Nav, Tab, Container, Row, Col } from 'react-bootstrap';
 import Version from './Settings/Version';
 import Preferences from './Settings/Preferences';
-
-const electron = window.require('electron');
-const appVersion = electron.remote.app.getVersion();
-const ipcRenderer = electron.ipcRenderer;
-var path = require('path');
+import General from './Settings/General';
+import Configuration from './Settings/Configuration';
 
 const Settings = (props) => {
 	const [ showUpdateModal, setShowUpdateModal ] = useState(false);
-	//const [ isCheckingForUpdate, setIsCheckingForUpdate ] = useState(false);
 
-	//ipcRenderer.sendto(,'checking-for-update');
 	const handleCheckUpdate = () => {
 		console.log('handleCheckUpdate');
 		setShowUpdateModal(true);
-		//const res = ipcRenderer.sendSync('runCommand');
-		//console.log('response', res);
 	};
 
 	return (
@@ -29,19 +21,31 @@ const Settings = (props) => {
 					<Col sm={2}>
 						<Nav variant="pills" className="flex-column">
 							<Nav.Item>
-								<Nav.Link eventKey={'#link1'}>Version</Nav.Link>
+								<Nav.Link eventKey={'#link1'}>General</Nav.Link>
 							</Nav.Item>
 							<Nav.Item>
-								<Nav.Link eventKey={'#link2'}>Preferences</Nav.Link>
+								<Nav.Link eventKey={'#link2'}>Version</Nav.Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Nav.Link eventKey={'#link3'}>Configuration</Nav.Link>
+							</Nav.Item>
+							<Nav.Item>
+								<Nav.Link eventKey={'#link4'}>Preferences</Nav.Link>
 							</Nav.Item>
 						</Nav>
 					</Col>
 					<Col lg={true}>
 						<Tab.Content>
 							<Tab.Pane eventKey={'#link1'}>
-								<Version handleCheckUpdate={handleCheckUpdate} />
+								<General />
 							</Tab.Pane>
 							<Tab.Pane eventKey={'#link2'}>
+								<Version handleCheckUpdate={handleCheckUpdate} />
+							</Tab.Pane>
+							<Tab.Pane eventKey={'#link3'}>
+								<Configuration />
+							</Tab.Pane>
+							<Tab.Pane eventKey={'#link4'}>
 								<Preferences
 									currentTheme={props.currentTheme}
 									setCurrentTheme={props.setCurrentTheme}

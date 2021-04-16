@@ -115,13 +115,18 @@ const MissionTab = (props) => {
 			if (isNode(el) && el.id === node.id) {
 				// unfortunately we need this little hack to pass a slighltiy different position
 				// in order to notify react flow about the change
+
+				var y = 150;
+
+				if (node.position.y >= 150) y = node.position.y;
+
 				el.position = {
 					x: el.position.x + Math.random(),
-					y: node.position.y
+					y: y
 				};
 				el.data = {
 					...el.data,
-					position: node.position.y / 150
+					position: y / 150
 				};
 			}
 			return el;

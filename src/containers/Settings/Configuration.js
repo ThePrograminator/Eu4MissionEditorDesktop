@@ -8,9 +8,11 @@ const Configuration = (props) => {
 				<h1 style={{ width: '100%' }}>Configuration</h1>
 			</Row>
 			<Row lg={true}>
-				<Col lg={true} />
+				<Col lg={true}>
+					<h2>Key-Bindings: </h2>
+					<hr />
+				</Col>
 			</Row>
-			<hr />
 		</Container>
 	);
 };

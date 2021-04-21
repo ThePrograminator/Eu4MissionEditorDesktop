@@ -1,16 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+
+import ReactFlow, { isNode } from 'react-flow-renderer';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const RemoveMissionModal = (props) => {
-	const [ selectedMissionTab, setSelectedMissionTab ] = useState(0);
+const AddMissionModal = (props) => {
+	const [ selectedMission, setSelectedMission ] = useState(null);
 
 	const handleClose = () => {
 		props.setShow(0);
 	};
 
+	useEffect(
+		() => {
+			if (props.missions.length !== 0) {
+				setSelectedMission(props.missions[0]);
+				console.log('props.missions', props.missions[0]);
+				console.log('selectedMission', selectedMission);
+			}
+		},
+		[ props.show ]
+	);
+
 	return (
-		<Modal show={props.show === 5} onHide={handleClose}>
+		<Modal show={props.show === 7} onHide={handleClose}>
 			<Modal.Header closeButton>
 				<Modal.Title>Remove Mission</Modal.Title>
 			</Modal.Header>
@@ -20,17 +33,15 @@ const RemoveMissionModal = (props) => {
 						<Form.Label>Select Mission To Remove</Form.Label>
 						<Form.Control
 							as="select"
-							onChange={(evt) => setSelectedMissionTab(evt.target.value)}
-							value={selectedMissionTab}
+							onChange={(evt) => setSelectedMission(evt.target.value)}
+							value={selectedMission}
 						>
-							{props.missionTabs.map((missionTab) => (
-								<option key={missionTab.id} value={missionTab.id}>
-									{missionTab.name}
+							{props.missions.map((mission) => (
+								<option key={mission.id} value={mission.id}>
+									{mission.data.label}
 								</option>
 							))}
 						</Form.Control>
-						<Form.Text className="text-muted">This does not remove the mission file from your directory</Form.Text>
-						<Form.Text className="text-muted">Your changes not exported will be lost</Form.Text>
 					</Form.Group>
 				</Form>
 			</Modal.Body>
@@ -38,7 +49,12 @@ const RemoveMissionModal = (props) => {
 				<Button variant="secondary" onClick={handleClose}>
 					Close
 				</Button>
-				<Button variant="primary" onClick={() => (props.setShow(0), props.removeFile(selectedMissionTab))}>
+				<Button
+					variant="primary"
+					onClick={() => (
+						props.setShow(0), console.log(selectedMission), props.removeMission(selectedMission)
+					)}
+				>
 					Remove Mission
 				</Button>
 			</Modal.Footer>
@@ -46,4 +62,4 @@ const RemoveMissionModal = (props) => {
 	);
 };
 
-export default RemoveMissionModal;
+export default AddMissionModal;

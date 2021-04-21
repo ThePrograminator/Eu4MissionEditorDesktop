@@ -3,7 +3,7 @@ import MissionTabButton from '../components/MissionTabButton';
 import ExportMissionModal from '../components/Modals/ExportMissionModal';
 import CreateMissionModal from '../components/Modals/CreateMissionModal';
 import DuplicateMissionModal from '../components/Modals/DuplicateMissionModal';
-import RemoveMissionModal from '../components/Modals/RemoveMissionModal';
+import RemoveMissionModal from '../components/Modals/RemoveMissionFileModal';
 import Reader from '../Reader';
 import Writer from '../Writer';
 import { ButtonGroup, ButtonToolbar } from 'react-bootstrap';
@@ -16,8 +16,10 @@ import {
 	FaFileImport,
 	FaFileMedical,
 	FaFileExcel,
-	FaPlusSquare
+	FaPlusSquare,
+	FaTrashAlt
 } from 'react-icons/fa';
+//IoDuplicateSharp
 
 const electron = window.require('electron');
 const fs = electron.remote.require('fs');
@@ -48,9 +50,13 @@ const MissionTabHeader = (props) => {
 			case 5:
 				handleRemoveMissionFile();
 				break;
-			//Remove
+			//Create Mission
 			case 6:
 				handleCreateMission();
+				break;
+			//Remove Mission
+			case 7:
+				handleRemoveMission();
 				break;
 			default:
 				break;
@@ -173,6 +179,12 @@ const MissionTabHeader = (props) => {
 		props.setShow(6);
 	};
 
+	const handleRemoveMission = () => {
+		console.log('Remove Mission');
+
+		props.setShow(7);
+	};
+
 	return (
 		<div>
 			<ButtonToolbar aria-label="Toolbar with button groups">
@@ -233,6 +245,15 @@ const MissionTabHeader = (props) => {
 						buttonText={'Add Mission'}
 						toolTipText={'Add Mission'}
 						icon={<FaPlusSquare />}
+						disabled={props.missionTabs.length === 0 || props.fileKey == null}
+					/>
+					<MissionTabButton
+						id={InProgressIDMap.removeMission}
+						inProgress={props.inProgressID}
+						handleClick={handleClick}
+						buttonText={'Remove Mission'}
+						toolTipText={'Remove Mission'}
+						icon={<FaTrashAlt />}
 						disabled={props.missionTabs.length === 0 || props.fileKey == null}
 					/>
 				</ButtonGroup>

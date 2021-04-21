@@ -13,6 +13,7 @@ import { FaAngleLeft, FaAngleRight } from 'react-icons/fa';
 import MissionTabButton from '../components/MissionTabButton';
 
 import AddMissionModal from '../components/Modals/AddMissionModal';
+import RemoveMissionModal from '../components/Modals/RemoveMissionModal';
 
 import CodeEditor from './CodeEditor';
 import '../Provider.css';
@@ -155,32 +156,49 @@ const MissionTab = (props) => {
 		}
 	};
 
-	const onAdd = useCallback(
-		(name) => {
-			console.log('Elements start', elements);
-			const newNode = {
-				id: getNodeId(),
-				data: {
-					label: name,
-					position: 1
-				},
-				position: {
-					x: 0,
-					y: 150
-				}
-			};
-			elements.push(newNode);
-			setElements([ ...elements ]);
+	const onAdd = (name) => {
+		console.log('Elements start', elements);
+		const newNode = {
+			id: getNodeId(),
+			data: {
+				label: name,
+				position: 1
+			},
+			position: {
+				x: 0,
+				y: 150
+			},
+			type: 'default'
+		};
+		let elementsCopy = [ ...elements ];
+		elementsCopy.push(newNode);
+		setElements(elementsCopy);
 
-			let missionTabsCopy = [ ...props.missionTabs ];
-			let index = missionTabsCopy.findIndex((missionTab) => missionTab.id === props.fileID);
-			missionTabsCopy[index].missions = elements;
-			props.setMissionTabs(missionTabsCopy);
+		let missionTabsCopy = [ ...props.missionTabs ];
+		let index = missionTabsCopy.findIndex((missionTab) => missionTab.id === props.fileID);
+		missionTabsCopy[index].missions = elements;
+		props.setMissionTabs(missionTabsCopy);
 
-			console.log('Elements End', elements);
+		console.log('Elements End', elements);
+	};
+
+	useEffect(
+		() => {
+			console.log('new Elements End', elements);
 		},
-		[ setElements ]
+		[ elements ]
 	);
+
+	const onRemove = (selectedMission) => {
+		console.log('onRemove selectedMission', selectedMission);
+		console.log('onRemove elements', elements);
+		let index = elements.findIndex((mission) => mission.id === selectedMission);
+
+		var removeElementArr = [];
+		removeElementArr.push(elements[index]);
+
+		testRemove(removeElementArr);
+	};
 
 	const onUpdate = useCallback(() => {
 		console.log('OnUpdate elements', elements);
@@ -191,7 +209,36 @@ const MissionTab = (props) => {
 		console.log('OnUpdate missionTabs', props.missionTabs);
 	}, []);
 
-	const onElementsRemove = (elementsToRemove) => setElements((els) => removeElements(elementsToRemove, els));
+	const testRemove = (elementsToRemove) => {
+		console.log('elementsToRemove', elementsToRemove);
+
+		if (selectedElement !== null) {
+			for (let index = 0; index < elementsToRemove.length; index++) {
+				const element = elementsToRemove[index];
+				if (selectedElement.id === element.id) {
+					console.log('same');
+					setSelectedElement(null);
+				}
+			}
+		}
+
+		setElements((els) => removeElements(elementsToRemove, els), onUpdate());
+	};
+
+	const onElementsRemove = (elementsToRemove) => (
+		console.log('elementsToRemove', elementsToRemove), testRemove(elementsToRemove)
+	);
+
+	const getOnlyNodes = () => {
+		if (elements.length === 0) return [];
+		let elementsCopy = [];
+		elements.map((mission) => {
+			if (isNode(mission)) {
+				elementsCopy.push(mission);
+			}
+		});
+		return elementsCopy;
+	};
 
 	return (
 		<div className="providerflow">
@@ -237,6 +284,12 @@ const MissionTab = (props) => {
 				/>
 			</ReactFlowProvider>
 			<AddMissionModal show={props.show} setShow={props.setShow} addMission={onAdd} missions={elements} />
+			<RemoveMissionModal
+				show={props.show}
+				setShow={props.setShow}
+				removeMission={onRemove}
+				missions={getOnlyNodes()}
+			/>
 		</div>
 	);
 };

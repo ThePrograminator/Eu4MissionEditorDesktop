@@ -159,7 +159,8 @@ const MissionTab = (props) => {
 	const onAdd = (name) => {
 		console.log('Elements start', elements);
 		const newNode = {
-			id: getNodeId(),
+			//id: getNodeId(),
+			id: props.getAvailableFileId(),
 			data: {
 				label: name,
 				position: 1

@@ -66,6 +66,7 @@ const MissionList = (props) => {
 														setShow={setShow}
 														inProgressID={inProgressID}
 														setinProgressID={setinProgressID}
+														getAvailableFileId={props.getAvailableFileId}
 													/>
 												</Row>
 											</Container>

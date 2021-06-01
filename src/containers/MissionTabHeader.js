@@ -6,7 +6,7 @@ import DuplicateMissionModal from '../components/Modals/DuplicateMissionModal';
 import RemoveMissionModal from '../components/Modals/RemoveMissionFileModal';
 import Reader from '../Reader';
 import Writer from '../Writer';
-import { ButtonGroup, ButtonToolbar } from 'react-bootstrap';
+import { ButtonGroup, ButtonToolbar, Container, Row } from 'react-bootstrap';
 
 import InProgressIDMap from '../InProgressIDMap';
 
@@ -56,6 +56,22 @@ const MissionTabHeader = (props) => {
 				break;
 			//Remove Mission
 			case 7:
+				handleRemoveMission();
+				break;
+			//Duplicate Mission
+			case 8:
+				handleRemoveMission();
+				break;
+			//Add Series
+			case 9:
+				handleRemoveMission();
+				break;
+			//Remove Series
+			case 10:
+				handleRemoveMission();
+				break;
+			//Duplicate Series
+			case 11:
 				handleRemoveMission();
 				break;
 			default:
@@ -114,15 +130,29 @@ const MissionTabHeader = (props) => {
 		});
 	};
 
-	const createFile = (name) => {
+	const createFile = (name, seriesName) => {
 		console.log('name', name);
 		let missionTabsCopy = [ ...props.missionTabs ];
+
+		let newSeries = {
+			id: 0,
+			name: seriesName,
+			slot: 0,
+			generic: false,
+			ai: true,
+			hasCountryShield: false,
+			potentialOnLoad: null,
+			potential: null,
+			selectedSeries: null,
+			color: '',
+			missions: []
+		};
 
 		const newMissionTab = {
 			id: props.getAvailableFileId(),
 			name: name,
 			fileName: name + '.txt',
-			series: [],
+			series: [ newSeries ],
 			missions: [],
 			edges: []
 		};
@@ -188,74 +218,123 @@ const MissionTabHeader = (props) => {
 	return (
 		<div>
 			<ButtonToolbar aria-label="Toolbar with button groups">
-				<ButtonGroup className="mr-2" aria-label="Second group">
-					<MissionTabButton
-						id={InProgressIDMap.create}
-						inProgress={props.inProgressID}
-						handleClick={handleClick}
-						buttonText={'Create Mission File'}
-						toolTipText={'Create Mission File'}
-						icon={<FaFileMedical />}
-					/>
-					<MissionTabButton
-						id={InProgressIDMap.duplicate}
-						inProgress={props.inProgressID}
-						handleClick={handleClick}
-						buttonText={'Duplicate Mission File'}
-						toolTipText={'Duplicate Mission File'}
-						icon={<FaFileImport />}
-						disabled={props.missionTabs.length === 0}
-					/>
-					<MissionTabButton
-						id={InProgressIDMap.remove}
-						inProgress={props.inProgressID}
-						handleClick={handleClick}
-						buttonText={'Remove Mission File'}
-						toolTipText={'Remove Mission File'}
-						icon={<FaFileExcel />}
-						disabled={props.missionTabs.length === 0}
-					/>
+				<ButtonGroup className="mr-2" aria-label="File group">
+					<Container>
+						<Row className="mr-2" style={{ maxHeight: '35%' }}>
+							<p>File</p>
+						</Row>
+						<Row className="mr-2">
+							<MissionTabButton
+								id={InProgressIDMap.create}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Create Mission File'}
+								toolTipText={'Create Mission File'}
+								icon={<FaFileMedical />}
+							/>
+							<MissionTabButton
+								id={InProgressIDMap.duplicate}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Duplicate Mission File'}
+								toolTipText={'Duplicate Mission File'}
+								icon={<FaFileImport />}
+								disabled={props.missionTabs.length === 0}
+							/>
+							<MissionTabButton
+								id={InProgressIDMap.remove}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Remove Mission File'}
+								toolTipText={'Remove Mission File'}
+								icon={<FaFileExcel />}
+								disabled={props.missionTabs.length === 0}
+							/>
+						</Row>
+					</Container>
 				</ButtonGroup>
-				<ButtonGroup className="mr-2" aria-label="First group">
-					<MissionTabButton
-						id={InProgressIDMap.import}
-						inProgress={props.inProgressID}
-						handleClick={handleClick}
-						buttonText={'Import Mission File'}
-						toolTipText={'Import Mission File'}
-						icon={<FaFileDownload />}
-					/>
-					<MissionTabButton
-						id={InProgressIDMap.export}
-						inProgress={props.inProgressID}
-						handleClick={handleClick}
-						buttonText={'Export Mission File'}
-						toolTipText={'Export Mission File'}
-						icon={<FaFileUpload />}
-						disabled={props.missionTabs.length === 0}
-					/>
+				<ButtonGroup className="mr-2" aria-label="File group 2">
+					<Container>
+						<Row className="mr-2" style={{ maxHeight: '35%' }}>
+							<p style={{ visibility: 'hidden' }}> a</p>
+						</Row>
+						<Row className="mr-2">
+							<MissionTabButton
+								id={InProgressIDMap.import}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Import Mission File'}
+								toolTipText={'Import Mission File'}
+								icon={<FaFileDownload />}
+							/>
+							<MissionTabButton
+								id={InProgressIDMap.export}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Export Mission File'}
+								toolTipText={'Export Mission File'}
+								icon={<FaFileUpload />}
+								disabled={props.missionTabs.length === 0}
+							/>
+						</Row>
+					</Container>
 				</ButtonGroup>
 
 				<div className="mr-2" style={{ borderLeft: '2px solid lightgrey' }} />
-				<ButtonGroup className="mr-2" aria-label="First group">
-					<MissionTabButton
-						id={InProgressIDMap.addMission}
-						inProgress={props.inProgressID}
-						handleClick={handleClick}
-						buttonText={'Add Mission'}
-						toolTipText={'Add Mission'}
-						icon={<FaPlusSquare />}
-						disabled={props.missionTabs.length === 0 || props.fileKey == null}
-					/>
-					<MissionTabButton
-						id={InProgressIDMap.removeMission}
-						inProgress={props.inProgressID}
-						handleClick={handleClick}
-						buttonText={'Remove Mission'}
-						toolTipText={'Remove Mission'}
-						icon={<FaTrashAlt />}
-						disabled={props.missionTabs.length === 0 || props.fileKey == null}
-					/>
+				<ButtonGroup className="mr-2" aria-label="Mission group">
+					<Container>
+						<Row className="mr-2" style={{ maxHeight: '35%' }}>
+							<p>Mission</p>
+						</Row>
+						<Row className="mr-2">
+							<MissionTabButton
+								id={InProgressIDMap.addMission}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Add Mission'}
+								toolTipText={'Add Mission'}
+								icon={<FaPlusSquare />}
+								disabled={props.missionTabs.length === 0 || props.fileKey == null}
+							/>
+							<MissionTabButton
+								id={InProgressIDMap.removeMission}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Remove Mission'}
+								toolTipText={'Remove Mission'}
+								icon={<FaTrashAlt />}
+								disabled={props.missionTabs.length === 0 || props.fileKey == null}
+							/>
+						</Row>
+					</Container>
+				</ButtonGroup>
+				<div className="mr-2" style={{ borderLeft: '2px solid lightgrey' }} />
+				<ButtonGroup className="mr-2" aria-label="Series group">
+					<Container>
+						<Row className="mr-2" style={{ maxHeight: '35%' }}>
+							<p>Series</p>
+						</Row>
+						<Row className="mr-2">
+							<MissionTabButton
+								id={InProgressIDMap.addSeries}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Add Series'}
+								toolTipText={'Add Series'}
+								icon={<FaPlusSquare />}
+								disabled={props.missionTabs.length === 0 || props.fileKey == null}
+							/>
+							<MissionTabButton
+								id={InProgressIDMap.removeSeries}
+								inProgress={props.inProgressID}
+								handleClick={handleClick}
+								buttonText={'Remove Series'}
+								toolTipText={'Remove Series'}
+								icon={<FaTrashAlt />}
+								disabled={props.missionTabs.length === 0 || props.fileKey == null}
+							/>
+						</Row>
+					</Container>
 				</ButtonGroup>
 			</ButtonToolbar>
 			<ExportMissionModal

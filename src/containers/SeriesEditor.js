@@ -28,7 +28,7 @@ const SeriesEditor = (props) => {
       <ButtonGroup size="lg" className="mb-2">
         <Button onClick={onAdd}>Add Node</Button>
       </ButtonGroup>
-      <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link1">
+      <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link0">
         <Row>
           <Col lg={true} style={{ maxWidth: "250px" }}>
             <ListGroup>

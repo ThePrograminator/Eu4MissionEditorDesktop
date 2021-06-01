@@ -36,11 +36,11 @@ const AddMissionModal = (props) => {
 							onChange={(evt) => setSelectedMission(evt.target.value)}
 							value={selectedMission}
 						>
-							{props.missions.map((mission) => (
+							{props.missions.length != 0 ? props.missions.map((mission) => (
 								<option key={mission.id} value={mission.id}>
 									{mission.data.label}
 								</option>
-							))}
+							)) : null}
 						</Form.Control>
 					</Form.Group>
 				</Form>

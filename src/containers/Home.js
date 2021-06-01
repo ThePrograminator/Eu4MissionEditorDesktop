@@ -11,7 +11,7 @@ const Home = (props) => {
 	const [ availableFileId, setAvailableFileId ] = useState(1);
 
 	const getAvailableFileId = () => {
-		var availableId = `file_${availableFileId.toString()}`;
+		var availableId = `node_${availableFileId.toString()}`;
 		var newId = availableFileId + 1;
 		setAvailableFileId(newId);
 		return availableId;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 
 import { Modal, Button, Form, FormControl } from 'react-bootstrap';
 
-const DuplicateMissionModal = (props) => {
+const DuplicateMissionFileModal = (props) => {
 	const [ selectedMissionTab, setSelectedMissionTab ] = useState(0);
 	const [ fileName, setFileName ] = useState(0);
 	const [ validated, setValidated ] = useState(false);
@@ -62,12 +62,12 @@ const DuplicateMissionModal = (props) => {
 	return (
 		<Modal show={props.show === 4} onHide={handleClose}>
 			<Modal.Header closeButton>
-				<Modal.Title>Duplicate Mission</Modal.Title>
+				<Modal.Title>Duplicate Mission File</Modal.Title>
 			</Modal.Header>
 			<Modal.Body>
 				<Form noValidate validated={validated}>
 					<Form.Group controlId="formMission">
-						<Form.Label>Select Mission To Duplicate</Form.Label>
+						<Form.Label>Select Mission File To Duplicate</Form.Label>
 						<Form.Control
 							as="select"
 							onChange={(evt) => setSelectedMissionTab(evt.target.value)}
@@ -111,11 +111,11 @@ const DuplicateMissionModal = (props) => {
 					disabled={!validated || selectedMissionTab === 0}
 					onClick={() => (props.setShow(0), handleAction())}
 				>
-					Duplicate Mission
+					Duplicate Mission File
 				</Button>
 			</Modal.Footer>
 		</Modal>
 	);
 };
 
-export default DuplicateMissionModal;
+export default DuplicateMissionFileModal;

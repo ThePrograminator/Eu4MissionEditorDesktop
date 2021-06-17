@@ -13,7 +13,9 @@ import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import MissionTabButton from "../components/MissionTabButton";
 
 import AddMissionModal from "../components/Modals/AddMissionModal";
+import DuplicateMissionModal from "../components/Modals/DuplicateMissionModal";
 import RemoveMissionModal from "../components/Modals/RemoveMissionModal";
+import AddSeriesModal from "../components/Modals/AddSeriesModal";
 
 import CodeEditor from "./CodeEditor";
 import "../Provider.css";
@@ -86,7 +88,7 @@ const MissionTab = (props) => {
       return el;
     });
     setElements(ele);
-    let missionTabsCopy = [...props.missionTabs];
+    let missionTabsCopy = props.missionTabs.slice();
     let index = missionTabsCopy.findIndex(
       (missionTab) => missionTab.id === props.fileID
     );
@@ -143,7 +145,7 @@ const MissionTab = (props) => {
     console.log("onNodeDragStop");
     console.log("node", node);
     if (isNode(node) && node.data.selectedSeries != null) {
-      const layoutedElements = getLayoutedElements(elements, node);
+      let layoutedElements = getLayoutedElements(elements, node);
       setElements(layoutedElements);
       console.log("layoutedElements", layoutedElements);
       elements.map((el) => {
@@ -156,11 +158,14 @@ const MissionTab = (props) => {
           );
         }
       });
-      let missionTabsCopy = [...props.missionTabs];
+      console.log("layoutedElements 2", layoutedElements);
+      let missionTabsCopy = props.missionTabs.slice();
       let index = missionTabsCopy.findIndex(
         (missionTab) => missionTab.id === props.fileID
       );
-      missionTabsCopy[index].missions = elements;
+      console.log("index", index);
+      missionTabsCopy[index].missions = layoutedElements;
+      console.log("onNodeDragStop missionTabsCopy", missionTabsCopy);
       props.setMissionTabs(missionTabsCopy);
       console.log("elemeents", elements);
     }
@@ -224,7 +229,7 @@ const MissionTab = (props) => {
 
   const onUpdate = useCallback(() => {
     console.log("OnUpdate elements", elements);
-    let missionTabsCopy = [...props.missionTabs];
+    let missionTabsCopy = props.missionTabs.slice();
     let index = missionTabsCopy.findIndex(
       (missionTab) => missionTab.id === props.fileID
     );
@@ -311,6 +316,9 @@ const MissionTab = (props) => {
           series={series}
           setSeries={setSeries}
           onUpdate={onUpdate}
+          missionTabs={props.missionTabs}
+          fileID={props.fileID}
+          setMissionTabs={props.setMissionTabs}
         />
       </ReactFlowProvider>
       <AddMissionModal
@@ -320,11 +328,23 @@ const MissionTab = (props) => {
         missions={elements}
         series={series}
       />
+      <DuplicateMissionModal
+        show={props.show}
+        setShow={props.setShow}
+        duplicateMission={onAdd}
+        missions={elements}
+      />
       <RemoveMissionModal
         show={props.show}
         setShow={props.setShow}
         removeMission={onRemove}
         missions={getOnlyNodes()}
+      />
+      <AddSeriesModal
+        show={props.show}
+        setShow={props.setShow}
+        addSeries={onAdd}
+        series={series}
       />
     </div>
   );

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
 import { Modal, Button, Form, FormControl } from "react-bootstrap";
+import InProgressIDMap from "../../InProgressIDMap";
 
-const AddMissionModal = (props) => {
+const AddSeriesModal = (props) => {
   const [name, setName] = useState("");
-  const [selectedSeries, setSelectedSeries] = useState(props.series[0].id);
   const [validated, setValidated] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -18,13 +18,13 @@ const AddMissionModal = (props) => {
       return;
     }
     var valid = true;
-    console.log("props.missions", props.missions);
-    if (props.missions !== null && props.missions.length !== 0) {
-      props.missions.map((mission) => {
-        if (mission.data !== undefined && mission.data.label === name) {
+    console.log("props.series", props.series);
+    if (props.series !== null && props.series.length !== 0) {
+      props.series.map((serie) => {
+        if (serie.name !== undefined && serie.name === name) {
           console.log("Same Name");
           setValidated(false);
-          setErrorMessage("Mission name already in use.");
+          setErrorMessage("Serie name already in use.");
           valid = false;
           return;
         }
@@ -47,14 +47,14 @@ const AddMissionModal = (props) => {
   }, [props.show]);
 
   return (
-    <Modal show={props.show === 6} onHide={handleClose}>
+    <Modal show={props.show === InProgressIDMap.addSeries} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Mission</Modal.Title>
+        <Modal.Title>Add Series</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Form.Group controlId="formLabel">
-            <Form.Label>Mission File Name</Form.Label>
+            <Form.Label>Series Name</Form.Label>
             <FormControl
               placeholder="name"
               aria-label="label"
@@ -70,24 +70,6 @@ const AddMissionModal = (props) => {
               </Form.Control.Feedback>
             ) : null}
           </Form.Group>
-          <Form.Group controlId="formSeries">
-            <Form.Label>Selected Series</Form.Label>
-            <Form.Control
-              as="select"
-              onChange={(evt) => setSelectedSeries(parseInt(evt.target.value))}
-              value={selectedSeries}
-              placeholder={"Select Series"}
-            >
-              {props.series.map((serie) => (
-                <option key={serie.id} value={serie.id}>
-                  {serie.name}
-                </option>
-              ))}
-            </Form.Control>
-            <Form.Text className="text-muted">
-              (Required) A mission needs a Series
-            </Form.Text>
-          </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -96,16 +78,14 @@ const AddMissionModal = (props) => {
         </Button>
         <Button
           variant="primary"
-          onClick={() => (
-            props.setShow(0), props.addMission(name, selectedSeries)
-          )}
+          onClick={() => (props.setShow(0), props.addSeries(name))}
           disabled={!validated}
         >
-          Add Mission
+          Add Series
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default AddMissionModal;
+export default AddSeriesModal;

@@ -40,51 +40,57 @@ const Mission = (props) => {
 
   useEffect(() => {
     console.log("nodeName", nodeName);
-    props.setMissions((els) =>
-      els.map((el) => {
-        if (el.id === props.selectedElement.id) {
-          // it's important that you create a new object here
-          // in order to notify react flow about the change
-          var pos = props.selectedElement.position.x;
-          if (selectedSeries != null) {
-            pos = props.series.find((x) => x.id === selectedSeries).slot * 150;
-          }
-          el.data = {
-            ...el.data,
-            label: nodeName,
-            icon: icon,
-            generic: generic,
-            completed_by: completedBy,
-            provinces_to_highlight: provincesToHighLight,
-            trigger: trigger,
-            effect: effect,
-            selectedSeries: selectedSeries,
-          };
-          el.position = {
-            ...el.position,
-            x: pos,
-            y: position * 150,
-          };
-          if (
-            selectedSeries != undefined &&
-            selectedSeries != null &&
-            selectedSeries != "Select Series"
-          ) {
-            el.style = {
-              ...el.style,
-              background: props.series.find((x) => x.id === selectedSeries)
-                .color,
-            };
-          }
-          console.log("data", el);
-          props.setSelectedElement(el);
+    let missionsCopy = props.missions.slice();
+    missionsCopy.map((el) => {
+      if (el.id === props.selectedElement.id) {
+        // it's important that you create a new object here
+        // in order to notify react flow about the change
+        var pos = props.selectedElement.position.x;
+        if (selectedSeries != null) {
+          pos = props.series.find((x) => x.id === selectedSeries).slot * 150;
         }
+        el.data = {
+          ...el.data,
+          label: nodeName,
+          icon: icon,
+          generic: generic,
+          completed_by: completedBy,
+          provinces_to_highlight: provincesToHighLight,
+          trigger: trigger,
+          effect: effect,
+          selectedSeries: selectedSeries,
+        };
+        el.position = {
+          ...el.position,
+          x: pos,
+          y: position * 150,
+        };
+        if (
+          selectedSeries != undefined &&
+          selectedSeries != null &&
+          selectedSeries != "Select Series"
+        ) {
+          el.style = {
+            ...el.style,
+            background: props.series.find((x) => x.id === selectedSeries).color,
+          };
+        }
+        console.log("data", el);
+        props.setSelectedElement(el);
+      }
 
-        return el;
-      })
+      return el;
+    });
+
+    props.setMissions(missionsCopy);
+
+    let missionTabsCopy = props.missionTabs.slice();
+    let index = missionTabsCopy.findIndex(
+      (missionTab) => missionTab.id === props.fileID
     );
-
-    props.onUpdate();
+    missionTabsCopy[index].missions = missionsCopy;
+    props.setMissionTabs(missionTabsCopy);
+    //props.onUpdate();
   }, [
     nodeName,
     icon,

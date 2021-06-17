@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import MissionTabButton from "../components/MissionTabButton";
 import ExportMissionModal from "../components/Modals/ExportMissionModal";
 import CreateMissionModal from "../components/Modals/CreateMissionModal";
-import DuplicateMissionModal from "../components/Modals/DuplicateMissionFileModal";
-import RemoveMissionModal from "../components/Modals/RemoveMissionFileModal";
+import DuplicateMissionFileModal from "../components/Modals/DuplicateMissionFileModal";
+import RemoveMissionFileModal from "../components/Modals/RemoveMissionFileModal";
 import Reader from "../Reader";
 import Writer from "../Writer";
 import { ButtonGroup, ButtonToolbar, Container, Row } from "react-bootstrap";
@@ -254,33 +254,42 @@ const MissionTabHeader = (props) => {
   };
 
   const checkDuplicateMissionDisabled = () => {
-    console.log("1");
     if (props.missionTabs === undefined || props.missionTabs === null)
       return true;
 
-    console.log("2");
     if (props.fileKey === undefined || props.fileKey === null) return true;
 
-    console.log("3");
     if (props.missionTabs.length === 0) return true;
 
     let index = props.missionTabs.findIndex(
       (missionTab) => missionTab.id === props.fileKey
     );
 
-    console.log("missions of filekey length 1", props.missionTabs[index]);
-    console.log(
-      "missions of filekey length 2",
-      props.missionTabs[index].missions.length
-    );
-
+    console.log("got here", props.missionTabs[index].missions);
     if (props.missionTabs[index].missions.length > 0) return false;
 
     return true;
   };
 
+  const checkRemoveSeriesDisabled = () => {
+    if (props.missionTabs === undefined || props.missionTabs === null)
+      return true;
+
+    if (props.fileKey === undefined || props.fileKey === null) return true;
+
+    if (props.missionTabs.length === 0) return true;
+
+    let index = props.missionTabs.findIndex(
+      (missionTab) => missionTab.id === props.fileKey
+    );
+
+    if (props.missionTabs[index].series.length > 1) return false;
+
+    return true;
+  };
+
   return (
-    <div key={props.setMissionTabs}>
+    <div>
       <ButtonToolbar aria-label="Toolbar with button groups">
         <ButtonGroup className="mr-2" aria-label="File group">
           <Container>
@@ -378,9 +387,7 @@ const MissionTabHeader = (props) => {
                 buttonText={"Remove Mission"}
                 toolTipText={"Remove Mission"}
                 icon={<FaTrashAlt />}
-                disabled={
-                  props.missionTabs.length === 0 || props.fileKey == null
-                }
+                disabled={checkDuplicateMissionDisabled()}
               />
             </Row>
           </Container>
@@ -421,40 +428,73 @@ const MissionTabHeader = (props) => {
                 buttonText={"Remove Series"}
                 toolTipText={"Remove Series"}
                 icon={<FaTrashAlt />}
-                disabled={
-                  props.missionTabs.length === 0 || props.fileKey == null
-                }
+                disabled={checkRemoveSeriesDisabled()}
               />
             </Row>
           </Container>
         </ButtonGroup>
       </ButtonToolbar>
-      <ExportMissionModal
-        show={props.show}
-        setShow={props.setShow}
-        exportFile={exportFile}
-        missionTabs={props.missionTabs}
-      />
-      <CreateMissionModal
-        show={props.show}
-        setShow={props.setShow}
-        createFile={createFile}
-        missionTabs={props.missionTabs}
-      />
-      <RemoveMissionModal
-        show={props.show}
-        setShow={props.setShow}
-        removeFile={removeFile}
-        missionTabs={props.missionTabs}
-      />
-      <DuplicateMissionModal
-        show={props.show}
-        setShow={props.setShow}
-        duplicateFile={duplicateFile}
-        missionTabs={props.missionTabs}
-      />
+      {props.show !== 0 ? (
+        <div>
+          <ExportMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            exportFile={exportFile}
+            missionTabs={props.missionTabs}
+          />
+          <CreateMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            createFile={createFile}
+            missionTabs={props.missionTabs}
+          />
+          <RemoveMissionFileModal
+            show={props.show}
+            setShow={props.setShow}
+            removeFile={removeFile}
+            missionTabs={props.missionTabs}
+          />
+          <DuplicateMissionFileModal
+            show={props.show}
+            setShow={props.setShow}
+            duplicateFile={duplicateFile}
+            missionTabs={props.missionTabs}
+          />
+        </div>
+      ) : null}
     </div>
   );
 };
 
 export default MissionTabHeader;
+
+/*
+{props.show !== 0 ? (
+        <div>
+          <ExportMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            exportFile={exportFile}
+            missionTabs={props.missionTabs}
+          />
+          <CreateMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            createFile={createFile}
+            missionTabs={props.missionTabs}
+          />
+          <RemoveMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            removeFile={removeFile}
+            missionTabs={props.missionTabs}
+          />
+          <DuplicateMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            duplicateFile={duplicateFile}
+            missionTabs={props.missionTabs}
+          />
+        </div>
+      ) : null}
+      */

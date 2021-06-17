@@ -59,6 +59,7 @@ const MissionList = (props) => {
                       >
                         <Row style={{ minHeight: "83vh", maxHeight: "83vh" }}>
                           <MissionTab
+                            missionTab={missionTab}
                             missions={missionTab.missions}
                             series={missionTab.series}
                             edges={missionTab.edges}

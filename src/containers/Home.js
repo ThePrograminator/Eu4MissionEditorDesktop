@@ -17,7 +17,6 @@ const Home = (props) => {
 		return availableId;
 	};
 
-	console.log('missionTabs', missionTabs);
 	return (
 		<Container fluid style={{ minHeight: 'inherit' }}>
 			<Tabs defaultActiveKey="missions" id="uncontrolled-tab-example">

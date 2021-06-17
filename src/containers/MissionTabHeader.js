@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import MissionTabButton from "../components/MissionTabButton";
 import ExportMissionModal from "../components/Modals/ExportMissionModal";
 import CreateMissionModal from "../components/Modals/CreateMissionModal";
-import DuplicateMissionModal from "../components/Modals/DuplicateMissionModal";
+import DuplicateMissionModal from "../components/Modals/DuplicateMissionFileModal";
 import RemoveMissionModal from "../components/Modals/RemoveMissionFileModal";
 import Reader from "../Reader";
 import Writer from "../Writer";
@@ -18,6 +18,7 @@ import {
   FaFileExcel,
   FaPlusSquare,
   FaTrashAlt,
+  FaClone,
 } from "react-icons/fa";
 //IoDuplicateSharp
 
@@ -142,6 +143,7 @@ const MissionTabHeader = (props) => {
 
   const createFile = (name, seriesName) => {
     console.log("name", name);
+
     let missionTabsCopy = [...props.missionTabs];
 
     let newSeries = {
@@ -167,6 +169,7 @@ const MissionTabHeader = (props) => {
       edges: [],
     };
     missionTabsCopy.push(newMissionTab);
+    console.log("Mission tabs", missionTabsCopy);
     props.setMissionTabs(missionTabsCopy);
   };
 
@@ -197,6 +200,7 @@ const MissionTabHeader = (props) => {
 
   const handleCreateMissionFile = () => {
     console.log("Added Mission");
+    console.log("props.filekey", props.fileKey);
 
     props.setShow(3);
   };
@@ -249,8 +253,34 @@ const MissionTabHeader = (props) => {
     props.setShow(11);
   };
 
+  const checkDuplicateMissionDisabled = () => {
+    console.log("1");
+    if (props.missionTabs === undefined || props.missionTabs === null)
+      return true;
+
+    console.log("2");
+    if (props.fileKey === undefined || props.fileKey === null) return true;
+
+    console.log("3");
+    if (props.missionTabs.length === 0) return true;
+
+    let index = props.missionTabs.findIndex(
+      (missionTab) => missionTab.id === props.fileKey
+    );
+
+    console.log("missions of filekey length 1", props.missionTabs[index]);
+    console.log(
+      "missions of filekey length 2",
+      props.missionTabs[index].missions.length
+    );
+
+    if (props.missionTabs[index].missions.length > 0) return false;
+
+    return true;
+  };
+
   return (
-    <div>
+    <div key={props.setMissionTabs}>
       <ButtonToolbar aria-label="Toolbar with button groups">
         <ButtonGroup className="mr-2" aria-label="File group">
           <Container>
@@ -333,6 +363,15 @@ const MissionTabHeader = (props) => {
                 }
               />
               <MissionTabButton
+                id={InProgressIDMap.duplicateMission}
+                inProgress={props.inProgressID}
+                handleClick={handleClick}
+                buttonText={"Duplicate Mission"}
+                toolTipText={"Duplicate Mission"}
+                icon={<FaClone />}
+                disabled={checkDuplicateMissionDisabled()}
+              />
+              <MissionTabButton
                 id={InProgressIDMap.removeMission}
                 inProgress={props.inProgressID}
                 handleClick={handleClick}
@@ -360,6 +399,17 @@ const MissionTabHeader = (props) => {
                 buttonText={"Add Series"}
                 toolTipText={"Add Series"}
                 icon={<FaPlusSquare />}
+                disabled={
+                  props.missionTabs.length === 0 || props.fileKey == null
+                }
+              />
+              <MissionTabButton
+                id={InProgressIDMap.duplicateMission}
+                inProgress={props.inProgressID}
+                handleClick={handleClick}
+                buttonText={"Duplicate Series"}
+                toolTipText={"Duplicate Series"}
+                icon={<FaClone />}
                 disabled={
                   props.missionTabs.length === 0 || props.fileKey == null
                 }

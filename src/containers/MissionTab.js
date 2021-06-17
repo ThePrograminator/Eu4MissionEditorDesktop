@@ -190,12 +190,16 @@ const MissionTab = (props) => {
     elementsCopy.push(newNode);
     setElements(elementsCopy);
 
-    let missionTabsCopy = [...props.missionTabs];
+    //let missionTabsCopy = [...props.missionTabs];
+    let missionTabsCopy = props.missionTabs.slice();
     let index = missionTabsCopy.findIndex(
       (missionTab) => missionTab.id === props.fileID
     );
-    missionTabsCopy[index].missions = elements;
+    console.log("index", index);
+    missionTabsCopy[index].missions = elementsCopy;
+    console.log("missionTabsCopy", missionTabsCopy);
     props.setMissionTabs(missionTabsCopy);
+    console.log("props.missiontabs", props.missionTabs);
 
     console.log("Elements End", elements);
   };
@@ -207,7 +211,9 @@ const MissionTab = (props) => {
   const onRemove = (selectedMission) => {
     console.log("onRemove selectedMission", selectedMission);
     console.log("onRemove elements", elements);
-    let index = elements.findIndex((mission) => mission.id === selectedMission.id);
+    let index = elements.findIndex(
+      (mission) => mission.id === selectedMission.id
+    );
 
     var removeElementArr = [];
     removeElementArr.push(elements[index]);

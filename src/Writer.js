@@ -9,7 +9,7 @@ const Writer = {
     for (let index = 0; index < series.length; index++) {
       const serie = series[index];
       //name
-      missionTreeText += serie.name + Writer.addEqualBracket();
+      missionTreeText += serie.name + " " + Writer.addEqualBracket();
 
       tabs += 1;
       tabsText = Writer.updateTabsText(tabs);
@@ -65,20 +65,44 @@ const Writer = {
           continue;
 
         //name
-        missionTreeText += "\t" + mission.data.label + Writer.addEqualBracket();
+        missionTreeText +=
+          "\t" + mission.data.label + " " + Writer.addEqualBracket();
 
         //icon
         missionTreeText += tabsText + "icon = " + mission.data.icon + "\n";
 
         //gerneric
         missionTreeText +=
-          tabsText + "generic = " + Writer.boolToYesNo(mission.data.generic) + "\n";
+          tabsText +
+          "generic = " +
+          Writer.boolToYesNo(mission.data.generic) +
+          "\n";
+
+        //position
+        missionTreeText +=
+          tabsText + "position = " + mission.data.position + "\n";
+
+        let completedByCorrect = Writer.isCorrectValue(
+          mission.data.completed_by
+        );
 
         //completed_by
         missionTreeText +=
-          tabsText + "completed_by = " + Writer.isCorrectValue(mission.data.completed_by)
-            ? mission.data.completed_by
-            : "{ }" + "\n";
+          tabsText +
+          "completed_by = " +
+          (completedByCorrect ? mission.data.completed_by : "{ }" + "\n");
+
+        //required Missions
+        if (mission.data.required_missions.length > 0) {
+          let requiredMissionsText = "";
+          mission.data.required_missions.map((reMission) => {
+            requiredMissionsText += reMission + " ";
+          });
+          missionTreeText +=
+            tabsText + "required_missions = { " + requiredMissionsText + "}\n";
+        } else {
+          missionTreeText += tabsText + "required_missions = {}" + "\n";
+        }
 
         //provinces_to_highlight
         missionTreeText +=
@@ -94,7 +118,7 @@ const Writer = {
         //trigger
         missionTreeText +=
           tabsText +
-          "potential_on_load = " +
+          "trigger = " +
           Writer.handleBlockInput(
             mission.data.trigger,
             Writer.updateTabsText(tabs + 1)
@@ -105,7 +129,7 @@ const Writer = {
         //effect
         missionTreeText +=
           tabsText +
-          "potential = " +
+          "effect = " +
           Writer.handleBlockInput(
             mission.data.effect,
             Writer.updateTabsText(tabs + 1)

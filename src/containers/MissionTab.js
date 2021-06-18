@@ -7,6 +7,7 @@ import ReactFlow, {
   MiniMap,
   Background,
   isNode,
+  getIncomers,
 } from "react-flow-renderer";
 
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
@@ -65,6 +66,7 @@ const MissionTab = (props) => {
     setElements(
       (els) => (
         console.log("newConnection:", params),
+        console.log("els:", els),
         applyEdgeStyle(params),
         addEdge(params, els)
       )
@@ -95,6 +97,25 @@ const MissionTab = (props) => {
     missionTabsCopy[index].series = series;
     props.setMissionTabs(missionTabsCopy);
   }, [series, setSelectedElement]);
+
+  const updateElementsAfterConnection = (params) => {
+    let indexMission = elements.findIndex(
+      (mission) => mission.id === params.target
+    );
+    let incomers = getIncomers(elements[indexMission], elements);
+    let incomerNames = incomers.map((incomer) => {
+      return incomer.data.label;
+    });
+    let missionsCopy = elements.slice();
+    missionsCopy[indexMission].data.required_missions = incomerNames;
+
+    let missionTabsCopy = props.missionTabs.slice();
+    let indexMissionTab = missionTabsCopy.findIndex(
+      (missionTab) => missionTab.id === props.fileID
+    );
+    missionTabsCopy[indexMissionTab].missions = missionsCopy;
+    props.setMissionTabs(missionTabsCopy);
+  };
 
   useEffect(() => {
     console.log("MissionTab useEffect, [props.setMissionTabs]");
@@ -182,6 +203,13 @@ const MissionTab = (props) => {
       data: {
         label: name,
         position: 1,
+        icon: "",
+        generic: false,
+        completed_by: "",
+        required_missions: "",
+        provinces_to_highlight: null,
+        trigger: null,
+        effect: null,
         selectedSeries: selectedSeries,
       },
       position: {
@@ -332,7 +360,7 @@ const MissionTab = (props) => {
         show={props.show}
         setShow={props.setShow}
         duplicateMission={onAdd}
-        missions={elements}
+        missions={getOnlyNodes()}
       />
       <RemoveMissionModal
         show={props.show}

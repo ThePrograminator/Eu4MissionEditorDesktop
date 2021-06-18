@@ -49,12 +49,15 @@ const Mission = (props) => {
         if (selectedSeries != null) {
           pos = props.series.find((x) => x.id === selectedSeries).slot * 150;
         }
+        let incomers = getIncomers(props.selectedElement, props.missions)
+        let incomerNames = incomers.map((incomer) => {return incomer.data.label})
         el.data = {
           ...el.data,
           label: nodeName,
           icon: icon,
           generic: generic,
           completed_by: completedBy,
+          required_missions : incomerNames,
           provinces_to_highlight: provincesToHighLight,
           trigger: trigger,
           effect: effect,
@@ -218,7 +221,7 @@ const Mission = (props) => {
       <Form.Group controlId={"formIncomer"}>
         <Form.Label>Required Missions</Form.Label>
         {getIncomers(props.selectedElement, props.missions).map((incomer) => (
-          <Form.Control readOnly defaultValue={incomer.data.label} />
+          <Form.Control key={incomer.id} readOnly defaultValue={incomer.data.label} />
         ))}
         <Form.Text className="text-muted">
           Which missions must be completed before this mission is active.

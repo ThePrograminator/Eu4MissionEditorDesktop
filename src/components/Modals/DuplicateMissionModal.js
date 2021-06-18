@@ -72,11 +72,13 @@ const DuplicateMissionModal = (props) => {
               isInvalid={selectedMissionTab === 0}
               required
             >
-              {props.missions.map((mission) => (
-                <option key={mission.id} value={mission.id}>
-                  {mission.data.label}
-                </option>
-              ))}
+              {props.missions.map((mission) =>
+                mission.data.label !== undefined ? (
+                  <option key={mission.id} value={mission.id}>
+                    {mission.data.label}
+                  </option>
+                ) : null
+              )}
             </Form.Control>
             {selectedMissionTab === 0 ? (
               <Form.Control.Feedback type="invalid">

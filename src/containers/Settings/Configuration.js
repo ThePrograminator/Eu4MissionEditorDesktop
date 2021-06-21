@@ -1,20 +1,26 @@
-import React, { useState } from 'react';
-import { Container, Row, Col } from 'react-bootstrap';
+import React, { useState, useContext } from "react";
+import { Container, Row, Col } from "react-bootstrap";
+import MissionTreeContext from "../../contexts/MissionTreeContext";
 
 const Configuration = (props) => {
-	return (
-		<Container fluid>
-			<Row lg={true} style={{ margin: 'auto', textAlign: 'center', width: '50%' }}>
-				<h1 style={{ width: '100%' }}>Configuration</h1>
-			</Row>
-			<Row lg={true}>
-				<Col lg={true}>
-					<h2>Key-Bindings: </h2>
-					<hr />
-				</Col>
-			</Row>
-		</Container>
-	);
+  const missionTreeContext = useContext(MissionTreeContext);
+  return (
+    <Container fluid>
+      <Row
+        lg={true}
+        style={{ margin: "auto", textAlign: "center", width: "50%" }}
+      >
+        <h1 style={{ width: "100%" }}>Configuration</h1>
+      </Row>
+      <Row lg={true}>
+        <Col lg={true}>
+          <h2>Key-Bindings: </h2>
+          <hr />
+          <p>{missionTreeContext.user.name}</p>
+        </Col>
+      </Row>
+    </Container>
+  );
 };
 
 export default Configuration;

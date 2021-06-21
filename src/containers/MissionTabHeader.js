@@ -7,6 +7,7 @@ import RemoveMissionFileModal from "../components/Modals/RemoveMissionFileModal"
 import Reader from "../Reader";
 import Writer from "../Writer";
 import { ButtonGroup, ButtonToolbar, Container, Row } from "react-bootstrap";
+import Factory from "../helper/Factory";
 
 import InProgressIDMap from "../InProgressIDMap";
 
@@ -111,7 +112,6 @@ const MissionTabHeader = (props) => {
   const exportFile = (id) => {
     console.log("id", id);
     console.log("props.missionTabs", props.missionTabs);
-    //let index = props.missionTabs.findIndex((missionTab) => missionTab.id === id);
     var missionTab = props.missionTabs[id];
     console.log("missionTab", missionTab);
     const fileData = Writer.exportMissionTree(
@@ -146,28 +146,13 @@ const MissionTabHeader = (props) => {
 
     let missionTabsCopy = [...props.missionTabs];
 
-    let newSeries = {
-      id: 0,
-      name: seriesName,
-      slot: 1,
-      generic: false,
-      ai: true,
-      hasCountryShield: false,
-      potentialOnLoad: null,
-      potential: null,
-      selectedSeries: null,
-      color: "",
-      missions: [],
-    };
+    let newSeries = Factory.createDefaultSeries(0, seriesName);
+    let newMissionTab = Factory.createDefaultMissionTab(
+      props.getAvailableFileId(),
+      name
+    );
+    newMissionTab.series = [newSeries];
 
-    const newMissionTab = {
-      id: props.getAvailableFileId(),
-      name: name,
-      fileName: name + ".txt",
-      series: [newSeries],
-      missions: [],
-      edges: [],
-    };
     missionTabsCopy.push(newMissionTab);
     console.log("Mission tabs", missionTabsCopy);
     props.setMissionTabs(missionTabsCopy);

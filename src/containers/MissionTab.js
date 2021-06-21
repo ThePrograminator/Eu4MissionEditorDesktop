@@ -19,6 +19,7 @@ import RemoveMissionModal from "../components/Modals/RemoveMissionModal";
 import AddSeriesModal from "../components/Modals/AddSeriesModal";
 
 import CodeEditor from "./CodeEditor";
+import Factory from "../helper/Factory";
 import "../Provider.css";
 
 const onLoad = (reactFlowInstance) =>
@@ -69,7 +70,7 @@ const MissionTab = (props) => {
     console.log("newConnection:", newParams);
     console.log("copyElements:", copyElements);
     setElements(copyElements);
-    updateElementsAfterConnection(newParams, copyElements)
+    updateElementsAfterConnection(newParams, copyElements);
   };
 
   useEffect(() => {
@@ -198,33 +199,13 @@ const MissionTab = (props) => {
     console.log("newNode name", name);
     console.log("newNode selectedSeries", selectedSeries);
 
-    const newNode = {
-      //id: getNodeId(),
-      id: props.getAvailableFileId(),
-      data: {
-        label: name,
-        position: 1,
-        icon: "",
-        generic: false,
-        completed_by: "",
-        required_missions: "",
-        provinces_to_highlight: null,
-        trigger: null,
-        effect: null,
-        selectedSeries: selectedSeries,
-      },
-      position: {
-        x: 0,
-        y: 150,
-      },
-      type: "default",
-    };
+    const newNode = Factory.createDefaultMission(props.getAvailableFileId(), name, selectedSeries);
+
     console.log("new node", newNode);
     let elementsCopy = [...elements];
     elementsCopy.push(newNode);
     setElements(elementsCopy);
 
-    //let missionTabsCopy = [...props.missionTabs];
     let missionTabsCopy = props.missionTabs.slice();
     let index = missionTabsCopy.findIndex(
       (missionTab) => missionTab.id === props.fileID

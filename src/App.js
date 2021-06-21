@@ -11,25 +11,26 @@ import { GlobalStyles } from "./components/GlobalStyles";
 import { lightTheme, darkTheme } from "./components/Themes";
 import Logger from "./components/Logger";
 
-const themesList = [
-  lightTheme,
-  darkTheme,
-];
+import MissionTreeContextProvider from "./contexts/MissionTreeContextProvider";
+
+const themesList = [lightTheme, darkTheme];
 
 const App = () => {
   const [currentTheme, setCurrentTheme] = useState(themesList[1]);
   return (
-    <ThemeProvider theme={currentTheme}>
-      <GlobalStyles />
-      <div style={{ minHeight: "100vh" }}>
-        <Home
-          currentTheme={currentTheme}
-          setCurrentTheme={setCurrentTheme}
-          themesList={themesList}
-        />
-      </div>
-      <Logger />
-    </ThemeProvider>
+    <MissionTreeContextProvider>
+      <ThemeProvider theme={currentTheme}>
+        <GlobalStyles />
+        <div style={{ minHeight: "100vh" }}>
+          <Home
+            currentTheme={currentTheme}
+            setCurrentTheme={setCurrentTheme}
+            themesList={themesList}
+          />
+        </div>
+        <Logger />
+      </ThemeProvider>
+    </MissionTreeContextProvider>
   );
 };
 

@@ -1,5 +1,7 @@
 import React from "react";
 
+import Factory from "./helper/Factory";
+
 const electron = window.require("electron");
 const fs = electron.remote.require("fs");
 const dialog = electron.remote.dialog;
@@ -75,19 +77,18 @@ const Reader = {
       })
     );
     const connections = Reader.createConnections(allMissions);
-    const newMissionTab = {
-      id: availableId,
-      name: fileName.substring(0, fileName.indexOf(".")),
-      fileName: fileName + extName,
-      series: allSeries,
-      missions: allMissions,
-      edges: connections,
-    };
+    const newMissionTab = Factory.createDefaultMissionTab(
+      availableId,
+      fileName.substring(0, fileName.indexOf(".")),
+      extName
+    );
+    newMissionTab.series = allSeries;
+    newMissionTab.missions = allMissions;
+    newMissionTab.edges = connections;
     allMissionTabs.push(newMissionTab);
 
     console.log("allMissionTabs", allMissionTabs);
     callback(allMissionTabs);
-    //props.setMissionTabs((els) => els.concat(allMissionTabs));
   },
   handleBlockBracketString: function (line, splitCleanedUp) {
     var stringConcat = "";
@@ -193,20 +194,8 @@ const Reader = {
   },
   handleMission: function (lineStart, splitCleanedUp) {
     let first = true;
-    let newMission = {
-      id: missionId,
-      data: {
-        icon: "",
-        generic: false,
-        position: -1,
-        completed_by: "",
-        required_missions: "",
-        provinces_to_highlight: null,
-        trigger: null,
-        effect: null,
-      },
-      position: { x: 0, y: 0 },
-    };
+
+    let newMission = Factory.createDefaultMission(missionId);
     for (var line = lineStart; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
       string = string.trim();
@@ -280,19 +269,7 @@ const Reader = {
   handleSeries: function (str) {
     var splitCleanedUp = str.split("\n");
     let first = true;
-    let newSeries = {
-      id: seriesId,
-      name: "",
-      slot: 0,
-      generic: false,
-      ai: true,
-      hasCountryShield: false,
-      potentialOnLoad: null,
-      potential: null,
-      selectedSeries: null,
-      color: "",
-      missions: [],
-    };
+    let newSeries = Factory.createDefaultSeries(seriesId);
     for (var line = 0; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
       if (!first && string.search("=") === -1) {
@@ -411,30 +388,6 @@ const Reader = {
     console.log("mappedConnections", mappedConnections);
 
     return mappedConnections;
-
-    /*missions.map((mission, index) => {
-      if (mission.data.required_missions.length === 0) continue;
-      const newConnectionMap = {
-        from: mission.data.required_missions,
-        to: mission.id,
-      };
-      mappedConnections.push(newConnectionMap);
-    });
-    return mappedConnections;*/
-  },
-  mapConnections: function (series, mappedConnections) {
-    /*var mappedConnections = [];
-    allSeries.map((series) =>
-      series.missions.map((mission, index) => {
-        if (mission.data.required_missions.length === 0) continue;
-        const newConnectionMap = {
-          from: mission.data.required_missions,
-          to: mission.id,
-        };
-        mappedConnections.push(newConnectionMap);
-      })
-    );
-    return mappedConnections;*/
   },
 };
 

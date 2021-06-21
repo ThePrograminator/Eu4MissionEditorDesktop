@@ -32,6 +32,7 @@ function applyEdgeStyle(params) {
   params.type = "step";
 
   params.arrowHeadType = "arrowclosed";
+  return params;
 }
 
 const MissionTab = (props) => {
@@ -62,15 +63,15 @@ const MissionTab = (props) => {
     console.log(closed);
   };
 
-  const onConnect = (params) =>
-    setElements(
-      (els) => (
-        console.log("newConnection:", params),
-        console.log("els:", els),
-        applyEdgeStyle(params),
-        addEdge(params, els)
-      )
-    );
+  const onConnect = (params) => {
+    let newParams = applyEdgeStyle(params);
+    let copyElements = addEdge(newParams, elements);
+    console.log("newConnection:", newParams);
+    console.log("copyElements:", copyElements);
+    setElements(copyElements);
+    updateElementsAfterConnection(newParams, copyElements)
+  };
+
   useEffect(() => {
     console.log("MissionTab useEffect, [series, setSelectedElement]");
     console.log("series", series);
@@ -98,15 +99,15 @@ const MissionTab = (props) => {
     props.setMissionTabs(missionTabsCopy);
   }, [series, setSelectedElement]);
 
-  const updateElementsAfterConnection = (params) => {
-    let indexMission = elements.findIndex(
+  const updateElementsAfterConnection = (params, copyElements) => {
+    let indexMission = copyElements.findIndex(
       (mission) => mission.id === params.target
     );
-    let incomers = getIncomers(elements[indexMission], elements);
+    let incomers = getIncomers(copyElements[indexMission], copyElements);
     let incomerNames = incomers.map((incomer) => {
       return incomer.data.label;
     });
-    let missionsCopy = elements.slice();
+    let missionsCopy = copyElements.slice();
     missionsCopy[indexMission].data.required_missions = incomerNames;
 
     let missionTabsCopy = props.missionTabs.slice();

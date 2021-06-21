@@ -5,7 +5,6 @@ import { Container, Row, Tabs, Tab } from 'react-bootstrap';
 
 const Home = (props) => {
 	const [ missionTabs, setMissionTabs ] = useState([]);
-	const [ availableFileId, setAvailableFileId ] = useState(1);
 
 	return (
 		<Container fluid style={{ minHeight: 'inherit' }}>

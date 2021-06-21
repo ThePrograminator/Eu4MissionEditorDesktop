@@ -1,5 +1,6 @@
 import React from "react";
 import MissionTreeContext from "./MissionTreeContext";
+import ReactFlow, { removeElements } from "react-flow-renderer";
 
 class MissionTreeProvider extends React.Component {
   state = {
@@ -33,6 +34,27 @@ class MissionTreeProvider extends React.Component {
     return availableId;
   };
 
+  addMissionTree = (missionTree) => {
+    console.log("Context new MissionTree: ", missionTree);
+    let missionTabsCopy = this.state.missionTrees.slice();
+    missionTabsCopy.push(missionTree);
+    console.log("Context new missionTabsCopy: ", missionTabsCopy);
+    this.setState({ missionTrees: missionTabsCopy }, function () {
+      console.log("Context MissionTrees: ", this.state.missionTrees);
+    });
+  };
+
+  editMissionTree = (missionTree) => {
+    let missionTabsCopy = this.state.missionTrees.slice();
+    let indexMissionTab = missionTabsCopy.findIndex(
+      (missionTab) => missionTab.id === missionTree.fileID
+    );
+    missionTabsCopy[indexMissionTab] = missionTree;
+    this.setState({ missionTrees: missionTabsCopy }, function () {
+      console.log("Context MissionTrees: ", this.state.missionTrees);
+    });
+  };
+
   render() {
     return (
       <MissionTreeContext.Provider
@@ -42,6 +64,8 @@ class MissionTreeProvider extends React.Component {
           getAvailableNodeId: this.getAvailableNodeId,
           getAvailableSeriesId: this.getAvailableSeriesId,
           missionTrees: this.state.missionTrees,
+          addMissionTree: this.addMissionTree,
+          editMissionTree: this.editMissionTree,
         }}
       >
         {this.props.children}

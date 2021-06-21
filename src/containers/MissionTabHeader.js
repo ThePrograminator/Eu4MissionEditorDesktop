@@ -106,6 +106,7 @@ const MissionTabHeader = (props) => {
       missionTreeContext.getAvailableTreeId(),
       (allMissionTabs) => {
         props.setMissionTabs((els) => els.concat(allMissionTabs));
+        missionTreeContext.addMissionTree(allMissionTabs[0]);
         props.setinProgressID(0);
       }
     );
@@ -158,6 +159,7 @@ const MissionTabHeader = (props) => {
     missionTabsCopy.push(newMissionTab);
     console.log("Mission tabs", missionTabsCopy);
     props.setMissionTabs(missionTabsCopy);
+    missionTreeContext.addMissionTree(newMissionTab);
   };
 
   const duplicateFile = (duplicateId, fileName) => {

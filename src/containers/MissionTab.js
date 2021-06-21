@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback, useEffect, useContext } from "react";
 import ReactFlow, {
   ReactFlowProvider,
   addEdge,
@@ -20,6 +20,7 @@ import AddSeriesModal from "../components/Modals/AddSeriesModal";
 
 import CodeEditor from "./CodeEditor";
 import Factory from "../helper/Factory";
+import MissionTreeContext from "../contexts/MissionTreeContext";
 import "../Provider.css";
 
 const onLoad = (reactFlowInstance) =>
@@ -37,6 +38,7 @@ function applyEdgeStyle(params) {
 }
 
 const MissionTab = (props) => {
+  const missionTreeContext = useContext(MissionTreeContext);
   const [elements, setElements] = useState([]);
   const [selectedElement, setSelectedElement] = useState(null);
   const [series, setSeries] = useState(props.series);
@@ -199,7 +201,7 @@ const MissionTab = (props) => {
     console.log("newNode name", name);
     console.log("newNode selectedSeries", selectedSeries);
 
-    const newNode = Factory.createDefaultMission(props.getAvailableFileId(), name, selectedSeries);
+    const newNode = Factory.createDefaultMission(missionTreeContext.getAvailableNodeId(), name, selectedSeries);
 
     console.log("new node", newNode);
     let elementsCopy = [...elements];

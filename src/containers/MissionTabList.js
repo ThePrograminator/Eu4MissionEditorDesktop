@@ -21,7 +21,6 @@ const MissionList = (props) => {
             setinProgressID={setinProgressID}
             missionTabs={props.missionTabs}
             setMissionTabs={props.setMissionTabs}
-            getAvailableFileId={props.getAvailableFileId}
             fileKey={key}
           />
         </Col>
@@ -70,7 +69,6 @@ const MissionList = (props) => {
                             setShow={setShow}
                             inProgressID={inProgressID}
                             setinProgressID={setinProgressID}
-                            getAvailableFileId={props.getAvailableFileId}
                           />
                         </Row>
                       </Container>
@@ -87,48 +85,3 @@ const MissionList = (props) => {
 };
 
 export default MissionList;
-
-/*
-
-
-<NodeEditor
-                        missions={props.missions}
-                        setMissions={props.setMissions}
-                        series={props.series}
-                        setSeries={props.setSeries}
-                        edges={props.edges}
-                      />
-                      */
-
-/*
-					  {props.missionTabs.length > 0 ? (
-				<div>
-					<hr />
-					<Tabs defaultActiveKey="createMissionFile" id="uncontrolled-tab-example">
-						{props.missionTabs.map((missionTab) => {
-							console.log('MissionTabs loaded', props.missionTabs);
-							return (
-								<Tab
-									key={missionTab.name}
-									eventKey={'missionTab_' + missionTab.id}
-									title={missionTab.name}
-									style={{ minHeight: 'inherit' }}
-								>
-									<Container fluid style={{ minHeight: '90vh' }}>
-										<Row style={{ minHeight: '90vh' }}>
-											<MissionTab
-												missions={missionTab.missions}
-												series={missionTab.series}
-												edges={missionTab.edges}
-												missionTabs={props.missionTabs}
-												setMissionTabs={props.setMissionTabs}
-												fileID={missionTab.id}
-											/>
-										</Row>
-									</Container>
-								</Tab>
-							);
-						})}
-					</Tabs>
-				</div>
-			) : null}*/

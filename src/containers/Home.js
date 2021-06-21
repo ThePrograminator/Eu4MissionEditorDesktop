@@ -4,18 +4,8 @@ import Settings from './Settings';
 import { Container, Row, Tabs, Tab } from 'react-bootstrap';
 
 const Home = (props) => {
-	const [ series, setSeries ] = useState([]);
-	const [ missions, setMissions ] = useState([]);
 	const [ missionTabs, setMissionTabs ] = useState([]);
-	const [ edges, setEdges ] = useState([]);
 	const [ availableFileId, setAvailableFileId ] = useState(1);
-
-	const getAvailableFileId = () => {
-		var availableId = `node_${availableFileId.toString()}`;
-		var newId = availableFileId + 1;
-		setAvailableFileId(newId);
-		return availableId;
-	};
 
 	return (
 		<Container fluid style={{ minHeight: 'inherit' }}>
@@ -33,7 +23,6 @@ const Home = (props) => {
 							<MissionTabList
 								missionTabs={missionTabs}
 								setMissionTabs={setMissionTabs}
-								getAvailableFileId={getAvailableFileId}
 							/>
 						</Row>
 					</Container>
@@ -42,12 +31,8 @@ const Home = (props) => {
 					<Container fluid style={{ minHeight: '83vh' }}>
 						<Row style={{ minHeight: '83vh' }}>
 							<Settings
-								setMissions={setMissions}
-								setSeries={setSeries}
-								setEdges={setEdges}
 								missionTabs={missionTabs}
 								setMissionTabs={setMissionTabs}
-								getAvailableFileId={getAvailableFileId}
 								currentTheme={props.currentTheme}
 								setCurrentTheme={props.setCurrentTheme}
 								themesList={props.themesList}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import MissionTabButton from "../components/MissionTabButton";
 import ExportMissionModal from "../components/Modals/ExportMissionModal";
 import CreateMissionModal from "../components/Modals/CreateMissionModal";
@@ -8,6 +8,7 @@ import Reader from "../Reader";
 import Writer from "../Writer";
 import { ButtonGroup, ButtonToolbar, Container, Row } from "react-bootstrap";
 import Factory from "../helper/Factory";
+import MissionTreeContext from "../contexts/MissionTreeContext";
 
 import InProgressIDMap from "../InProgressIDMap";
 
@@ -29,6 +30,7 @@ const dialog = electron.remote.dialog;
 var path = require("path");
 
 const MissionTabHeader = (props) => {
+  const missionTreeContext = useContext(MissionTreeContext);
   const handleClick = (id) => {
     console.log("clicked id", id);
     switch (id) {
@@ -101,7 +103,7 @@ const MissionTabHeader = (props) => {
 
     Reader.asyncHandleFile(
       file,
-      props.getAvailableFileId(),
+      missionTreeContext.getAvailableTreeId(),
       (allMissionTabs) => {
         props.setMissionTabs((els) => els.concat(allMissionTabs));
         props.setinProgressID(0);
@@ -148,7 +150,7 @@ const MissionTabHeader = (props) => {
 
     let newSeries = Factory.createDefaultSeries(0, seriesName);
     let newMissionTab = Factory.createDefaultMissionTab(
-      props.getAvailableFileId(),
+      missionTreeContext.getAvailableTreeId(),
       name
     );
     newMissionTab.series = [newSeries];

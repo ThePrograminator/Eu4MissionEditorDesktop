@@ -36,21 +36,21 @@ class MissionTreeProvider extends React.Component {
 
   addMissionTree = (missionTree) => {
     console.log("Context new MissionTree: ", missionTree);
-    let missionTabsCopy = this.state.missionTrees.slice();
-    missionTabsCopy.push(missionTree);
-    console.log("Context new missionTabsCopy: ", missionTabsCopy);
-    this.setState({ missionTrees: missionTabsCopy }, function () {
+    let missionTreeCopy = this.state.missionTrees.slice();
+    missionTreeCopy.push(missionTree);
+    console.log("Context new missionTreeCopy: ", missionTreeCopy);
+    this.setState({ missionTrees: missionTreeCopy }, function () {
       console.log("Context MissionTrees: ", this.state.missionTrees);
     });
   };
 
   editMissionTree = (missionTree) => {
-    let missionTabsCopy = this.state.missionTrees.slice();
-    let indexMissionTab = missionTabsCopy.findIndex(
-      (missionTab) => missionTab.id === missionTree.fileID
+    let missionTreeCopy = this.state.missionTrees.slice();
+    let indexMissionTab = missionTreeCopy.findIndex(
+      (missionTab) => missionTab.id === missionTree.id
     );
-    missionTabsCopy[indexMissionTab] = missionTree;
-    this.setState({ missionTrees: missionTabsCopy }, function () {
+    missionTreeCopy[indexMissionTab] = missionTree;
+    this.setState({ missionTrees: [...missionTreeCopy] }, function () {
       console.log("Context MissionTrees: ", this.state.missionTrees);
     });
   };

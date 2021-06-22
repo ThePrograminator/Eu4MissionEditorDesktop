@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Tabs, Tab } from "react-bootstrap";
 import Mission from "../components/Mission";
 import SeriesEditor from "./SeriesEditor";
@@ -20,16 +20,13 @@ const CodeEditor = (props) => {
             }}
           >
             <Mission
-              missions={props.missions}
+              missionTree={props.missionTree}
               setMissions={props.setMissions}
               selectedElement={props.selectedElement}
               setSelectedElement={props.setSelectedElement}
               series={props.series}
               onUpdate={props.onUpdate}
-              missionTabs={props.missionTabs}
-              missionTabs={props.missionTabs}
               fileID={props.fileID}
-              setMissionTabs={props.setMissionTabs}
             />
           </Tab>
         ) : null}
@@ -43,11 +40,7 @@ const CodeEditor = (props) => {
             maxHeight: "75vh",
           }}
         >
-          <SeriesEditor
-            series={props.series}
-            setSeries={props.setSeries}
-            setMissionTabs={props.setMissionTabs}
-          />
+          <SeriesEditor series={props.series} setSeries={props.setSeries} />
         </Tab>
       </Tabs>
     </aside>
@@ -55,33 +48,3 @@ const CodeEditor = (props) => {
 };
 
 export default CodeEditor;
-
-/*
-
-
-<Accordion defaultActiveKey="0">
-        <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="0">
-            Mission
-          </Accordion.Toggle>
-          <Accordion.Collapse eventKey="0">
-            <Card.Body>
-              <Mission
-                setElements={props.setElements}
-                selectedElement={props.selectedElement}
-                elements={props.elements}
-                series={props.series}
-              />
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-        <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="1">
-            Series (Read Only)
-          </Accordion.Toggle>
-          <Accordion.Collapse eventKey="1">
-            <Card.Body>hello</Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      </Accordion>
-      */

@@ -105,7 +105,6 @@ const MissionTabHeader = (props) => {
       file,
       missionTreeContext.getAvailableTreeId(),
       (allMissionTabs) => {
-        props.setMissionTabs((els) => els.concat(allMissionTabs));
         missionTreeContext.addMissionTree(allMissionTabs[0]);
         props.setinProgressID(0);
       }
@@ -114,8 +113,8 @@ const MissionTabHeader = (props) => {
 
   const exportFile = (id) => {
     console.log("id", id);
-    console.log("props.missionTabs", props.missionTabs);
-    var missionTab = props.missionTabs[id];
+    console.log("props.missionTabs", missionTreeContext.missionTrees);
+    var missionTab = missionTreeContext.missionTrees[id];
     console.log("missionTab", missionTab);
     const fileData = Writer.exportMissionTree(
       missionTab.series,
@@ -147,18 +146,13 @@ const MissionTabHeader = (props) => {
   const createFile = (name, seriesName) => {
     console.log("name", name);
 
-    let missionTabsCopy = [...props.missionTabs];
-
-    let newSeries = Factory.createDefaultSeries(0, seriesName);
+    let newSeries = Factory.createDefaultSeries(missionTreeContext.getAvailableSeriesId(), seriesName);
     let newMissionTab = Factory.createDefaultMissionTab(
       missionTreeContext.getAvailableTreeId(),
       name
     );
     newMissionTab.series = [newSeries];
 
-    missionTabsCopy.push(newMissionTab);
-    console.log("Mission tabs", missionTabsCopy);
-    props.setMissionTabs(missionTabsCopy);
     missionTreeContext.addMissionTree(newMissionTab);
   };
 
@@ -243,36 +237,43 @@ const MissionTabHeader = (props) => {
   };
 
   const checkDuplicateMissionDisabled = () => {
-    if (props.missionTabs === undefined || props.missionTabs === null)
+    if (
+      missionTreeContext.missionTrees === undefined ||
+      missionTreeContext.missionTrees === null
+    )
       return true;
 
     if (props.fileKey === undefined || props.fileKey === null) return true;
 
-    if (props.missionTabs.length === 0) return true;
+    if (missionTreeContext.missionTrees.length === 0) return true;
 
-    let index = props.missionTabs.findIndex(
+    let index = missionTreeContext.missionTrees.findIndex(
       (missionTab) => missionTab.id === props.fileKey
     );
 
-    console.log("got here", props.missionTabs[index].missions);
-    if (props.missionTabs[index].missions.length > 0) return false;
+    console.log("got here", missionTreeContext.missionTrees[index].missions);
+    if (missionTreeContext.missionTrees[index].missions.length > 0)
+      return false;
 
     return true;
   };
 
   const checkRemoveSeriesDisabled = () => {
-    if (props.missionTabs === undefined || props.missionTabs === null)
+    if (
+      missionTreeContext.missionTrees === undefined ||
+      missionTreeContext.missionTrees === null
+    )
       return true;
 
     if (props.fileKey === undefined || props.fileKey === null) return true;
 
-    if (props.missionTabs.length === 0) return true;
+    if (missionTreeContext.missionTrees.length === 0) return true;
 
-    let index = props.missionTabs.findIndex(
+    let index = missionTreeContext.missionTrees.findIndex(
       (missionTab) => missionTab.id === props.fileKey
     );
 
-    if (props.missionTabs[index].series.length > 1) return false;
+    if (missionTreeContext.missionTrees[index].series.length > 1) return false;
 
     return true;
   };
@@ -301,7 +302,7 @@ const MissionTabHeader = (props) => {
                 buttonText={"Duplicate Mission File"}
                 toolTipText={"Duplicate Mission File"}
                 icon={<FaFileImport />}
-                disabled={props.missionTabs.length === 0}
+                disabled={missionTreeContext.missionTrees.length === 0}
               />
               <MissionTabButton
                 id={InProgressIDMap.remove}
@@ -310,7 +311,7 @@ const MissionTabHeader = (props) => {
                 buttonText={"Remove Mission File"}
                 toolTipText={"Remove Mission File"}
                 icon={<FaFileExcel />}
-                disabled={props.missionTabs.length === 0}
+                disabled={missionTreeContext.missionTrees.length === 0}
               />
             </Row>
           </Container>
@@ -336,7 +337,7 @@ const MissionTabHeader = (props) => {
                 buttonText={"Export Mission File"}
                 toolTipText={"Export Mission File"}
                 icon={<FaFileUpload />}
-                disabled={props.missionTabs.length === 0}
+                disabled={missionTreeContext.missionTrees.length === 0}
               />
             </Row>
           </Container>
@@ -357,7 +358,8 @@ const MissionTabHeader = (props) => {
                 toolTipText={"Add Mission"}
                 icon={<FaPlusSquare />}
                 disabled={
-                  props.missionTabs.length === 0 || props.fileKey == null
+                  missionTreeContext.missionTrees.length === 0 ||
+                  props.fileKey == null
                 }
               />
               <MissionTabButton
@@ -396,7 +398,8 @@ const MissionTabHeader = (props) => {
                 toolTipText={"Add Series"}
                 icon={<FaPlusSquare />}
                 disabled={
-                  props.missionTabs.length === 0 || props.fileKey == null
+                  missionTreeContext.missionTrees.length === 0 ||
+                  props.fileKey == null
                 }
               />
               <MissionTabButton
@@ -407,7 +410,8 @@ const MissionTabHeader = (props) => {
                 toolTipText={"Duplicate Series"}
                 icon={<FaClone />}
                 disabled={
-                  props.missionTabs.length === 0 || props.fileKey == null
+                  missionTreeContext.missionTrees.length === 0 ||
+                  props.fileKey == null
                 }
               />
               <MissionTabButton
@@ -429,25 +433,25 @@ const MissionTabHeader = (props) => {
             show={props.show}
             setShow={props.setShow}
             exportFile={exportFile}
-            missionTabs={props.missionTabs}
+            missionTabs={missionTreeContext.missionTrees}
           />
           <CreateMissionModal
             show={props.show}
             setShow={props.setShow}
             createFile={createFile}
-            missionTabs={props.missionTabs}
+            missionTabs={missionTreeContext.missionTrees}
           />
           <RemoveMissionFileModal
             show={props.show}
             setShow={props.setShow}
             removeFile={removeFile}
-            missionTabs={props.missionTabs}
+            missionTabs={missionTreeContext.missionTrees}
           />
           <DuplicateMissionFileModal
             show={props.show}
             setShow={props.setShow}
             duplicateFile={duplicateFile}
-            missionTabs={props.missionTabs}
+            missionTabs={missionTreeContext.missionTrees}
           />
         </div>
       ) : null}

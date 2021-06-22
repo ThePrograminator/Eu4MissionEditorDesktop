@@ -74,7 +74,8 @@ const AddMissionModal = (props) => {
             <Form.Label>Selected Series</Form.Label>
             <Form.Control
               as="select"
-              onChange={(evt) => setSelectedSeries(parseInt(evt.target.value))}
+              //onChange={(evt) => setSelectedSeries(parseInt(evt.target.value))}
+              onChange={(evt) => setSelectedSeries(evt.target.value)}
               value={selectedSeries}
               placeholder={"Select Series"}
             >

@@ -17,6 +17,7 @@ import AddMissionModal from "../components/Modals/AddMissionModal";
 import DuplicateMissionModal from "../components/Modals/DuplicateMissionModal";
 import RemoveMissionModal from "../components/Modals/RemoveMissionModal";
 import AddSeriesModal from "../components/Modals/AddSeriesModal";
+import RemoveSeriesModal from "../components/Modals/RemoveSeriesModal";
 
 import CodeEditor from "./CodeEditor";
 import Factory from "../helper/Factory";
@@ -26,8 +27,6 @@ import "../Provider.css";
 const onLoad = (reactFlowInstance) =>
   console.log("flow loaded:", reactFlowInstance);
 
-let id = 900;
-//const getNodeId = () => `node_${(id++).toString()}`;
 const snapGrid = [150, 150];
 
 function applyEdgeStyle(params) {
@@ -39,9 +38,9 @@ function applyEdgeStyle(params) {
 
 const MissionTab = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
-  const [elements, setElements] = useState([]);
+  const [elements, setElements] = useState(props.missionTree.missions);
   const [selectedElement, setSelectedElement] = useState(null);
-  const [series, setSeries] = useState(props.series);
+  const [series, setSeries] = useState(props.missionTree.series);
 
   const [closed, setClosed] = useState({
     maxWidth: "40%",
@@ -94,12 +93,17 @@ const MissionTab = (props) => {
       return el;
     });
     setElements(ele);
-    let missionTabsCopy = props.missionTabs.slice();
-    let index = missionTabsCopy.findIndex(
-      (missionTab) => missionTab.id === props.fileID
+    let missionTreesCopy = missionTreeContext.missionTrees.slice();
+    let index = missionTreesCopy.findIndex(
+      (missionTree) => missionTree.id === props.missionTree.id
     );
-    missionTabsCopy[index].series = series;
-    props.setMissionTabs(missionTabsCopy);
+    if (index != -1) {
+      console.log(
+        "missiontab.js useEffect[series, setSelectedElement] updating"
+      );
+      missionTreesCopy[index].series = series;
+      missionTreeContext.editMissionTree(missionTreesCopy[index]);
+    }
   }, [series, setSelectedElement]);
 
   const updateElementsAfterConnection = (params, copyElements) => {
@@ -113,31 +117,16 @@ const MissionTab = (props) => {
     let missionsCopy = copyElements.slice();
     missionsCopy[indexMission].data.required_missions = incomerNames;
 
-    let missionTabsCopy = props.missionTabs.slice();
-    let indexMissionTab = missionTabsCopy.findIndex(
-      (missionTab) => missionTab.id === props.fileID
+    let missionTreesCopy = missionTreeContext.missionTrees.slice();
+    let indexMissionTree = missionTreesCopy.findIndex(
+      (missionTree) => missionTree.id === props.missionTreeId
     );
-    missionTabsCopy[indexMissionTab].missions = missionsCopy;
-    props.setMissionTabs(missionTabsCopy);
+    if (indexMissionTree != -1) {
+      console.log("missiontab.js updateElementsAfterConnection updating");
+      missionTreesCopy[indexMissionTree].missions = missionsCopy;
+      missionTreeContext.editMissionTree(missionTreesCopy[indexMissionTree]);
+    }
   };
-
-  useEffect(() => {
-    console.log("MissionTab useEffect, [props.setMissionTabs]");
-    props.missions.map((mission) => {
-      const newNode = {
-        id: "node_" + mission.id,
-        data: mission.data,
-        position: mission.position,
-      };
-      elements.push(newNode);
-    });
-    props.edges.map((edge) => {
-      elements.push(edge);
-    });
-
-    setElements([...elements]);
-    console.log("Elements End", elements);
-  }, [props.setMissionTabs]);
 
   const onElementClick = (event, element) => (
     console.log("click", element), setSelectedElement(element)
@@ -184,15 +173,18 @@ const MissionTab = (props) => {
         }
       });
       console.log("layoutedElements 2", layoutedElements);
-      let missionTabsCopy = props.missionTabs.slice();
-      let index = missionTabsCopy.findIndex(
-        (missionTab) => missionTab.id === props.fileID
+      let missionTreesCopy = missionTreeContext.missionTrees.slice();
+      let index = missionTreesCopy.findIndex(
+        (missionTree) => missionTree.id === props.missionTree.id
       );
       console.log("index", index);
-      missionTabsCopy[index].missions = layoutedElements;
-      console.log("onNodeDragStop missionTabsCopy", missionTabsCopy);
-      props.setMissionTabs(missionTabsCopy);
-      console.log("elemeents", elements);
+      if (index !== -1) {
+        console.log("missiontab.js onNodeDragStop updating");
+        missionTreesCopy[index].missions = layoutedElements;
+        console.log("onNodeDragStop missionTabsCopy", missionTreesCopy);
+        missionTreeContext.editMissionTree(missionTreesCopy[index]);
+        console.log("elemeents", elements);
+      }
     }
   };
 
@@ -201,28 +193,57 @@ const MissionTab = (props) => {
     console.log("newNode name", name);
     console.log("newNode selectedSeries", selectedSeries);
 
-    const newNode = Factory.createDefaultMission(missionTreeContext.getAvailableNodeId(), name, selectedSeries);
+    const newNode = Factory.createDefaultMission(
+      missionTreeContext.getAvailableNodeId(),
+      name,
+      selectedSeries
+    );
 
     console.log("new node", newNode);
     let elementsCopy = [...elements];
     elementsCopy.push(newNode);
     setElements(elementsCopy);
 
-    let missionTabsCopy = props.missionTabs.slice();
-    let index = missionTabsCopy.findIndex(
-      (missionTab) => missionTab.id === props.fileID
-    );
-    console.log("index", index);
-    missionTabsCopy[index].missions = elementsCopy;
-    console.log("missionTabsCopy", missionTabsCopy);
-    props.setMissionTabs(missionTabsCopy);
-    console.log("props.missiontabs", props.missionTabs);
-
     console.log("Elements End", elements);
   };
 
+  const addSeries = (name) => {
+    console.log("name", name);
+
+    let newSeries = Factory.createDefaultSeries(
+      missionTreeContext.getAvailableSeriesId(),
+      name
+    );
+
+    console.log("newSeries", newSeries);
+    let seriesCopy = [...series];
+    seriesCopy.push(newSeries);
+    setSeries(seriesCopy);
+
+    /*let missionTreesCopy = missionTreeContext.missionTrees.slice();
+    let index = missionTreesCopy.findIndex(
+      (missionTree) => missionTree.id === props.missionTree.id
+    );
+    if (index !== -1) {
+      missionTreesCopy[index].series = newSeries;
+      console.log("missionTabsCopy", missionTreesCopy);
+      missionTreeContext.editMissionTree(missionTreesCopy[index]);
+    }*/
+  };
+
   useEffect(() => {
+    console.log("missiontab.js useEffect [elements]");
     console.log("new Elements End", elements);
+
+    let missionTreesCopy = missionTreeContext.missionTrees.slice();
+    let index = missionTreesCopy.findIndex(
+      (missionTree) => missionTree.id === props.missionTree.id
+    );
+    if (index !== -1) {
+      missionTreesCopy[index].missions = elements;
+      console.log("missionTabsCopy", missionTreesCopy);
+      missionTreeContext.editMissionTree(missionTreesCopy[index]);
+    }
   }, [elements]);
 
   const onRemove = (selectedMission) => {
@@ -241,13 +262,15 @@ const MissionTab = (props) => {
 
   const onUpdate = useCallback(() => {
     console.log("OnUpdate elements", elements);
-    let missionTabsCopy = props.missionTabs.slice();
-    let index = missionTabsCopy.findIndex(
-      (missionTab) => missionTab.id === props.fileID
+    let missionTreesCopy = missionTreeContext.missionTrees.slice();
+    let index = missionTreesCopy.findIndex(
+      (missionTree) => missionTree.id === props.missionTree.id
     );
-    missionTabsCopy[index].missions = elements;
-    props.setMissionTabs(missionTabsCopy);
-    console.log("OnUpdate missionTabs", props.missionTabs);
+    if (index !== -1) {
+      missionTreesCopy[index].missions = elements;
+      console.log("missiontab.js onUpdate updating");
+      missionTreeContext.editMissionTree(missionTreesCopy[index]);
+    }
   }, []);
 
   const testRemove = (elementsToRemove) => {
@@ -264,6 +287,17 @@ const MissionTab = (props) => {
     }
 
     setElements((els) => removeElements(elementsToRemove, els), onUpdate());
+  };
+
+  const removeSeries = (seriesId) => {
+    if (series.length === 1) return;
+    console.log("series to be removed", seriesId);
+
+    let seriesCopy = series.slice();
+    let index = series.findIndex((serie) => serie.id === seriesId.id);
+
+    seriesCopy.splice(index, 1);
+    setSeries(seriesCopy);
   };
 
   const onElementsRemove = (elementsToRemove) => (
@@ -322,15 +356,14 @@ const MissionTab = (props) => {
         <CodeEditor
           closed={closed}
           missions={elements}
+          missionTree={props.missionTree}
           setMissions={setElements}
           selectedElement={selectedElement}
           setSelectedElement={setSelectedElement}
           series={series}
           setSeries={setSeries}
           onUpdate={onUpdate}
-          missionTabs={props.missionTabs}
-          fileID={props.fileID}
-          setMissionTabs={props.setMissionTabs}
+          fileId={props.missionTree.id}
         />
       </ReactFlowProvider>
       <AddMissionModal
@@ -355,7 +388,13 @@ const MissionTab = (props) => {
       <AddSeriesModal
         show={props.show}
         setShow={props.setShow}
-        addSeries={onAdd}
+        addSeries={addSeries}
+        series={series}
+      />
+      <RemoveSeriesModal
+        show={props.show}
+        setShow={props.setShow}
+        removeSeries={removeSeries}
         series={series}
       />
     </div>

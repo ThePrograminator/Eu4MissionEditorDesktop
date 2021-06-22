@@ -48,7 +48,11 @@ const SeriesEditor = (props) => {
             <Tab.Content>
               {props.series.map((series) => (
                 <Tab.Pane key={series.id} eventKey={"#link" + series.id}>
-                  <Series series={series} setSeries={props.setSeries} />
+                  <Series
+                    series={series}
+                    allSeries={props.series}
+                    setSeries={props.setSeries}
+                  />
                 </Tab.Pane>
               ))}
             </Tab.Content>

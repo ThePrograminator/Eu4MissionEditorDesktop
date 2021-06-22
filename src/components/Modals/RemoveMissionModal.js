@@ -4,7 +4,7 @@ import ReactFlow, { isNode } from 'react-flow-renderer';
 
 import { Modal, Button, Form } from 'react-bootstrap';
 
-const AddMissionModal = (props) => {
+const RemoveMissionModal = (props) => {
 	const [ selectedMission, setSelectedMission ] = useState(null);
 
 	const handleClose = () => {
@@ -13,7 +13,7 @@ const AddMissionModal = (props) => {
 
 	useEffect(
 		() => {
-			if (props.missions.length !== 0) {
+			if (props.show === 7 && props.missions.length !== 0) {
 				setSelectedMission(props.missions[0]);
 				console.log('props.missions', props.missions[0]);
 				console.log('selectedMission', selectedMission);
@@ -62,4 +62,4 @@ const AddMissionModal = (props) => {
 	);
 };
 
-export default AddMissionModal;
+export default RemoveMissionModal;

@@ -85,6 +85,11 @@ const Reader = {
     newMissionTab.series = allSeries;
     newMissionTab.missions = allMissions;
     newMissionTab.edges = connections;
+    console.log("newMissionTab", newMissionTab);
+    newMissionTab.edges.map((edge) => {
+      newMissionTab.missions.push(edge);
+    });
+    console.log("newMissionTab", newMissionTab);
     allMissionTabs.push(newMissionTab);
 
     console.log("allMissionTabs", allMissionTabs);
@@ -195,7 +200,8 @@ const Reader = {
   handleMission: function (lineStart, splitCleanedUp) {
     let first = true;
 
-    let newMission = Factory.createDefaultMission(missionId);
+    var availableId = `node_${missionId.toString()}`;
+    let newMission = Factory.createDefaultMission(availableId);
     for (var line = lineStart; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
       string = string.trim();
@@ -269,7 +275,8 @@ const Reader = {
   handleSeries: function (str) {
     var splitCleanedUp = str.split("\n");
     let first = true;
-    let newSeries = Factory.createDefaultSeries(seriesId);
+    var availableId = `series_${seriesId.toString()}`;
+    let newSeries = Factory.createDefaultSeries(availableId);
     for (var line = 0; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
       if (!first && string.search("=") === -1) {
@@ -375,8 +382,8 @@ const Reader = {
           if (element === source.data.label) {
             const newConnectionMap = {
               id: "e" + source.id + "-" + target.id,
-              source: "node_" + source.id,
-              target: "node_" + target.id,
+              source: source.id,
+              target: target.id,
               type: "step",
             };
             mappedConnections.push(newConnectionMap);

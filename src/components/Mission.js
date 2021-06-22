@@ -1,13 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { FormControl, Form, Col, Accordion, Card } from "react-bootstrap";
+import React, { useEffect, useState, useContext } from "react";
+import { FormControl, Form, Accordion, Card } from "react-bootstrap";
 import { getIncomers } from "react-flow-renderer";
 import SeriesReadOnly from "./SeriesReadOnly";
+import MissionTreeContext from "../contexts/MissionTreeContext";
 
 function calcPosition(pos) {
   return pos / 150;
 }
 
 const Mission = (props) => {
+  const missionTreeContext = useContext(MissionTreeContext);
   const [nodeName, setNodeName] = useState(props.selectedElement.data.label);
   const [icon, setIcon] = useState(props.selectedElement.data.icon);
   const [generic, setGeneric] = useState(props.selectedElement.data.generic);
@@ -36,11 +38,11 @@ const Mission = (props) => {
     setTrigger(props.selectedElement.data.trigger);
     setEffect(props.selectedElement.data.effect);
     setSelectedSeries(props.selectedElement.data.selectedSeries);
-  }, [props.selectedElement, props.missions, props.series]);
+  }, [props.selectedElement, props.missionTree, props.series]);
 
   useEffect(() => {
     console.log("nodeName", nodeName);
-    let missionsCopy = props.missions.slice();
+    let missionsCopy = props.missionTree.missions.slice();
     missionsCopy.map((el) => {
       if (el.id === props.selectedElement.id) {
         // it's important that you create a new object here
@@ -49,15 +51,20 @@ const Mission = (props) => {
         if (selectedSeries != null) {
           pos = props.series.find((x) => x.id === selectedSeries).slot * 150;
         }
-        let incomers = getIncomers(props.selectedElement, props.missions)
-        let incomerNames = incomers.map((incomer) => {return incomer.data.label})
+        let incomers = getIncomers(
+          props.selectedElement,
+          props.missionTree.missions
+        );
+        let incomerNames = incomers.map((incomer) => {
+          return incomer.data.label;
+        });
         el.data = {
           ...el.data,
           label: nodeName,
           icon: icon,
           generic: generic,
           completed_by: completedBy,
-          required_missions : incomerNames,
+          required_missions: incomerNames,
           provinces_to_highlight: provincesToHighLight,
           trigger: trigger,
           effect: effect,
@@ -86,14 +93,6 @@ const Mission = (props) => {
     });
 
     props.setMissions(missionsCopy);
-
-    let missionTabsCopy = props.missionTabs.slice();
-    let index = missionTabsCopy.findIndex(
-      (missionTab) => missionTab.id === props.fileID
-    );
-    missionTabsCopy[index].missions = missionsCopy;
-    props.setMissionTabs(missionTabsCopy);
-    //props.onUpdate();
   }, [
     nodeName,
     icon,
@@ -220,9 +219,15 @@ const Mission = (props) => {
 
       <Form.Group controlId={"formIncomer"}>
         <Form.Label>Required Missions</Form.Label>
-        {getIncomers(props.selectedElement, props.missions).map((incomer) => (
-          <Form.Control key={incomer.id} readOnly defaultValue={incomer.data.label} />
-        ))}
+        {getIncomers(props.selectedElement, props.missionTree.missions).map(
+          (incomer) => (
+            <Form.Control
+              key={incomer.id}
+              readOnly
+              defaultValue={incomer.data.label}
+            />
+          )
+        )}
         <Form.Text className="text-muted">
           Which missions must be completed before this mission is active.
         </Form.Text>

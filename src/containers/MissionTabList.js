@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import MissionTab from "./MissionTab";
 import MissionTabHeader from "./MissionTabHeader";
 import { Container, Row, Tab, Nav, Col } from "react-bootstrap";
+import MissionTreeContext from "../contexts/MissionTreeContext";
 
 import "../tabs.css";
 
 const MissionList = (props) => {
+  const missionTreeContext = useContext(MissionTreeContext);
   const [key, setKey] = useState(null);
   const [inProgressID, setinProgressID] = useState(0);
   const [show, setShow] = useState(0);
@@ -19,8 +21,6 @@ const MissionList = (props) => {
             setShow={setShow}
             inProgressID={inProgressID}
             setinProgressID={setinProgressID}
-            missionTabs={props.missionTabs}
-            setMissionTabs={props.setMissionTabs}
             fileKey={key}
           />
         </Col>
@@ -32,15 +32,15 @@ const MissionList = (props) => {
         id="left-tabs-example"
         defaultActiveKey="first"
       >
-        {props.missionTabs.length > 0 ? (
+        {missionTreeContext.missionTrees.length > 0 ? (
           <Row>
             <Col sm={2}>
               <Nav variant="pills" className="flex-column">
-                {props.missionTabs.map((missionTab) => {
+                {missionTreeContext.missionTrees.map((missionTree) => {
                   return (
-                    <Nav.Item key={missionTab.id}>
-                      <Nav.Link eventKey={missionTab.id}>
-                        {missionTab.name}
+                    <Nav.Item key={missionTree.id}>
+                      <Nav.Link eventKey={missionTree.id}>
+                        {missionTree.name}
                       </Nav.Link>
                     </Nav.Item>
                   );
@@ -49,22 +49,17 @@ const MissionList = (props) => {
             </Col>
             <Col lg={true}>
               <Tab.Content style={{ maxHeight: "200px" }}>
-                {props.missionTabs.map((missionTab) => {
+                {missionTreeContext.missionTrees.map((missionTree) => {
                   return (
-                    <Tab.Pane key={missionTab.id} eventKey={missionTab.id}>
+                    <Tab.Pane key={missionTree.id} eventKey={missionTree.id}>
                       <Container
                         fluid
                         style={{ minHeight: "83vh", maxHeight: "83vh" }}
                       >
                         <Row style={{ minHeight: "83vh", maxHeight: "83vh" }}>
                           <MissionTab
-                            missionTab={missionTab}
-                            missions={missionTab.missions}
-                            series={missionTab.series}
-                            edges={missionTab.edges}
-                            missionTabs={props.missionTabs}
-                            setMissionTabs={props.setMissionTabs}
-                            fileID={missionTab.id}
+                            missionTree={missionTree}
+                            edges={missionTree.edges}
                             show={show}
                             setShow={setShow}
                             inProgressID={inProgressID}

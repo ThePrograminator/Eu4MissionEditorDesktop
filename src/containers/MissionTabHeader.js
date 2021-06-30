@@ -251,7 +251,6 @@ const MissionTabHeader = (props) => {
       (missionTab) => missionTab.id === props.fileKey
     );
 
-    console.log("got here", missionTreeContext.missionTrees[index].missions);
     if (missionTreeContext.missionTrees[index].missions.length > 0)
       return false;
 

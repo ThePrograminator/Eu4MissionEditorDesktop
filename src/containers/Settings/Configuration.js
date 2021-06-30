@@ -16,7 +16,6 @@ const Configuration = (props) => {
         <Col lg={true}>
           <h2>Key-Bindings: </h2>
           <hr />
-          <p>{missionTreeContext.user.name}</p>
         </Col>
       </Row>
     </Container>

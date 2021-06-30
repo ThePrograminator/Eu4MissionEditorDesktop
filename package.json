@@ -1,6 +1,6 @@
 {
   "name": "eu4missioneditordesktop",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -26,7 +26,7 @@
   "devDependencies": {
     "concurrently": "^4.1.2",
     "electron": "^6.0.7",
-    "electron-builder": "^20.44.4",
+    "electron-builder": "^22.11.7",
     "wait-on": "^3.3.0"
   },
   "scripts": {
@@ -71,6 +71,7 @@
       }
     ],
     "files": [
+      "*.js",
       "build/**/*",
       "node_modules/**/*"
     ],

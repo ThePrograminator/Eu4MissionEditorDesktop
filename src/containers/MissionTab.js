@@ -23,6 +23,7 @@ import CodeEditor from "./CodeEditor";
 import Factory from "../helper/Factory";
 import MissionTreeContext from "../contexts/MissionTreeContext";
 import "../Provider.css";
+import inProgressIDMap from "../InProgressIDMap";
 
 const onLoad = (reactFlowInstance) =>
   console.log("flow loaded:", reactFlowInstance);
@@ -219,16 +220,6 @@ const MissionTab = (props) => {
     let seriesCopy = [...series];
     seriesCopy.push(newSeries);
     setSeries(seriesCopy);
-
-    /*let missionTreesCopy = missionTreeContext.missionTrees.slice();
-    let index = missionTreesCopy.findIndex(
-      (missionTree) => missionTree.id === props.missionTree.id
-    );
-    if (index !== -1) {
-      missionTreesCopy[index].series = newSeries;
-      console.log("missionTabsCopy", missionTreesCopy);
-      missionTreeContext.editMissionTree(missionTreesCopy[index]);
-    }*/
   };
 
   useEffect(() => {
@@ -289,14 +280,114 @@ const MissionTab = (props) => {
     setElements((els) => removeElements(elementsToRemove, els), onUpdate());
   };
 
-  const removeSeries = (seriesId) => {
+  const removeSeries = (seriesId, seriesReplaceId) => {
     if (series.length === 1) return;
     console.log("series to be removed", seriesId);
 
-    let seriesCopy = series.slice();
-    let index = series.findIndex((serie) => serie.id === seriesId.id);
+    /*  const ele = elements.map((el) => {
+      if (isNode(el)) {
+        if (el.data.selectedSeries === seriesId) {
+          el = {
+            ...el,
+            data: {
+              ...el.data,
+              selectedSeries: seriesReplaceId,
+            },
+          };
+        }
+      }
+      return el;
+    });
+    setElements(ele);
 
-    seriesCopy.splice(index, 1);
+    if (selectedElement !== null) {
+      elements.map((el) => {
+        if (isNode(el)) {
+          if (
+            el.id === selectedElement.id &&
+            el.data.selectedSeries === seriesId
+          ) {
+            el = {
+              ...el,
+              data: {
+                ...el.data,
+                selectedSeries: seriesReplaceId,
+              },
+            };
+            setSelectedElement((selEL) => ({
+              ...selEL,
+              data: {
+                ...selEL.data,
+                selectedSeries: seriesReplaceId,
+              },
+            }));
+          }
+        }
+        return el;
+      });
+    }*/
+
+    const elementsCopy = elements.map((el) => {
+      if (isNode(el)) {
+        if (el.data.selectedSeries === seriesId) {
+          el = {
+            ...el,
+            data: {
+              ...el.data,
+              selectedSeries: seriesReplaceId,
+            },
+          };
+        }
+      }
+      return el;
+    });
+    console.log("elementsCopy", elementsCopy);
+    let index = elementsCopy.findIndex(
+      (mission) => mission.id === selectedElement.id
+    );
+    let layoutedElements = getLayoutedElements(
+      elementsCopy,
+      elementsCopy[index]
+    );
+    setElements(layoutedElements);
+    index = layoutedElements.findIndex(
+      (mission) => mission.id === selectedElement.id
+    );
+    let selectedElementCopy = { ...layoutedElements[index] };
+    setSelectedElement({ ...selectedElementCopy });
+
+    console.log("selectedElementCopy", selectedElementCopy);
+    console.log("layoutedElements", layoutedElements);
+    /*elements.map((el) => {
+      console.log("loop el", el);
+      if (isNode(el) && el.data.selectedSeries === seriesId) {
+        console.log("updating position for seletected element el", el);
+        setSelectedElement(el);
+        console.log(
+          "updating position for seletected element",
+          selectedElement
+        );
+      }
+    });*/
+    /*console.log("layoutedElements 2", layoutedElements);
+    let missionTreesCopy = missionTreeContext.missionTrees.slice();
+    let index = missionTreesCopy.findIndex(
+      (missionTree) => missionTree.id === props.missionTree.id
+    );
+    console.log("index", index);
+    if (index !== -1) {
+      console.log("missiontab.js onNodeDragStop updating");
+      missionTreesCopy[index].missions = layoutedElements;
+      console.log("onNodeDragStop missionTabsCopy", missionTreesCopy);
+      missionTreeContext.editMissionTree(missionTreesCopy[index]);
+      console.log("elemeents", elements);
+    }*/
+
+    let seriesCopy = series.slice();
+    let seriesIndex = series.findIndex((serie) => serie.id === seriesId);
+
+    console.log("seriesCopy", seriesCopy);
+    seriesCopy.splice(seriesIndex, 1);
     setSeries(seriesCopy);
   };
 
@@ -366,37 +457,45 @@ const MissionTab = (props) => {
           fileId={props.missionTree.id}
         />
       </ReactFlowProvider>
-      <AddMissionModal
-        show={props.show}
-        setShow={props.setShow}
-        addMission={onAdd}
-        missions={elements}
-        series={series}
-      />
-      <DuplicateMissionModal
-        show={props.show}
-        setShow={props.setShow}
-        duplicateMission={onAdd}
-        missions={getOnlyNodes()}
-      />
-      <RemoveMissionModal
-        show={props.show}
-        setShow={props.setShow}
-        removeMission={onRemove}
-        missions={getOnlyNodes()}
-      />
-      <AddSeriesModal
-        show={props.show}
-        setShow={props.setShow}
-        addSeries={addSeries}
-        series={series}
-      />
-      <RemoveSeriesModal
-        show={props.show}
-        setShow={props.setShow}
-        removeSeries={removeSeries}
-        series={series}
-      />
+      {props.show !== 0 ? (
+        <div>
+          <AddMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            addMission={onAdd}
+            missions={elements}
+            series={series}
+          />
+          <DuplicateMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            duplicateMission={onAdd}
+            missions={getOnlyNodes()}
+          />
+          <RemoveMissionModal
+            show={props.show}
+            setShow={props.setShow}
+            removeMission={onRemove}
+            missions={getOnlyNodes()}
+          />
+          <AddSeriesModal
+            show={props.show}
+            setShow={props.setShow}
+            addSeries={addSeries}
+            series={series}
+          />
+          {props.show === inProgressIDMap.removeSeries ? (
+            <div>
+              <RemoveSeriesModal
+                show={props.show}
+                setShow={props.setShow}
+                removeSeries={removeSeries}
+                series={series}
+              />
+            </div>
+          ) : null}
+        </div>
+      ) : null}
     </div>
   );
 };

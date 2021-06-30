@@ -1,8 +1,9 @@
 import React, { useState } from "react";
-import { Button, Tab, Container, Row, Col } from "react-bootstrap";
+import { Button, Accordion, Card, Container, Row, Col } from "react-bootstrap";
 
 const electron = window.require("electron");
 const appVersion = electron.remote.app.getVersion();
+const test = electron.remote.app.g
 
 const Version = (props) => {
   return (
@@ -23,7 +24,21 @@ const Version = (props) => {
           <Button onClick={props.handleCheckUpdate}>Check for Update</Button>
         </Col>
       </Row>
-      <hr/>
+      <hr />
+      <Row lg={true}>
+        <Col lg={true}>
+          <Accordion defaultActiveKey="0">
+            <Card>
+              <Accordion.Toggle as={Card.Header} eventKey="0">
+                Release Notes
+              </Accordion.Toggle>
+              <Accordion.Collapse eventKey="0">
+                <Card.Body>Hello! I'm the body</Card.Body>
+              </Accordion.Collapse>
+            </Card>
+          </Accordion>
+        </Col>
+      </Row>
     </Container>
   );
 };

@@ -27,8 +27,16 @@ const Mission = (props) => {
   const [selectedSeries, setSelectedSeries] = useState(
     props.selectedElement.data.selectedSeries
   );
+  console.log("Mission", props.selectedElement);
+  /*if (props.selectedElement.data.selectedSeries !== selectedSeries) {
+    console.log("setting new series manually fuck sake");
+    setSelectedSeries(props.selectedElement.data.selectedSeries);
+  }*/
 
   useEffect(() => {
+    console.log(
+      "update mission [props.selectedElement, props.missionTree, props.series]"
+    );
     setIcon(props.selectedElement.data.icon);
     setNodeName(props.selectedElement.data.label);
     setGeneric(props.selectedElement.data.generic);
@@ -39,6 +47,16 @@ const Mission = (props) => {
     setEffect(props.selectedElement.data.effect);
     setSelectedSeries(props.selectedElement.data.selectedSeries);
   }, [props.selectedElement, props.missionTree, props.series]);
+
+  useEffect(() => {
+    console.log("update mission [props.selectedElement]");
+    setSelectedSeries(props.selectedElement.data.selectedSeries);
+  }, [props.selectedElement]);
+
+  useEffect(() => {
+    console.log("update mission [props.selectedElement.data.selectedSeries]");
+    setSelectedSeries(props.selectedElement.data.selectedSeries);
+  }, [props.selectedElement.data.selectedSeries]);
 
   useEffect(() => {
     console.log("nodeName", nodeName);
@@ -111,8 +129,8 @@ const Mission = (props) => {
         <Form.Label>Selected Series</Form.Label>
         <Form.Control
           as="select"
-          onChange={(evt) => setSelectedSeries(parseInt(evt.target.value))}
-          value={props.selectedElement.data.selectedSeries}
+          onChange={(evt) => setSelectedSeries(evt.target.value)}
+          value={selectedSeries}
           placeholder={"Select Series"}
         >
           {props.series.map((serie) => (
@@ -133,10 +151,10 @@ const Mission = (props) => {
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="0">
             <Card.Body>
-              {selectedSeries != null ? (
+              {props.selectedElement.data.selectedSeries != null ? (
                 <SeriesReadOnly
                   selectedSeries={props.series.find(
-                    (x) => x.id === selectedSeries
+                    (x) => x.id === props.selectedElement.data.selectedSeries
                   )}
                 />
               ) : (

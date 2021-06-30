@@ -159,10 +159,6 @@ function createWindow() {
     settings.set("quessColumnFilters", false);
   }*/
 
-  //if (isDev) {
-  mainWindow.webContents.openDevTools();
-  //}
-
   mainWindow.setMenuBarVisibility(false);
 
   mainWindow.loadURL(
@@ -170,6 +166,11 @@ function createWindow() {
       ? "http://localhost:3000"
       : `file://${path.join(__dirname, "../build/index.html")}`
   );
+
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
+
   mainWindow.on("closed", () => (mainWindow = null));
 }
 

@@ -37,7 +37,7 @@ const Factory = {
         selectedSeries: selectedSeries !== null ? selectedSeries.id : null,
       },
       position: {
-        x: 0,
+        x: selectedSeries.slot * 150,
         y: 150,
       },
       style: {

@@ -114,7 +114,11 @@ const MissionTabHeader = (props) => {
   const exportFile = (id) => {
     console.log("id", id);
     console.log("props.missionTabs", missionTreeContext.missionTrees);
-    var missionTab = missionTreeContext.missionTrees[id];
+    //var missionTab = missionTreeContext.missionTrees[id];
+    let index = missionTreeContext.missionTrees.findIndex(
+      (missionTab) => missionTab.id === id
+    );
+    var missionTab = missionTreeContext.missionTrees[index];
     console.log("missionTab", missionTab);
     const fileData = Writer.exportMissionTree(
       missionTab.series,

@@ -194,10 +194,12 @@ const MissionTab = (props) => {
     console.log("newNode name", name);
     console.log("newNode selectedSeries", selectedSeries);
 
+    const selectedSeriesObj = series.find((x) => x.id === selectedSeries);
+
     const newNode = Factory.createDefaultMission(
       missionTreeContext.getAvailableNodeId(),
       name,
-      selectedSeries
+      selectedSeriesObj
     );
 
     console.log("new node", newNode);

@@ -25,34 +25,28 @@ const Writer = {
       missionTreeText +=
         tabsText + "ai = " + Writer.boolToYesNo(serie.ai) + "\n";
 
-      //hasCountryShield
-      missionTreeText +=
-        tabsText +
-        "has_country_shield = " +
-        Writer.boolToYesNo(serie.hasCountryShield) +
-        "\n";
+      //has_country_shield (Optional)
+      if (serie.has_country_shield) {
+        missionTreeText +=
+          tabsText +
+          "has_country_shield = " +
+          Writer.boolToYesNo(serie.has_country_shield) +
+          "\n";
+      }
 
-      //potentialOnLoad
-      missionTreeText +=
-        tabsText +
-        "potential_on_load = " +
-        Writer.handleBlockInput(
-          serie.potentialOnLoad,
-          Writer.updateTabsText(tabs + 1)
-        ) +
-        tabsText +
-        "}\n";
+      //potentialOnLoad (Optional)
+      if (Writer.isCorrectValue(serie.potential_on_load)) {
+        missionTreeText +=
+          tabsText +
+          "potential_on_load = " +
+          Writer.handleBlockInput(serie.potential_on_load, tabs + 1);
+      }
 
       //potential
       missionTreeText +=
         tabsText +
         "potential = " +
-        Writer.handleBlockInput(
-          serie.potential,
-          Writer.updateTabsText(tabs + 1)
-        ) +
-        tabsText +
-        "}\n";
+        Writer.handleBlockInput(serie.potential, tabs + 1);
 
       missionTreeText += "\n";
 
@@ -71,12 +65,14 @@ const Writer = {
         //icon
         missionTreeText += tabsText + "icon = " + mission.data.icon + "\n";
 
-        //gerneric
-        missionTreeText +=
-          tabsText +
-          "generic = " +
-          Writer.boolToYesNo(mission.data.generic) +
-          "\n";
+        //gerneric (Optional)
+        if (mission.data.generic) {
+          missionTreeText +=
+            tabsText +
+            "generic = " +
+            Writer.boolToYesNo(mission.data.generic) +
+            "\n";
+        }
 
         //position
         missionTreeText +=
@@ -86,11 +82,11 @@ const Writer = {
           mission.data.completed_by
         );
 
-        //completed_by
-        missionTreeText +=
-          tabsText +
-          "completed_by = " +
-          (completedByCorrect ? mission.data.completed_by : "{ }" + "\n");
+        //completed_by (Optional)
+        if (completedByCorrect) {
+          missionTreeText +=
+            tabsText + "completed_by = " + mission.data.completed_by + "\n";
+        }
 
         //required Missions
         if (mission.data.required_missions.length > 0) {
@@ -101,41 +97,31 @@ const Writer = {
           missionTreeText +=
             tabsText + "required_missions = { " + requiredMissionsText + "}\n";
         } else {
-          missionTreeText += tabsText + "required_missions = {}" + "\n";
+          missionTreeText += tabsText + "required_missions = {  }" + "\n";
         }
 
-        //provinces_to_highlight
-        missionTreeText +=
-          tabsText +
-          "provinces_to_highlight = " +
-          Writer.handleBlockInput(
-            mission.data.provinces_to_highlight,
-            Writer.updateTabsText(tabs + 1)
-          ) +
-          tabsText +
-          "}\n";
+        //provinces_to_highlight (Optional)
+        if (Writer.isCorrectValue(mission.data.provinces_to_highlight)) {
+          missionTreeText +=
+            tabsText +
+            "provinces_to_highlight = " +
+            Writer.handleBlockInput(
+              mission.data.provinces_to_highlight,
+              tabs + 1
+            );
+        }
 
         //trigger
         missionTreeText +=
           tabsText +
           "trigger = " +
-          Writer.handleBlockInput(
-            mission.data.trigger,
-            Writer.updateTabsText(tabs + 1)
-          ) +
-          tabsText +
-          "}\n";
+          Writer.handleBlockInput(mission.data.trigger, tabs + 1);
 
         //effect
         missionTreeText +=
           tabsText +
           "effect = " +
-          Writer.handleBlockInput(
-            mission.data.effect,
-            Writer.updateTabsText(tabs + 1)
-          ) +
-          tabsText +
-          "}\n";
+          Writer.handleBlockInput(mission.data.effect, tabs + 1);
 
         //end
         missionTreeText += "\t}\n";
@@ -154,23 +140,27 @@ const Writer = {
   boolToYesNo: function (boolean) {
     return boolean ? "yes" : "no";
   },
-  handleBlockInput: function (variable, tabsText) {
+  handleBlockInput: function (variable, tabs) {
     var result = "";
-    if (!Writer.isCorrectValue(variable)) return "{";
+    if (!Writer.isCorrectValue(variable)) return "{ }\n";
 
     var trimmedVar = variable.trim();
     var resSplit = trimmedVar.split("\n");
     result = "{\n";
+    let tabsTextContent = Writer.updateTabsText(tabs);
     for (let index = 0; index < resSplit.length; index++) {
       const element = resSplit[index];
-      result += tabsText + element + "\n";
+      result += tabsTextContent + element + "\n";
     }
+    let tabsTextEnd = Writer.updateTabsText(tabs - 1);
+    result += tabsTextEnd + "}\n";
     return result;
   },
   isCorrectValue: function (variable) {
     if (variable === undefined) return false;
     else if (variable === null) return false;
     else if (variable === "" || variable === " ") return false;
+    else if (variable.trim() === "") return false;
     return true;
   },
   updateTabsText: function (tabs) {

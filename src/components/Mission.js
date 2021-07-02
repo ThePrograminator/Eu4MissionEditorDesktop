@@ -20,7 +20,7 @@ const Mission = (props) => {
     props.selectedElement.data.completedBy
   );
   const [provincesToHighLight, setProvincesToHighLight] = useState(
-    props.selectedElement.data.provincesToHighLight
+    props.selectedElement.data.provinces_to_highlight
   );
   const [trigger, setTrigger] = useState(props.selectedElement.data.trigger);
   const [effect, setEffect] = useState(props.selectedElement.data.effect);
@@ -42,7 +42,7 @@ const Mission = (props) => {
     setGeneric(props.selectedElement.data.generic);
     setPosition(calcPosition(props.selectedElement.position.y));
     setCompletedBy(props.selectedElement.data.completedBy);
-    setProvincesToHighLight(props.selectedElement.data.provincesToHighLight);
+    setProvincesToHighLight(props.selectedElement.data.provinces_to_highlight);
     setTrigger(props.selectedElement.data.trigger);
     setEffect(props.selectedElement.data.effect);
     setSelectedSeries(props.selectedElement.data.selectedSeries);

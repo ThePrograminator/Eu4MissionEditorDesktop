@@ -106,8 +106,9 @@ const Reader = {
 
       //inline doesn't count towards the level
       if (bracketText.search("{.+}") != -1) {
-        stringConcat += bracketText + "\n";
-        continue;
+        //levelIncreased = true;
+        //stringConcat += bracketText + "\n";
+        //continue;
       } else if (bracketText.search("{") != -1) {
         levelIncreased = true;
         level++;
@@ -178,6 +179,9 @@ const Reader = {
         break;
       }
     }
+    if (variable === "has_country_shield") {
+      console.log("Reader has_country_shield value", value);
+    }
 
     switch (type) {
       case "int":
@@ -202,6 +206,7 @@ const Reader = {
 
     var availableId = `node_${missionId.toString()}`;
     let newMission = Factory.createDefaultMission(availableId);
+    let foundPosition = false;
     for (var line = lineStart; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
       string = string.trim();
@@ -229,6 +234,9 @@ const Reader = {
           ...newMission.data,
           [variable[0]]: this.switchVariableType(variable[0], variable[1]),
         };
+        if (variable[0] === "position") {
+          foundPosition = true;
+        }
         continue;
       }
 
@@ -270,7 +278,7 @@ const Reader = {
     }
     console.log("mission", newMission);
     missionId++;
-    return { lineStart, newMission };
+    return { lineStart, newMission, foundPosition };
   },
   handleSeries: function (str) {
     var splitCleanedUp = str.split("\n");
@@ -319,11 +327,15 @@ const Reader = {
           continue;
         }
 
-        let { lineStart, newMission } = this.handleMission(
+        let { lineStart, newMission, foundPosition } = this.handleMission(
           line,
           splitCleanedUp
         );
         line = lineStart;
+        if (!foundPosition) {
+          newMission.data.position = newSeries.missions.length + 1;
+          newMission.position.y = newSeries.missions.length + 1 * 150;
+        }
         newSeries.missions.push(newMission);
       }
     }

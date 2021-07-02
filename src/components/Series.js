@@ -2,10 +2,6 @@ import React, { useState, useEffect, useCallback, useRef } from "react";
 import {
   Form,
   FormControl,
-  Col,
-  OverlayTrigger,
-  Button,
-  Tooltip,
 } from "react-bootstrap";
 import { SketchPicker } from "react-color";
 import "../Editor.css";
@@ -17,10 +13,10 @@ const Series = (props) => {
   const [generic, setGeneric] = useState(props.series.generic);
   const [ai, setAi] = useState(props.series.ai);
   const [hasCountryShield, setHasCountryShield] = useState(
-    props.series.hasCountryShield
+    props.series.has_country_shield
   );
   const [potentialOnLoad, setPotentialOnLoad] = useState(
-    props.series.potentialOnLoad
+    props.series.potential_on_load
   );
   const [potential, setPotential] = useState(props.series.potential);
   const [color, setColor] = useState(props.series.color);
@@ -42,8 +38,8 @@ const Series = (props) => {
             slot: slot,
             generic: generic,
             ai: ai,
-            hasCountryShield: hasCountryShield,
-            potentialOnLoad: potentialOnLoad,
+            has_country_shield: hasCountryShield,
+            potential_on_load: potentialOnLoad,
             potential: potential,
             color: color,
           };

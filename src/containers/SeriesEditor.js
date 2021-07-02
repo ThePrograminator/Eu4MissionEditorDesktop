@@ -5,14 +5,14 @@ import { Tab, Row, Col, ListGroup, ButtonGroup, Button } from "react-bootstrap";
 let id = 0;
 
 const SeriesEditor = (props) => {
-  const onAdd = useCallback(() => {
+  /*const onAdd = useCallback(() => {
     const newNode = {
       id: id,
       name: "new Series",
       slot: 1,
       generic: false,
       ai: true,
-      hasCountryShield: false,
+      has_country_shield: false,
       potentialOnLoad: "",
       potential: "",
       selectedSeries: null,
@@ -21,13 +21,10 @@ const SeriesEditor = (props) => {
     props.setSeries((els) => els.concat(newNode));
     id++;
     console.log(props.series.length);
-  }, [props.setSeries, props.setMissionTabs]);
+  }, [props.setSeries, props.setMissionTabs]);*/
 
   return (
     <div>
-      <ButtonGroup size="lg" className="mb-2">
-        <Button onClick={onAdd}>Add Node</Button>
-      </ButtonGroup>
       <Tab.Container id="list-group-tabs-example" defaultActiveKey="#link0">
         <Row>
           <Col lg={true} style={{ maxWidth: "250px" }}>

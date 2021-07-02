@@ -1,7 +1,11 @@
 import React from "react";
 
 const Factory = {
-  createDefaultMissionTab: function (id, name = "newMissionTree", extName = ".txt") {
+  createDefaultMissionTab: function (
+    id,
+    name = "newMissionTree",
+    extName = ".txt"
+  ) {
     const newMissionTab = {
       id: id,
       name: name,
@@ -23,18 +27,21 @@ const Factory = {
       data: {
         label: name,
         position: 1,
-        icon: "",
+        icon: "mission_build_up_to_force_limit",
         generic: false,
         completed_by: "",
         required_missions: "",
         provinces_to_highlight: null,
         trigger: null,
         effect: null,
-        selectedSeries: selectedSeries,
+        selectedSeries: selectedSeries !== null ? selectedSeries.id : null,
       },
       position: {
         x: 0,
         y: 150,
+      },
+      style: {
+        background: selectedSeries !== null ? selectedSeries.color : null,
       },
       type: "default",
     };
@@ -48,9 +55,9 @@ const Factory = {
       slot: 1,
       generic: false,
       ai: true,
-      hasCountryShield: false,
-      potentialOnLoad: "",
-      potential: "",
+      has_country_shield: false,
+      potential_on_load: "",
+      potential: "always = yes",
       color: "",
       missions: [],
     };

@@ -5,7 +5,6 @@ import SeriesEditor from "./SeriesEditor";
 import { isNode } from "react-flow-renderer";
 
 const CodeEditor = (props) => {
-  console.log("Codeeditor", props.selectedElement);
   return (
     <aside style={props.closed}>
       <Tabs defaultActiveKey="mission" id="uncontrolled-tab-example">

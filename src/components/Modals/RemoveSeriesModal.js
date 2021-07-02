@@ -10,6 +10,20 @@ const RemoveSeriesModal = (props) => {
     props.series[1].id
   );
 
+  const handleChange = (isReplaceSeries, value) => {
+    if (isReplaceSeries) {
+      if (value === selectedSeries) {
+        setSelectedSeries(selectedReplaceSeries);
+      }
+      setSelectedReplaceSeries(value);
+    } else {
+      if (value === selectedReplaceSeries) {
+        setSelectedReplaceSeries(selectedSeries);
+      }
+      setSelectedSeries(value);
+    }
+  };
+
   const handleClose = () => {
     props.setShow(0);
   };
@@ -37,7 +51,7 @@ const RemoveSeriesModal = (props) => {
             <Form.Label>Select Series To Remove</Form.Label>
             <Form.Control
               as="select"
-              onChange={(evt) => setSelectedSeries(evt.target.value)}
+              onChange={(evt) => handleChange(false, evt.target.value)}
               value={selectedSeries}
             >
               {props.series.length != 1
@@ -53,7 +67,7 @@ const RemoveSeriesModal = (props) => {
             <Form.Label>Select Series To Replace</Form.Label>
             <Form.Control
               as="select"
-              onChange={(evt) => setSelectedReplaceSeries(evt.target.value)}
+              onChange={(evt) => handleChange(true, evt.target.value)}
               value={selectedReplaceSeries}
             >
               {props.series.length != 1

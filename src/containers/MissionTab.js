@@ -282,7 +282,8 @@ const MissionTab = (props) => {
 
   const removeSeries = (seriesId, seriesReplaceId) => {
     if (series.length === 1) return;
-    console.log("series to be removed", seriesId);
+    console.log("removeSeries seriesId", seriesId);
+    console.log("removeSeries seriesReplaceId", seriesReplaceId);
 
     /*  const ele = elements.map((el) => {
       if (isNode(el)) {
@@ -330,6 +331,7 @@ const MissionTab = (props) => {
     const elementsCopy = elements.map((el) => {
       if (isNode(el)) {
         if (el.data.selectedSeries === seriesId) {
+          console.log("found node with id:", seriesId);
           el = {
             ...el,
             data: {
@@ -342,22 +344,26 @@ const MissionTab = (props) => {
       return el;
     });
     console.log("elementsCopy", elementsCopy);
-    let index = elementsCopy.findIndex(
-      (mission) => mission.id === selectedElement.id
-    );
-    let layoutedElements = getLayoutedElements(
-      elementsCopy,
-      elementsCopy[index]
-    );
-    setElements(layoutedElements);
-    index = layoutedElements.findIndex(
-      (mission) => mission.id === selectedElement.id
-    );
-    let selectedElementCopy = { ...layoutedElements[index] };
-    setSelectedElement({ ...selectedElementCopy });
+    if (selectedElement !== null) {
+      let index = elementsCopy.findIndex(
+        (mission) => mission.id === selectedElement.id
+      );
+      let layoutedElements = getLayoutedElements(
+        elementsCopy,
+        elementsCopy[index]
+      );
+      setElements(layoutedElements);
+      index = layoutedElements.findIndex(
+        (mission) => mission.id === selectedElement.id
+      );
+      let selectedElementCopy = { ...layoutedElements[index] };
+      setSelectedElement({ ...selectedElementCopy });
+      console.log("selectedElementCopy", selectedElementCopy);
+      console.log("layoutedElements", layoutedElements);
+    } else {
+      setElements(elementsCopy);
+    }
 
-    console.log("selectedElementCopy", selectedElementCopy);
-    console.log("layoutedElements", layoutedElements);
     /*elements.map((el) => {
       console.log("loop el", el);
       if (isNode(el) && el.data.selectedSeries === seriesId) {

@@ -146,7 +146,10 @@ const MissionTabHeader = (props) => {
   const createFile = (name, seriesName) => {
     console.log("name", name);
 
-    let newSeries = Factory.createDefaultSeries(missionTreeContext.getAvailableSeriesId(), seriesName);
+    let newSeries = Factory.createDefaultSeries(
+      missionTreeContext.getAvailableSeriesId(),
+      seriesName
+    );
     let newMissionTab = Factory.createDefaultMissionTab(
       missionTreeContext.getAvailableTreeId(),
       name
@@ -157,17 +160,40 @@ const MissionTabHeader = (props) => {
   };
 
   const duplicateFile = (duplicateId, fileName) => {
+    console.log(
+      "duplicateFile props.missionTabs",
+      missionTreeContext.missionTrees
+    );
     console.log("duplicateFile duplicateId", duplicateId);
     console.log("duplicateFile fileName", fileName);
+
+    let newMissionTab = Factory.createDefaultMissionTab(
+      missionTreeContext.getAvailableTreeId(),
+      fileName
+    );
+    let index = missionTreeContext.missionTrees.findIndex(
+      (missionTab) => missionTab.id === duplicateId
+    );
+    let fileToDuplicate = missionTreeContext.missionTrees[index];
+    let newID = newMissionTab.id;
+    newMissionTab = {
+      ...fileToDuplicate,
+      id: newID,
+      name: fileName,
+      fileName: fileName + ".txt",
+    };
+    missionTreeContext.addMissionTree(newMissionTab);
   };
 
   const removeFile = (id) => {
     console.log("removeFile id", id);
 
-    let missionTabsCopy = [...props.missionTabs];
+    let missionTabsCopy = [...missionTreeContext.missionTrees];
     let index = missionTabsCopy.findIndex((missionTab) => missionTab.id === id);
-    missionTabsCopy.splice(index, 1);
-    props.setMissionTabs(missionTabsCopy);
+
+    let missionTab = missionTabsCopy[index];
+    console.log("removeFile missionTab", missionTab);
+    missionTreeContext.removeMissionTree(missionTab);
   };
 
   const handleImportMissionFile = () => {
@@ -249,6 +275,11 @@ const MissionTabHeader = (props) => {
 
     let index = missionTreeContext.missionTrees.findIndex(
       (missionTab) => missionTab.id === props.fileKey
+    );
+
+    console.log(
+      "checkDuplicateMissionDisabled missionTreeContext.missionTrees",
+      missionTreeContext.missionTrees
     );
 
     if (missionTreeContext.missionTrees[index].missions.length > 0)

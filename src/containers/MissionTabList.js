@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import MissionTab from "./MissionTab";
 import MissionTabHeader from "./MissionTabHeader";
 import { Container, Row, Tab, Nav, Col } from "react-bootstrap";
@@ -11,6 +11,10 @@ const MissionList = (props) => {
   const [key, setKey] = useState(null);
   const [inProgressID, setinProgressID] = useState(0);
   const [show, setShow] = useState(0);
+
+  useEffect(() => {
+    
+  }, []);
 
   return (
     <Container fluid style={{ minHeight: "inherit" }}>

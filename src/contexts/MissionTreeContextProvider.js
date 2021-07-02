@@ -11,6 +11,7 @@ class MissionTreeProvider extends React.Component {
     availableTreeId: 0,
     availableNodeId: 0,
     availableSeriesId: 0,
+    missionTabListKeyCallback: null,
   };
 
   getAvailableTreeId = () => {
@@ -55,6 +56,19 @@ class MissionTreeProvider extends React.Component {
     });
   };
 
+  removeMissionTree = (missionTree) => {
+    console.log("Context removeMissionTree missionTree: ", missionTree);
+    let missionTreeCopy = this.state.missionTrees.slice();
+    let indexMissionTab = missionTreeCopy.findIndex(
+      (missionTab) => missionTab.id === missionTree.id
+    );
+    missionTreeCopy.splice(indexMissionTab, 1);
+    //missionTreeCopy[indexMissionTab] = missionTree;
+    this.setState({ missionTrees: [...missionTreeCopy] }, function () {
+      console.log("Context MissionTrees: ", this.state.missionTrees);
+    });
+  };
+
   render() {
     return (
       <MissionTreeContext.Provider
@@ -66,6 +80,8 @@ class MissionTreeProvider extends React.Component {
           missionTrees: this.state.missionTrees,
           addMissionTree: this.addMissionTree,
           editMissionTree: this.editMissionTree,
+          removeMissionTree: this.removeMissionTree,
+          missionTabListKeyCallback: this.missionTabListKeyCallback,
         }}
       >
         {this.props.children}

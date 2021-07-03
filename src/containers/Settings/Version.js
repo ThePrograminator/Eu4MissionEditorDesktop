@@ -3,7 +3,7 @@ import { Button, Accordion, Card, Container, Row, Col } from "react-bootstrap";
 
 const electron = window.require("electron");
 const appVersion = electron.remote.app.getVersion();
-const test = electron.remote.app.g
+const test = electron.remote.app.g;
 
 const Version = (props) => {
   return (
@@ -25,7 +25,14 @@ const Version = (props) => {
         </Col>
       </Row>
       <hr />
-      <Row lg={true}>
+    </Container>
+  );
+};
+
+export default Version;
+
+/*
+<Row lg={true}>
         <Col lg={true}>
           <Accordion defaultActiveKey="0">
             <Card>
@@ -38,9 +45,4 @@ const Version = (props) => {
             </Card>
           </Accordion>
         </Col>
-      </Row>
-    </Container>
-  );
-};
-
-export default Version;
+      </Row>*/

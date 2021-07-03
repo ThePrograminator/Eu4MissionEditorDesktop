@@ -31,7 +31,9 @@ const Settings = (props) => {
               <Nav.Item>
                 <Nav.Link eventKey={"#link2"}>Version</Nav.Link>
               </Nav.Item>
-
+              <Nav.Item>
+                <Nav.Link eventKey={"#link3"}>Configuration</Nav.Link>
+              </Nav.Item>
               <Nav.Item>
                 <Nav.Link eventKey={"#link4"}>Preferences</Nav.Link>
               </Nav.Item>
@@ -45,7 +47,9 @@ const Settings = (props) => {
               <Tab.Pane eventKey={"#link2"}>
                 <Version handleCheckUpdate={handleCheckUpdate} />
               </Tab.Pane>
-
+              <Tab.Pane eventKey={"#link3"}>
+                <Configuration />
+              </Tab.Pane>
               <Tab.Pane eventKey={"#link4"}>
                 <Preferences
                   currentTheme={props.currentTheme}
@@ -67,11 +71,5 @@ const Settings = (props) => {
 
 export default Settings;
 /*
-<Nav.Item>
-								<Nav.Link eventKey={'#link3'}>Configuration</Nav.Link>
-							</Nav.Item>
 
-							<Tab.Pane eventKey={"#link3"}>
-                <Configuration />
-              </Tab.Pane>
 */

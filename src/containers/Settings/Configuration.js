@@ -1,6 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import MissionTreeContext from "../../contexts/MissionTreeContext";
+import ConfigurationDefaults from "../../components/Settings/ConfigurationDefaults";
 
 const Configuration = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
@@ -15,6 +16,13 @@ const Configuration = (props) => {
       <Row lg={true}>
         <Col lg={true}>
           <h2>Key-Bindings: </h2>
+          <hr />
+        </Col>
+      </Row>
+      <Row lg={true}>
+        <Col lg={true}>
+          <h2>Defaults: </h2>
+          <ConfigurationDefaults />
           <hr />
         </Col>
       </Row>

@@ -235,6 +235,42 @@ const Mission = (props) => {
         </Form.Text>
       </Form.Group>
 
+      <Form.Row style={{ width: "75%" }}>
+        <Form.Group as={Col} controlId="formGridEmail">
+          <Form.Label>Starting Year</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="startingYear"
+            aria-label="startingYear"
+            aria-describedby="basic-addon1"
+            value={startYear}
+            onChange={handleUpdateStartYear}
+            style={{ width: "50%" }}
+          />
+          <Form.Text className="text-muted">
+            Year your mod starts, Vanilla EU4 starts in 1444. Used in
+            'Compleated by' variable
+          </Form.Text>
+        </Form.Group>
+
+        <Form.Group as={Col} controlId="formGridPassword">
+          <Form.Label>End Year</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="endYear"
+            aria-label="endYear"
+            aria-describedby="basic-addon1"
+            value={endYear}
+            onChange={handleUpdateEndYear}
+            style={{ width: "50%" }}
+          />
+          <Form.Text className="text-muted">
+            Year your mod ends, Vanilla EU4 starts in 1821. Used in 'Compleated
+            by' variable
+          </Form.Text>
+        </Form.Group>
+      </Form.Row>
+
       <Form.Group controlId={"formIncomer"}>
         <Form.Label>Required Missions</Form.Label>
         {getIncomers(props.selectedElement, props.missionTree.missions).map(

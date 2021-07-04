@@ -13,15 +13,10 @@ const Configuration = (props) => {
       >
         <h1 style={{ width: "100%" }}>Configuration</h1>
       </Row>
+
       <Row lg={true}>
         <Col lg={true}>
-          <h2>Key-Bindings: </h2>
-          <hr />
-        </Col>
-      </Row>
-      <Row lg={true}>
-        <Col lg={true}>
-          <h2>Defaults: </h2>
+          <h2>General: </h2>
           <ConfigurationDefaults />
           <hr />
         </Col>
@@ -31,3 +26,11 @@ const Configuration = (props) => {
 };
 
 export default Configuration;
+
+/*
+<Row lg={true}>
+        <Col lg={true}>
+          <h2>Key-Bindings: </h2>
+          <hr />
+        </Col>
+      </Row>*/

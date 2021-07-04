@@ -22,6 +22,7 @@ import RemoveSeriesModal from "../components/Modals/RemoveSeriesModal";
 import CodeEditor from "./CodeEditor";
 import Factory from "../helper/Factory";
 import MissionTreeContext from "../contexts/MissionTreeContext";
+import SettingsContext from "../contexts/SettingsContext";
 import "../Provider.css";
 import inProgressIDMap from "../InProgressIDMap";
 
@@ -39,6 +40,7 @@ function applyEdgeStyle(params) {
 
 const MissionTab = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
+  const settingsContext = useContext(SettingsContext);
   const [elements, setElements] = useState(props.missionTree.missions);
   const [selectedElement, setSelectedElement] = useState(null);
   const [series, setSeries] = useState(props.missionTree.series);
@@ -433,7 +435,7 @@ const MissionTab = (props) => {
             selectNodesOnDrag={false}
             nodeExtent={[
               [150, 0],
-              [750, 90000],
+              [settingsContext.maxSlot * 150, 90000],
             ]}
             deleteKeyCode={46}
           >

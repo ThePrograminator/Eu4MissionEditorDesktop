@@ -1,7 +1,4 @@
 const electron = require("electron");
-//const app = electron.app;
-//const BrowserWindow = electron.BrowserWindow;
-//const Dialog = electron.Dialog
 const { app, BrowserWindow, dialog, Menu } = require("electron");
 const { autoUpdater } = require("electron-updater");
 const {
@@ -26,16 +23,12 @@ const settings = require("electron-settings");
 
 const ipcMain = require("electron").ipcMain;
 
-//const isOnline = require("is-online");
-
 autoUpdater.logger = require("electron-log");
 autoUpdater.logger.transports.file.level = "info";
 
 autoUpdater.on("checking-for-update", () => {
   console.log("Checking for updates...");
   mainWindow.webContents.send("send-console", "Checking for updates...");
-  //mainWindow.webContents.send(CHECK_FOR_UPDATE_PENDING);
-  //sendStatusToWindow("Checking for update...");
 });
 
 ipcMain.on("runCommand", (event) => {
@@ -47,39 +40,7 @@ ipcMain.on("runCommand", (event) => {
     autoUpdater.checkForUpdates();
     console.log("past check...");
   }
-
-  //event.returnValue = "Checking Updating through runCommand";
 });
-
-/*ipcMain.on(CHECK_FOR_UPDATE_PENDING, (event) => {
-  const { sender } = event;
-  console.log("Check for updates...");
-  mainWindow.webContents.send("send-console", "Check for updates");
-
-  const data = {
-    provider: "github",
-    owner: "ThePrograminator",
-    repo: "Eu4MissionEditorDesktop",
-  };
-  autoUpdater.setFeedURL(data);
-  const result = autoUpdater.checkForUpdates(data);
-
-  result
-    .then((checkResult) => {
-      const { updateInfo } = checkResult;
-      console.log("updateInfo...", updateInfo);
-      mainWindow.webContents.send(
-        "send-console",
-        "Update Success: " + updateInfo
-      );
-      mainWindow.webContents.send(CHECK_FOR_UPDATE_SUCCESS, updateInfo);
-    })
-    .catch((error) => {
-      console.log("error...", error);
-      mainWindow.webContents.send("send-console", "Update Error: " + error);
-      mainWindow.webContents.send(CHECK_FOR_UPDATE_FAILURE, error);
-    });
-});*/
 
 autoUpdater.on("update-available", (info) => {
   mainWindow.webContents.send("send-console", "Update Available");
@@ -142,22 +103,11 @@ function createWindow() {
 
   autoUpdater.autoDownload = false;
 
-  /*(async () => {
-    var onlineStatus = await isOnline();
-    console.log("onlineStatus", onlineStatus);
-    if (!isDev && onlineStatus) {
-      autoUpdater.checkForUpdates();
-    }
-  })();*/
-
-  /*if (!settings.has("databasePath")) {
-    settings.set("databasePath", "");
-    settings.set("folderPath", "");
-    settings.set("fileNameDelimiter", "-");
-    settings.set("fileNamePrepend", "ID");
-    settings.set("loadOnStart", false);
-    settings.set("quessColumnFilters", false);
-  }*/
+  if (!settings.has("startYear")) {
+    settings.set("maxSlot", "5");
+    settings.set("startYear", "1444");
+    settings.set("endYear", "1821");
+  }
 
   mainWindow.setMenuBarVisibility(false);
 

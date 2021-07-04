@@ -1,12 +1,12 @@
-import React, { useState, useEffect, useCallback, useRef } from "react";
-import {
-  Form,
-  FormControl,
-} from "react-bootstrap";
+import React, { useState, useEffect, useCallback, useRef, useContext } from "react";
+import { Form, FormControl } from "react-bootstrap";
 import { SketchPicker } from "react-color";
 import "../Editor.css";
 
+import SettingsContext from "../contexts/SettingsContext";
+
 const Series = (props) => {
+  const settingsContext = useContext(SettingsContext);
   const mounted = useRef(false);
   const [name, setName] = useState(props.series.name);
   const [slot, setSlot] = useState(props.series.slot);
@@ -68,114 +68,114 @@ const Series = (props) => {
   );
 
   return (
-      <Form>
-        <Form.Group controlId="formName">
-          <Form.Label>Series Name</Form.Label>
-          <FormControl
-            className="mb-2"
-            placeholder="name"
-            aria-label="name"
-            value={name}
-            aria-describedby="basic-addon1"
-            onChange={(evt) => setName(evt.target.value)}
-          />
-        </Form.Group>
+    <Form>
+      <Form.Group controlId="formName">
+        <Form.Label>Series Name</Form.Label>
+        <FormControl
+          className="mb-2"
+          placeholder="name"
+          aria-label="name"
+          value={name}
+          aria-describedby="basic-addon1"
+          onChange={(evt) => setName(evt.target.value)}
+        />
+      </Form.Group>
 
-        <Form.Group controlId="formSlot">
-          <Form.Label>Slot</Form.Label>
-          <FormControl
-            type="number"
-            placeholder="slot"
-            aria-label="slot"
-            value={slot}
-            aria-describedby="basic-addon1"
-            min ={1}
-            max ={5}
-            onChange={(evt) => setSlot(parseInt(evt.target.value))}
-            style={{ width: '20%' }}
-          />
-          <Form.Text className="text-muted">
-            Which column the missions will appear in. 1 to 5.
-          </Form.Text>
-        </Form.Group>
+      <Form.Group controlId="formSlot">
+        <Form.Label>Slot</Form.Label>
+        <FormControl
+          type="number"
+          placeholder="slot"
+          aria-label="slot"
+          value={slot}
+          aria-describedby="basic-addon1"
+          min={1}
+          max={settingsContext.maxSlot}
+          onChange={(evt) => setSlot(parseInt(evt.target.value))}
+          style={{ width: "20%" }}
+        />
+        <Form.Text className="text-muted">
+          Which column the missions will appear in. 1 to 5.
+        </Form.Text>
+      </Form.Group>
 
-        <Form.Group controlId="formGeneric">
-          <Form.Check
-            type="checkbox"
-            label="Generic"
-            checked={generic}
-            onChange={(evt) => setGeneric(evt.target.checked)}
-          />
-          <Form.Text className="text-muted">
-            Whether missions within this series are considered generic.
-          </Form.Text>
-        </Form.Group>
+      <Form.Group controlId="formGeneric">
+        <Form.Check
+          type="checkbox"
+          label="Generic"
+          checked={generic}
+          onChange={(evt) => setGeneric(evt.target.checked)}
+        />
+        <Form.Text className="text-muted">
+          Whether missions within this series are considered generic.
+        </Form.Text>
+      </Form.Group>
 
-        <Form.Group controlId="formAi">
-          <Form.Check
-            type="checkbox"
-            label="AI"
-            checked={ai}
-            onChange={(evt) => setAi(evt.target.checked)}
-          />
-          <Form.Text className="text-muted">
-            Whether the AI will claim missions in this series.
-          </Form.Text>
-        </Form.Group>
+      <Form.Group controlId="formAi">
+        <Form.Check
+          type="checkbox"
+          label="AI"
+          checked={ai}
+          onChange={(evt) => setAi(evt.target.checked)}
+        />
+        <Form.Text className="text-muted">
+          Whether the AI will claim missions in this series.
+        </Form.Text>
+      </Form.Group>
 
-        <Form.Group controlId="formHasCountryShield">
-          <Form.Check
-            type="checkbox"
-            label="Has Country Shield"
-            checked={hasCountryShield}
-            onChange={(evt) => setHasCountryShield(evt.target.checked)}
-          />
-          <Form.Text className="text-muted">
-            Whether to display the country shield on the icon.
-          </Form.Text>
-        </Form.Group>
+      <Form.Group controlId="formHasCountryShield">
+        <Form.Check
+          type="checkbox"
+          label="Has Country Shield"
+          checked={hasCountryShield}
+          onChange={(evt) => setHasCountryShield(evt.target.checked)}
+        />
+        <Form.Text className="text-muted">
+          Whether to display the country shield on the icon.
+        </Form.Text>
+      </Form.Group>
 
-        <Form.Group controlId="formPotentialOnLoad">
-          <Form.Label>Potential on Load</Form.Label>
-          <FormControl
-            as="textarea"
-            placeholder="potentialOnLoad"
-            aria-label="Potential On Load"
-            value={potentialOnLoad}
-            aria-describedby="basic-addon1"
-            onChange={(evt) => setPotentialOnLoad(evt.target.value)}
-          />
-          <Form.Text className="text-muted">
-            Determines whether a series is loaded at all. Used to limit series
-            to DLC.
-          </Form.Text>
-        </Form.Group>
+      <Form.Group controlId="formPotentialOnLoad">
+        <Form.Label>Potential on Load</Form.Label>
+        <FormControl
+          as="textarea"
+          placeholder="potentialOnLoad"
+          aria-label="Potential On Load"
+          value={potentialOnLoad}
+          aria-describedby="basic-addon1"
+          onChange={(evt) => setPotentialOnLoad(evt.target.value)}
+        />
+        <Form.Text className="text-muted">
+          Determines whether a series is loaded at all. Used to limit series to
+          DLC.
+        </Form.Text>
+      </Form.Group>
 
-        <Form.Group controlId="formPotential">
-          <Form.Label>Potential</Form.Label>
-          <FormControl
-            as="textarea"
-            placeholder="potential"
-            aria-label="Potential"
-            value={potential}
-            aria-describedby="basic-addon1"
-            onChange={(evt) => setPotential(evt.target.value)}
-          />
-          <Form.Text className="text-muted">
-            Determines whether a series is loaded at all. Used to limit series
-            to DLC.
-          </Form.Text>
-        </Form.Group>
-        <hr />
-        <Form.Group controlId="formColor">
-          <Form.Label>Color</Form.Label>
-          <SketchPicker color={color} onChangeComplete={handleChangeComplete} />
-          <Form.Text className="text-muted">
-            (Optional) This color is only used in the Mission Editor, and is not
-            part of the mission file
-          </Form.Text>
-        </Form.Group>
-      </Form>
+      <Form.Group controlId="formPotential">
+        <Form.Label>Potential</Form.Label>
+        <FormControl
+          as="textarea"
+          placeholder="potential"
+          aria-label="Potential"
+          value={potential}
+          aria-describedby="basic-addon1"
+          onChange={(evt) => setPotential(evt.target.value)}
+        />
+        <Form.Text className="text-muted">
+          Determines whether a series is loaded at all. Used to limit series to
+          DLC.
+        </Form.Text>
+      </Form.Group>
+      <hr />
+      <Form.Group controlId="formColor">
+        <Form.Label>Color</Form.Label>
+        <SketchPicker color={color} onChangeComplete={handleChangeComplete} />
+        <Form.Text className="text-muted">
+          (Optional) This color is only used in the Mission Editor, and is not
+          part of the mission file
+        </Form.Text>
+      </Form.Group>
+    </Form>
   );
 };
 

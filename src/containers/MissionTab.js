@@ -420,6 +420,28 @@ const MissionTab = (props) => {
   return (
     <div className="providerflow">
       <ReactFlowProvider>
+        <div style={{ minHeight: "100%", margin: "auto" }}>
+          <MissionTabButton
+            handleClick={props.handleCloseTabList}
+            buttonText={
+              props.closedTabsList.maxWidth === "15%"
+                ? "Shrink Mission File List"
+                : "Expand Mission File List"
+            }
+            toolTipText={
+              props.closedTabsList.maxWidth === "15%"
+                ? "Shrink Mission File List"
+                : "Expand Mission File List"
+            }
+            icon={
+              props.closedTabsList.maxWidth === "15%" ? (
+                <FaAngleLeft />
+              ) : (
+                <FaAngleRight />
+              )
+            }
+          />
+        </div>
         <div className="reactflow-wrapper">
           <ReactFlow
             elements={elements}
@@ -447,8 +469,12 @@ const MissionTab = (props) => {
         <div style={{ minHeight: "100%", margin: "auto" }}>
           <MissionTabButton
             handleClick={handleClose}
-            buttonText={closed.maxWidth === "40%" ? "Shrink" : "Expand"}
-            toolTipText={closed.maxWidth === "40%" ? "Shrink" : "Expand"}
+            buttonText={
+              closed.maxWidth === "40%" ? "Shrink Editor" : "Expand Editor"
+            }
+            toolTipText={
+              closed.maxWidth === "40%" ? "Shrink Editor" : "Expand Editor"
+            }
             icon={
               closed.maxWidth === "40%" ? <FaAngleRight /> : <FaAngleLeft />
             }
@@ -467,7 +493,7 @@ const MissionTab = (props) => {
           fileId={props.missionTree.id}
         />
       </ReactFlowProvider>
-      {props.show !== 0 ? (
+      {props.show === inProgressIDMap.addMission ? (
         <div>
           <AddMissionModal
             show={props.show}
@@ -476,34 +502,46 @@ const MissionTab = (props) => {
             missions={elements}
             series={series}
           />
+        </div>
+      ) : null}
+      {props.show === inProgressIDMap.duplicateMission ? (
+        <div>
           <DuplicateMissionModal
             show={props.show}
             setShow={props.setShow}
             duplicateMission={onAdd}
             missions={getOnlyNodes()}
           />
+        </div>
+      ) : null}
+      {props.show === inProgressIDMap.removeMission ? (
+        <div>
           <RemoveMissionModal
             show={props.show}
             setShow={props.setShow}
             removeMission={onRemove}
             missions={getOnlyNodes()}
           />
+        </div>
+      ) : null}
+      {props.show === inProgressIDMap.addSeries ? (
+        <div>
           <AddSeriesModal
             show={props.show}
             setShow={props.setShow}
             addSeries={addSeries}
             series={series}
           />
-          {props.show === inProgressIDMap.removeSeries ? (
-            <div>
-              <RemoveSeriesModal
-                show={props.show}
-                setShow={props.setShow}
-                removeSeries={removeSeries}
-                series={series}
-              />
-            </div>
-          ) : null}
+        </div>
+      ) : null}
+      {props.show === inProgressIDMap.removeSeries ? (
+        <div>
+          <RemoveSeriesModal
+            show={props.show}
+            setShow={props.setShow}
+            removeSeries={removeSeries}
+            series={series}
+          />
         </div>
       ) : null}
     </div>

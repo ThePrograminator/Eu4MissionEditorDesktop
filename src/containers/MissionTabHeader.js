@@ -461,7 +461,7 @@ const MissionTabHeader = (props) => {
           </Container>
         </ButtonGroup>
       </ButtonToolbar>
-      {props.show !== 0 ? (
+      {props.show === InProgressIDMap.export ? (
         <div>
           <ExportMissionModal
             show={props.show}
@@ -469,18 +469,30 @@ const MissionTabHeader = (props) => {
             exportFile={exportFile}
             missionTabs={missionTreeContext.missionTrees}
           />
+        </div>
+      ) : null}
+      {props.show === InProgressIDMap.create ? (
+        <div>
           <CreateMissionModal
             show={props.show}
             setShow={props.setShow}
             createFile={createFile}
             missionTabs={missionTreeContext.missionTrees}
           />
+        </div>
+      ) : null}
+      {props.show === InProgressIDMap.remove ? (
+        <div>
           <RemoveMissionFileModal
             show={props.show}
             setShow={props.setShow}
             removeFile={removeFile}
             missionTabs={missionTreeContext.missionTrees}
           />
+        </div>
+      ) : null}
+      {props.show === InProgressIDMap.duplicate ? (
+        <div>
           <DuplicateMissionFileModal
             show={props.show}
             setShow={props.setShow}

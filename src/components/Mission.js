@@ -1,8 +1,19 @@
 import React, { useEffect, useState, useContext } from "react";
-import { FormControl, Form, Accordion, Card } from "react-bootstrap";
+import {
+  FormControl,
+  Form,
+  Accordion,
+  Card,
+  Col,
+  Button,
+  OverlayTrigger,
+  Tooltip,
+  Spinner,
+} from "react-bootstrap";
 import { getIncomers } from "react-flow-renderer";
 import SeriesReadOnly from "./SeriesReadOnly";
 import MissionTreeContext from "../contexts/MissionTreeContext";
+import SettingsContext from "../contexts/SettingsContext";
 
 function calcPosition(pos) {
   return pos / 150;
@@ -10,6 +21,7 @@ function calcPosition(pos) {
 
 const Mission = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
+  const settingsContext = useContext(SettingsContext);
   const [nodeName, setNodeName] = useState(props.selectedElement.data.label);
   const [icon, setIcon] = useState(props.selectedElement.data.icon);
   const [generic, setGeneric] = useState(props.selectedElement.data.generic);
@@ -19,6 +31,9 @@ const Mission = (props) => {
   const [completedBy, setCompletedBy] = useState(
     props.selectedElement.data.completedBy
   );
+  const [year, setYear] = useState(props.selectedElement.data.year);
+  const [month, setMonth] = useState(props.selectedElement.data.month);
+  const [day, setDay] = useState(props.selectedElement.data.day);
   const [provincesToHighLight, setProvincesToHighLight] = useState(
     props.selectedElement.data.provinces_to_highlight
   );
@@ -27,16 +42,8 @@ const Mission = (props) => {
   const [selectedSeries, setSelectedSeries] = useState(
     props.selectedElement.data.selectedSeries
   );
-  console.log("Mission", props.selectedElement);
-  /*if (props.selectedElement.data.selectedSeries !== selectedSeries) {
-    console.log("setting new series manually fuck sake");
-    setSelectedSeries(props.selectedElement.data.selectedSeries);
-  }*/
 
   useEffect(() => {
-    console.log(
-      "update mission [props.selectedElement, props.missionTree, props.series]"
-    );
     setIcon(props.selectedElement.data.icon);
     setNodeName(props.selectedElement.data.label);
     setGeneric(props.selectedElement.data.generic);
@@ -46,6 +53,9 @@ const Mission = (props) => {
     setTrigger(props.selectedElement.data.trigger);
     setEffect(props.selectedElement.data.effect);
     setSelectedSeries(props.selectedElement.data.selectedSeries);
+    setYear(props.selectedElement.data.year);
+    setMonth(props.selectedElement.data.month);
+    setDay(props.selectedElement.data.day);
   }, [props.selectedElement, props.missionTree, props.series]);
 
   useEffect(() => {
@@ -76,12 +86,18 @@ const Mission = (props) => {
         let incomerNames = incomers.map((incomer) => {
           return incomer.data.label;
         });
+        let date = year + "." + month + "." + day;
+        if (year === undefined || month === undefined || day === undefined)
+          date = "";
         el.data = {
           ...el.data,
           label: nodeName,
           icon: icon,
           generic: generic,
-          completed_by: completedBy,
+          completed_by: date,
+          year: year,
+          month: month,
+          day: day,
           required_missions: incomerNames,
           provinces_to_highlight: provincesToHighLight,
           trigger: trigger,
@@ -117,11 +133,39 @@ const Mission = (props) => {
     generic,
     position,
     completedBy,
+    year,
+    month,
+    day,
     provincesToHighLight,
     trigger,
     effect,
     selectedSeries,
   ]);
+
+  const handleDateChange = (event) => {
+    let { name, value } = event.target;
+    if (name === "year") {
+      setYear(value);
+      if (month === undefined) setMonth(1);
+      if (day === undefined) setDay(1);
+    }
+    if (name === "month") {
+      setMonth(value);
+      if (year === undefined) setYear(settingsContext.startYear);
+      if (day === undefined) setDay(1);
+    }
+    if (name === "day") {
+      setDay(value);
+      if (year === undefined) setYear(settingsContext.startYear);
+      if (month === undefined) setMonth(1);
+    }
+  };
+
+  const handleRemoveCompletedBy = () => {
+    setYear(undefined);
+    setMonth(undefined);
+    setDay(undefined);
+  };
 
   return (
     <Form>
@@ -221,54 +265,95 @@ const Mission = (props) => {
         </Form.Text>
       </Form.Group>
 
-      <Form.Group controlId="formCompletedBy">
-        <Form.Label>Completed By</Form.Label>
-        <FormControl
-          placeholder="completedBy"
-          aria-label="completedBy"
-          value={completedBy}
-          aria-describedby="basic-addon1"
-          onChange={(evt) => setCompletedBy(evt.target.value)}
-        />
-        <Form.Text className="text-muted">
-          Automatically completes mission in history.
-        </Form.Text>
-      </Form.Group>
-
-      <Form.Row style={{ width: "75%" }}>
-        <Form.Group as={Col} controlId="formGridEmail">
-          <Form.Label>Starting Year</Form.Label>
+      <Form.Row style={{ width: "100%" }}>
+        <Form.Group
+          as={Col}
+          controlId="formYear"
+          style={{ minWidth: "25%", width: "25%" }}
+        >
+          <Form.Label>Year</Form.Label>
           <Form.Control
             type="number"
-            placeholder="startingYear"
-            aria-label="startingYear"
+            placeholder="year"
+            aria-label="year"
+            name="year"
             aria-describedby="basic-addon1"
-            value={startYear}
-            onChange={handleUpdateStartYear}
-            style={{ width: "50%" }}
+            min={settingsContext.startYear}
+            max={settingsContext.endYear}
+            value={year === undefined ? "" : year}
+            onChange={handleDateChange}
+            style={{ minWidth: "50%", width: "50%" }}
           />
           <Form.Text className="text-muted">
-            Year your mod starts, Vanilla EU4 starts in 1444. Used in
-            'Compleated by' variable
+            Year mission is automatically completed.
           </Form.Text>
         </Form.Group>
 
-        <Form.Group as={Col} controlId="formGridPassword">
-          <Form.Label>End Year</Form.Label>
+        <Form.Group
+          as={Col}
+          controlId="formMonth"
+          style={{ minWidth: "25%", width: "25%" }}
+        >
+          <Form.Label>Month</Form.Label>
           <Form.Control
             type="number"
-            placeholder="endYear"
-            aria-label="endYear"
+            placeholder="month"
+            aria-label="month"
+            name="month"
             aria-describedby="basic-addon1"
-            value={endYear}
-            onChange={handleUpdateEndYear}
-            style={{ width: "50%" }}
+            min={1}
+            max={12}
+            value={month === undefined ? "" : month}
+            onChange={handleDateChange}
+            style={{ minWidth: "50%", width: "50%" }}
           />
           <Form.Text className="text-muted">
-            Year your mod ends, Vanilla EU4 starts in 1821. Used in 'Compleated
-            by' variable
+            Month mission is automatically completed.
           </Form.Text>
         </Form.Group>
+        <Form.Group
+          as={Col}
+          controlId="formDay"
+          style={{ minWidth: "25%", width: "25%" }}
+        >
+          <Form.Label>Day</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="day"
+            aria-label="day"
+            name="day"
+            aria-describedby="basic-addon1"
+            min={1}
+            max={31}
+            value={day === undefined ? "" : day}
+            onChange={handleDateChange}
+            style={{ minWidth: "40%", width: "40%" }}
+          />
+          <Form.Text className="text-muted">
+            Day mission is automatically completed.
+          </Form.Text>
+        </Form.Group>
+
+        <OverlayTrigger
+          placement="bottom"
+          delay={{ show: 250, hide: 400 }}
+          overlay={
+            <Tooltip id="button-tooltip">{"Remove Completed By"}</Tooltip>
+          }
+        >
+          <Button
+            variant="danger"
+            onClick={() => handleRemoveCompletedBy()}
+            style={{
+              minWidth: "7%",
+              width: "7%",
+              height: "7%",
+              margin: "auto",
+            }}
+          >
+            X
+          </Button>
+        </OverlayTrigger>
       </Form.Row>
 
       <Form.Group controlId={"formIncomer"}>

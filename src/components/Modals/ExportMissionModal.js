@@ -1,13 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { Modal, Button, Form } from "react-bootstrap";
 
 const ExportMissionModal = (props) => {
-  const [selectedMissionTab, setSelectedMissionTab] = useState(0);
+  const [selectedMissionTab, setSelectedMissionTab] = useState(
+    props.missionTabs[0].id
+  );
 
   const handleClose = () => {
     props.setShow(0);
   };
+
+  useEffect(() => {
+    if (props.show === 2 && props.missionTabs.length !== 0) {
+      setSelectedMissionTab(props.missionTabs[0].id);
+    }
+  }, [props.show]);
 
   return (
     <Modal show={props.show === 2} onHide={handleClose}>

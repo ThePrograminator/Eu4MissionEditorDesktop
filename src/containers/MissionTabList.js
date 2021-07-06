@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import MissionTab from "./MissionTab";
 import MissionTabHeader from "./MissionTabHeader";
 import { Container, Row, Tab, Nav, Col } from "react-bootstrap";
+import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
+import MissionTabButton from "../components/MissionTabButton";
 import MissionTreeContext from "../contexts/MissionTreeContext";
 
 import "../tabs.css";
@@ -11,10 +13,30 @@ const MissionList = (props) => {
   const [key, setKey] = useState(null);
   const [inProgressID, setinProgressID] = useState(0);
   const [show, setShow] = useState(0);
+  const [closedTabsList, setClosedTabsList] = useState({
+    maxWidth: "15%",
+    visibility: "visible",
+    maxHeight: "-webkit-fill-available",
+  });
 
-  useEffect(() => {
-    
-  }, []);
+  const handleCloseTabList = () => {
+    console.log("Clicked Closed");
+    if (closedTabsList.maxWidth === "15%")
+      setClosedTabsList({
+        ...closedTabsList,
+        maxWidth: "1%",
+        visibility: "hidden",
+      });
+    else
+      setClosedTabsList({
+        ...closedTabsList,
+        maxWidth: "15%",
+        visibility: "visible",
+      });
+    console.log(closedTabsList);
+  };
+
+  useEffect(() => {}, []);
 
   return (
     <Container fluid style={{ minHeight: "inherit" }}>
@@ -29,6 +51,7 @@ const MissionList = (props) => {
           />
         </Col>
       </Row>
+      <hr />
       <Tab.Container
         activeKey={key}
         onSelect={(k) => setKey(k)}
@@ -38,11 +61,24 @@ const MissionList = (props) => {
       >
         {missionTreeContext.missionTrees.length > 0 ? (
           <Row>
-            <Col sm={2}>
-              <Nav variant="pills" className="flex-column">
+            <Col sm={2} style={closedTabsList}>
+              <Nav
+                variant="pills"
+                className="flex-column"
+                style={{
+                  width: "100%",
+                  maxWidth: "100%",
+                  overflowWrap: "break-word",
+                }}
+              >
                 {missionTreeContext.missionTrees.map((missionTree) => {
                   return (
-                    <Nav.Item key={missionTree.id}>
+                    <Nav.Item
+                      key={missionTree.id}
+                      style={{
+                        width: "inherit",
+                      }}
+                    >
                       <Nav.Link eventKey={missionTree.id}>
                         {missionTree.name}
                       </Nav.Link>
@@ -68,6 +104,8 @@ const MissionList = (props) => {
                             setShow={setShow}
                             inProgressID={inProgressID}
                             setinProgressID={setinProgressID}
+                            closedTabsList={closedTabsList}
+                            handleCloseTabList={handleCloseTabList}
                           />
                         </Row>
                       </Container>

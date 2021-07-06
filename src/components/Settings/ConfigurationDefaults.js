@@ -40,6 +40,7 @@ const ConfigurationDefaults = (props) => {
             placeholder="startingYear"
             aria-label="startingYear"
             aria-describedby="basic-addon1"
+            name="startYear"
             value={startYear}
             onChange={handleUpdateStartYear}
             style={{ width: "50%" }}
@@ -57,6 +58,7 @@ const ConfigurationDefaults = (props) => {
             placeholder="endYear"
             aria-label="endYear"
             aria-describedby="basic-addon1"
+            name="endYear"
             value={endYear}
             onChange={handleUpdateEndYear}
             style={{ width: "50%" }}

@@ -72,7 +72,17 @@ const Reader = {
           mission.data.position = index + 1;
           mission.position.y = mission.data.position * 150;
         }
+        if (mission.data.completed_by !== "") {
+          let date = mission.data.completed_by.split(".");
+          let year = date[0];
+          let month = date[1];
+          let day = date[2];
+          mission.data.year = year;
+          mission.data.month = month;
+          mission.data.day = day;
+        }
         mission.data.selectedSeries = series.id;
+
         allMissions.push(mission);
       })
     );

@@ -2,7 +2,6 @@ import React from "react";
 import { Form, FormControl, Row, Col } from "react-bootstrap";
 
 const SeriesReadOnly = (props) => {
-  console.log("props.selectedSeries", props.selectedSeries)
   return (
     <div style={{ maxWidth: "750px" }}>
         <Row>

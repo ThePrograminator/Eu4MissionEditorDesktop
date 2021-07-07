@@ -35,21 +35,37 @@ const General = (props) => {
             application offers the following features:
           </p>
           <ul>
-            <li>Create, Import and Export Mission Files</li>
+            <li>Create, Import and Export Mission Files.</li>
             <li>
               Visual Graph editor which lets you move and connect missions
-              together
+              together.
             </li>
             <li>
-              Create Missions and Mission Series and edit all their variables
+              Create Missions and Mission Series and edit all their variables.
             </li>
             <li>Assign a Color to a Mission Series to easily identify them</li>
-            <li>Checks and warnings if using same mission names</li>
+            <li>Checks and warnings if using same mission names.</li>
             <li>
               Check for Application Updates, Download and install them with ease
-              through the application
+              through the application.
             </li>
-            <li>Light and Dark Mode</li>
+            <li>Light and Dark Mode.</li>
+          </ul>
+          <p>Windows Download Link:</p>
+          <a href="https://github.com/ThePrograminator/Eu4MissionEditorDesktop/releases">
+            Download Page
+          </a>
+          <br />
+          <p>Installation Guide:</p>
+          <ul>
+            <li>
+              Choose the Latest release version on the github release page.
+            </li>
+            <li>
+              Download the Paradox-Mission-Editor-Setup-x.x.x.exe (x are version
+              number).
+            </li>
+            <li>Run the Setup process.</li>
           </ul>
           <p>
             As with using any 3rd Party tools, backing your files up is crucial.
@@ -57,6 +73,18 @@ const General = (props) => {
             correctly, and therefore I don’t recommend only working with one
             version of your mission file.
           </p>
+          <p>Few notes on Importing and Exporting:</p>
+          <ul>
+            <li>
+              As of now comments are not imported and will therefore not be
+              exported.
+            </li>
+            <li>
+              • If your mission file cannot be imported, it can be caused by
+              formatting issues. I recommend using inline brackets as this has
+              the highest chance of being imported correctly.
+            </li>
+          </ul>
           <p>
             The Application was created using a Javascript Framework called
             Electron together with a Frontend Framework called ‘Create React

@@ -342,8 +342,10 @@ const Reader = {
           splitCleanedUp
         );
         line = lineStart;
-        if (!foundPosition) {
-          newMission.data.position = newSeries.missions.length + 1;
+        if (newSeries.missions.length > 1 && !foundPosition) {
+          let position =
+            newSeries.missions[newSeries.missions.length - 1].data.position;
+          newMission.data.position = position + 1;
           newMission.position.y = newSeries.missions.length + 1 * 150;
         }
         newSeries.missions.push(newMission);

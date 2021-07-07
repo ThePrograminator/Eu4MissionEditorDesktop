@@ -1,6 +1,6 @@
 {
   "name": "eu4missioneditordesktop",
-  "version": "1.0.6",
+  "version": "1.0.0",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
@@ -60,7 +60,7 @@
   "homepage": "./",
   "build": {
     "appId": "dkstranger.eu4missionedtior",
-    "productName": "Eu4 Mission Editor",
+    "productName": "Paradox Mission Editor",
     "target": "NSIS",
     "publish": [
       {

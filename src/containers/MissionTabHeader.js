@@ -281,6 +281,8 @@ const MissionTabHeader = (props) => {
       (missionTab) => missionTab.id === props.fileKey
     );
 
+    if (index === -1) return false;
+
     console.log(
       "checkDuplicateMissionDisabled missionTreeContext.missionTrees",
       missionTreeContext.missionTrees
@@ -306,6 +308,8 @@ const MissionTabHeader = (props) => {
     let index = missionTreeContext.missionTrees.findIndex(
       (missionTab) => missionTab.id === props.fileKey
     );
+
+    if (index === -1) return false;
 
     if (missionTreeContext.missionTrees[index].series.length > 1) return false;
 
@@ -397,15 +401,6 @@ const MissionTabHeader = (props) => {
                 }
               />
               <MissionTabButton
-                id={InProgressIDMap.duplicateMission}
-                inProgress={props.inProgressID}
-                handleClick={handleClick}
-                buttonText={"Duplicate Mission"}
-                toolTipText={"Duplicate Mission"}
-                icon={<FaClone />}
-                disabled={checkDuplicateMissionDisabled()}
-              />
-              <MissionTabButton
                 id={InProgressIDMap.removeMission}
                 inProgress={props.inProgressID}
                 handleClick={handleClick}
@@ -431,18 +426,6 @@ const MissionTabHeader = (props) => {
                 buttonText={"Add Series"}
                 toolTipText={"Add Series"}
                 icon={<FaPlusSquare />}
-                disabled={
-                  missionTreeContext.missionTrees.length === 0 ||
-                  props.fileKey == null
-                }
-              />
-              <MissionTabButton
-                id={InProgressIDMap.duplicateMission}
-                inProgress={props.inProgressID}
-                handleClick={handleClick}
-                buttonText={"Duplicate Series"}
-                toolTipText={"Duplicate Series"}
-                icon={<FaClone />}
                 disabled={
                   missionTreeContext.missionTrees.length === 0 ||
                   props.fileKey == null
@@ -537,3 +520,28 @@ export default MissionTabHeader;
         </div>
       ) : null}
       */
+/*
+
+<MissionTabButton
+                id={InProgressIDMap.duplicateMission}
+                inProgress={props.inProgressID}
+                handleClick={handleClick}
+                buttonText={"Duplicate Mission"}
+                toolTipText={"Duplicate Mission"}
+                icon={<FaClone />}
+                disabled={checkDuplicateMissionDisabled()}
+              />
+<MissionTabButton
+                id={InProgressIDMap.duplicateMission}
+                inProgress={props.inProgressID}
+                handleClick={handleClick}
+                buttonText={"Duplicate Series"}
+                toolTipText={"Duplicate Series"}
+                icon={<FaClone />}
+                disabled={
+                  missionTreeContext.missionTrees.length === 0 ||
+                  props.fileKey == null
+                }
+              />
+
+*/

@@ -20,7 +20,9 @@ If your mission file cannot be imported, it can be caused by formatting issues. 
 The Application was created using a Javascript Framework called Electron together with a Frontend Framework called ‘Create React App’. The Application does not use or require internet connection, aside from checking and downloading updates.<br />
 
 Please consider supporting this project by getting involved on the EU4 Forum or on Patreon.<br />
-https://www.patreon.com/ParadoxNodeEditor
+https://www.patreon.com/ParadoxNodeEditor<br/>
+
+The Application is called Paradox Node Editor because I want to leave it open to also include other Paradox Games into the editor, such as a Focus Tree editor for Hearts of Iron 4. Let me know if this would be interesting to you, and I will consider it.
 
 ### Author
 This Application was created by DKStranger, creator of the EU4 Mod Lord of Universalis

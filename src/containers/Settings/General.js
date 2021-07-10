@@ -101,6 +101,12 @@ const General = (props) => {
             EU4 Forum or on Patreon.
           </p>
           <a href="https://www.patreon.com/ParadoxNodeEditor">Patreon Page</a>
+          <p>
+            The Application is called Paradox Node Editor because I want to
+            leave it open to also include other Paradox Games into the editor,
+            such as a Focus Tree editor for Hearts of Iron 4. Let me know if
+            this would be interesting to you, and I will consider it.
+          </p>
         </Col>
       </Row>
       <Row lg={true}>

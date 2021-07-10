@@ -120,7 +120,7 @@ const UpdateModal = (props) => {
       centered
     >
       <Modal.Header closeButton={!isOnlineBool}>
-        <Modal.Title>Eu4 Mission Editor Updater</Modal.Title>
+        <Modal.Title>Paradox Node Editor Updater</Modal.Title>
       </Modal.Header>
       <Modal.Body style={{ minHeight: "200px" }}>
         <UpdateBody

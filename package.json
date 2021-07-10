@@ -60,7 +60,7 @@
   "homepage": "./",
   "build": {
     "appId": "dkstranger.eu4missionedtior",
-    "productName": "Paradox Mission Editor",
+    "productName": "Paradox Node Editor",
     "target": "NSIS",
     "publish": [
       {

@@ -18,6 +18,7 @@ const General = (props) => {
             Please consider supporting this project by getting involved on the
             EU4 Forum or on Patreon.
           </p>
+          <a href="https://www.patreon.com/ParadoxNodeEditor">Patreon Page</a>
         </Col>
       </Row>
       <Row lg={true}>
@@ -25,7 +26,7 @@ const General = (props) => {
           <h2>About: </h2>
           <hr />
           <p>
-            EU4 Mission Editor is a desktop application created to assist and
+            Paradox Node Editor is a desktop application created to assist and
             ease the development of EU4 mods. Working on my mod: Lord of
             Universalis I found it tedious to work with mission trees
             (especially large ones), without any visual representation outside
@@ -99,6 +100,7 @@ const General = (props) => {
             Please consider supporting this project by getting involved on the
             EU4 Forum or on Patreon.
           </p>
+          <a href="https://www.patreon.com/ParadoxNodeEditor">Patreon Page</a>
         </Col>
       </Row>
       <Row lg={true}>

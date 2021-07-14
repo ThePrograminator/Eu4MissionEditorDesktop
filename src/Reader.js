@@ -342,11 +342,16 @@ const Reader = {
           splitCleanedUp
         );
         line = lineStart;
-        if (newSeries.missions.length > 1 && !foundPosition) {
+        if(newSeries.missions.length === 0 && !foundPosition)
+        {
+          newMission.data.position = 1;
+          newMission.position.y = newMission.data.position * 150;
+        }
+        else if (!foundPosition) {
           let position =
             newSeries.missions[newSeries.missions.length - 1].data.position;
           newMission.data.position = position + 1;
-          newMission.position.y = newSeries.missions.length + 1 * 150;
+          newMission.position.y = newMission.data.position * 150;
         }
         newSeries.missions.push(newMission);
       }

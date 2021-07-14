@@ -25,14 +25,7 @@ const Version = (props) => {
         </Col>
       </Row>
       <hr />
-    </Container>
-  );
-};
-
-export default Version;
-
-/*
-<Row lg={true}>
+      <Row lg={true}>
         <Col lg={true}>
           <Accordion defaultActiveKey="0">
             <Card>
@@ -40,9 +33,28 @@ export default Version;
                 Release Notes
               </Accordion.Toggle>
               <Accordion.Collapse eventKey="0">
-                <Card.Body>Hello! I'm the body</Card.Body>
+                <Card.Body>
+                  <Row lg={true}>
+                    <Col lg={true}>
+                      <p>Current version: {appVersion}</p>
+                    </Col>
+                  </Row>
+                  <Row lg={true}>
+                    <Col lg={true}>
+                      <p>First Official Release</p>
+                    </Col>
+                  </Row>
+                </Card.Body>
               </Accordion.Collapse>
             </Card>
           </Accordion>
         </Col>
-      </Row>*/
+      </Row>
+    </Container>
+  );
+};
+
+export default Version;
+
+/*
+ */

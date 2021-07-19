@@ -41,7 +41,7 @@ const Version = (props) => {
                   </Row>
                   <Row lg={true}>
                     <Col lg={true}>
-                      <p>First Official Release</p>
+                      <p>- Added Max slot setting in configuration window</p>
                     </Col>
                   </Row>
                 </Card.Body>

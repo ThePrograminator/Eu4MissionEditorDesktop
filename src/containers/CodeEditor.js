@@ -41,7 +41,11 @@ const CodeEditor = (props) => {
             maxHeight: "75vh",
           }}
         >
-          <SeriesEditor series={props.series} setSeries={props.setSeries} />
+          <SeriesEditor
+            missionTree={props.missionTree}
+            series={props.series}
+            setSeries={props.setSeries}
+          />
         </Tab>
       </Tabs>
     </aside>

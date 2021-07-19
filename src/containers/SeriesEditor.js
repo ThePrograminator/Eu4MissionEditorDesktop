@@ -46,6 +46,7 @@ const SeriesEditor = (props) => {
               {props.series.map((series) => (
                 <Tab.Pane key={series.id} eventKey={"#link" + series.id}>
                   <Series
+                    missionTree={props.missionTree}
                     series={series}
                     allSeries={props.series}
                     setSeries={props.setSeries}

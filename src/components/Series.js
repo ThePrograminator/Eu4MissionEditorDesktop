@@ -1,7 +1,14 @@
-import React, { useState, useEffect, useCallback, useRef, useContext } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+  useContext,
+} from "react";
 import { Form, FormControl } from "react-bootstrap";
 import { SketchPicker } from "react-color";
 import "../Editor.css";
+import InputValidation from "../helper/InputValidation";
 
 import SettingsContext from "../contexts/SettingsContext";
 
@@ -20,6 +27,18 @@ const Series = (props) => {
   );
   const [potential, setPotential] = useState(props.series.potential);
   const [color, setColor] = useState(props.series.color);
+
+  useEffect(() => {
+    console.log("useEffect series [props.missionTree, props.series]");
+    setName(props.series.name);
+    setSlot(props.series.slot);
+    setGeneric(props.series.generic);
+    setAi(props.series.ai);
+    setHasCountryShield(props.series.hasCountryShield);
+    setPotentialOnLoad(props.series.potentialOnLoad);
+    setPotential(props.series.potential);
+    setColor(props.series.color);
+  }, [props.missionTree, props.series, props.allSeries]);
 
   useEffect(() => {
     if (!mounted.current) {

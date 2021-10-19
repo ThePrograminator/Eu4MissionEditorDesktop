@@ -41,7 +41,15 @@ const Version = (props) => {
                   </Row>
                   <Row lg={true}>
                     <Col lg={true}>
-                      <p>- Added Max slot setting in configuration window</p>
+                    <p>- Fixed Importing Mission file were there is no positions or a mix</p>
+                    <br/>
+                    <p>- Exporting Mission files now sorts missions into position order</p>
+                    <br/>
+                    <p>- Fixed Issues with moving mission not updating position</p>
+                    <br/>
+                    <p>- Added validation on Series Names</p>
+                    <br/>
+                    <p>- Added Export Localisation option</p>
                     </Col>
                   </Row>
                 </Card.Body>

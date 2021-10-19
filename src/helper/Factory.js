@@ -67,6 +67,15 @@ const Factory = {
 
     return newSeries;
   },
+  createDefaultWorkspace: function (id, name = "newWorkspace", type) {
+    const newWorkspace = {
+      id: id,
+      name: name,
+      type: type
+    };
+
+    return newWorkspace;
+  },
 };
 
 export default Factory;

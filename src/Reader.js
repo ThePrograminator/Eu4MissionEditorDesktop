@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 
 import Factory from "./helper/Factory";
 
@@ -19,11 +19,14 @@ const singleVariableMapping = [
 let seriesId = 0;
 let missionId = 0;
 
+
 const Reader = {
   asyncHandleFile: async (file, availableId, callback) => {
     const fileContent = fs.readFileSync(file).toString();
     const correctedPath = file.replace(/\\/g, "/");
     var fileName = path.basename(correctedPath);
+    seriesId = 0;
+    missionId = 0;
 
     const extName = path
       .extname(correctedPath)
@@ -99,6 +102,8 @@ const Reader = {
     newMissionTab.edges.map((edge) => {
       newMissionTab.missions.push(edge);
     });
+    newMissionTab.importedMissionLastId = missionId;
+    newMissionTab.importedSeriesLastId = seriesId;
     console.log("newMissionTab", newMissionTab);
     allMissionTabs.push(newMissionTab);
 
@@ -153,9 +158,9 @@ const Reader = {
       var bracketText = splitCleanedUp[lineStart];
       bracketText = bracketText.trim();
 
-      if (bracketText.search("{") != -1) {
+      if (bracketText.search("{") !== -1) {
         level++;
-      } else if (bracketText.search("}") != -1) {
+      } else if (bracketText.search("}") !== -1) {
         level--;
       }
 
@@ -175,7 +180,7 @@ const Reader = {
       inlineString.length - 1
     );
     inlineString = inlineString.trim();
-    if (inlineString === "") return [];
+    if (inlineString === "") return "";
     const elements = inlineString.split(" ");
 
     return elements;
@@ -213,7 +218,6 @@ const Reader = {
   },
   handleMission: function (lineStart, splitCleanedUp) {
     let first = true;
-
     var availableId = `node_${missionId.toString()}`;
     let newMission = Factory.createDefaultMission(availableId);
     let foundPosition = false;
@@ -251,7 +255,7 @@ const Reader = {
       }
 
       //Inline Brackets
-      if (string.search("{.+}") != -1) {
+      if (string.search("{.+}") !== -1) {
         newMission.data = {
           ...newMission.data,
           [variable[0]]: this.handleInlineBracket(string),
@@ -260,7 +264,7 @@ const Reader = {
       }
 
       //Not inline Bracket
-      if (string.search("{") != -1) {
+      if (string.search("{") !== -1) {
         if (variable[0] !== "required_missions") {
           let { lineStart, stringConcat } = this.handleBlockBracketString(
             line,

@@ -53,8 +53,11 @@ const Writer = {
       tabs += 1;
       tabsText = Writer.updateTabsText(tabs);
 
-      for (let index = 0; index < missions.length; index++) {
-        const mission = missions[index];
+      var sortedObjs = serie.missions.sort(
+        (a, b) => (a.data.position > b.data.position && 1) || -1
+      );
+      for (let index = 0; index < sortedObjs.length; index++) {
+        const mission = sortedObjs[index];
         if (!isNode(mission) || serie.id !== mission.data.selectedSeries)
           continue;
 
@@ -169,6 +172,49 @@ const Writer = {
       tabsText += "\t";
     }
     return tabsText;
+  },
+  exportLocalization: function (series) {
+    var localisationText = "l_english:\n";
+    for (let index = 0; index < series.length; index++) {
+      const serie = series[index];
+
+      let serieName = serie.name.replace(/_/g, " ");
+      serieName = Writer.titleCase(serieName);
+
+      localisationText +=
+        "\n #---------------------------------------------------------\n";
+      localisationText += " # " + serieName + "\n";
+      localisationText +=
+        " #---------------------------------------------------------\n\n";
+
+      var sortedObjs = serie.missions.sort(
+        (a, b) => (a.data.position > b.data.position && 1) || -1
+      );
+      for (let index = 0; index < sortedObjs.length; index++) {
+        const mission = sortedObjs[index];
+        if (!isNode(mission) || serie.id !== mission.data.selectedSeries)
+          continue;
+
+        let name = mission.data.label.replace(/_/g, " ");
+        name = Writer.titleCase(name);
+
+        localisationText +=
+          " " + mission.data.label + '_title: "' + name + '"\n';
+        localisationText += " " + mission.data.label + '_desc: ""\n';
+      }
+    }
+    return localisationText;
+  },
+  titleCase: function (str) {
+    var splitStr = str.toLowerCase().split(" ");
+    for (var i = 0; i < splitStr.length; i++) {
+      // You do not need to check if i is larger than splitStr length, as your for does that for you
+      // Assign it back to the array
+      splitStr[i] =
+        splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+    }
+    // Directly return the joined string
+    return splitStr.join(" ");
   },
 };
 

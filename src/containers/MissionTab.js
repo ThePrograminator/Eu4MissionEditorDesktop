@@ -168,7 +168,7 @@ const MissionTab = (props) => {
       elements.map((el) => {
         if (isNode(el) && el.id === node.id) {
           console.log("updating position for seletected element el", el);
-          setSelectedElement(el);
+          setSelectedElement({ ...el });
           console.log(
             "updating position for seletected element",
             selectedElement
@@ -244,10 +244,8 @@ const MissionTab = (props) => {
   const onRemove = (selectedMission) => {
     console.log("onRemove selectedMission", selectedMission);
     console.log("onRemove elements", elements);
-    let index = elements.findIndex(
-      (mission) => mission.id === selectedMission.id
-    );
-
+    let index = elements.findIndex((mission) => mission.id === selectedMission);
+    console.log("onRemove index", index);
     var removeElementArr = [];
     removeElementArr.push(elements[index]);
     console.log("onRemove removeElementArr", removeElementArr);

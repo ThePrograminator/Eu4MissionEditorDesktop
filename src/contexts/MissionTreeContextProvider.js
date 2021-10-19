@@ -28,11 +28,19 @@ class MissionTreeProvider extends React.Component {
     return availableId;
   };
 
+  setAvailableNodeId = (value) => {
+    this.setState({ availableNodeId: value });
+  };
+
   getAvailableSeriesId = () => {
     var availableId = `series_${this.state.availableSeriesId.toString()}`;
     var newId = this.state.availableSeriesId + 1;
     this.setState({ availableSeriesId: newId });
     return availableId;
+  };
+
+  setAvailableSeriesId = (value) => {
+    this.setState({ availableSeriesId: value });
   };
 
   addMissionTree = (missionTree) => {
@@ -76,7 +84,9 @@ class MissionTreeProvider extends React.Component {
           user: this.state.user,
           getAvailableTreeId: this.getAvailableTreeId,
           getAvailableNodeId: this.getAvailableNodeId,
+          setAvailableNodeId: this.setAvailableNodeId,
           getAvailableSeriesId: this.getAvailableSeriesId,
+          setAvailableSeriesId: this.setAvailableSeriesId,
           missionTrees: this.state.missionTrees,
           addMissionTree: this.addMissionTree,
           editMissionTree: this.editMissionTree,

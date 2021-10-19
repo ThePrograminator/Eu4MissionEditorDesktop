@@ -6,6 +6,7 @@ const ExportMissionModal = (props) => {
   const [selectedMissionTab, setSelectedMissionTab] = useState(
     props.missionTabs[0].id
   );
+  const [exportLocalisation, setExportLocalisation] = useState(false);
 
   const handleClose = () => {
     props.setShow(0);
@@ -38,6 +39,17 @@ const ExportMissionModal = (props) => {
               ))}
             </Form.Control>
           </Form.Group>
+          <Form.Group controlId="formExportLocalisation">
+            <Form.Check
+              type="checkbox"
+              label="Export Localization File"
+              checked={exportLocalisation}
+              onChange={(evt) => setExportLocalisation(evt.target.checked)}
+            />
+            <Form.Text className="text-muted">
+              (Only English).
+            </Form.Text>
+          </Form.Group>
         </Form>
       </Modal.Body>
       <Modal.Footer>
@@ -47,7 +59,7 @@ const ExportMissionModal = (props) => {
         <Button
           variant="primary"
           onClick={() => (
-            props.setShow(0), props.exportFile(selectedMissionTab)
+            props.setShow(0), props.exportFile(selectedMissionTab, exportLocalisation)
           )}
         >
           Export Mission

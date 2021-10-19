@@ -16,6 +16,7 @@ const Series = (props) => {
   const settingsContext = useContext(SettingsContext);
   const mounted = useRef(false);
   const [name, setName] = useState(props.series.name);
+  const [nameErrorMessage, setNameErrorMessage] = useState("");
   const [slot, setSlot] = useState(props.series.slot);
   const [generic, setGeneric] = useState(props.series.generic);
   const [ai, setAi] = useState(props.series.ai);
@@ -86,6 +87,22 @@ const Series = (props) => {
     [setColor]
   );
 
+  const handleSetName = (name) => {
+    let { valid, errorMessage } = InputValidation.validateSeriesName(
+      props.id,
+      name,
+      props.allSeries
+    );
+    console.log("handleSetName valid", valid);
+    console.log("handleSetName errorMessage", errorMessage);
+    if (valid) {
+      setNameErrorMessage(errorMessage);
+      return;
+    }
+    setNameErrorMessage("");
+    setName(name);
+  };
+
   return (
     <Form>
       <Form.Group controlId="formName">
@@ -96,8 +113,14 @@ const Series = (props) => {
           aria-label="name"
           value={name}
           aria-describedby="basic-addon1"
-          onChange={(evt) => setName(evt.target.value)}
+          onChange={(evt) => handleSetName(evt.target.value)}
+          isInvalid={nameErrorMessage !== ""}
         />
+        {nameErrorMessage !== "" ? (
+          <Form.Control.Feedback type="invalid">
+            {nameErrorMessage}
+          </Form.Control.Feedback>
+        ) : null}
       </Form.Group>
 
       <Form.Group controlId="formSlot">

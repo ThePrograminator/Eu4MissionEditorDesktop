@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import MissionTab from "./MissionTab";
 import MissionTabHeader from "./MissionTabHeader";
-import { Container, Row, Tab, Nav, Col } from "react-bootstrap";
+import { Container, Row, Tab, Nav, Col, Button } from "react-bootstrap";
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
 import MissionTabButton from "../components/MissionTabButton";
 import MissionTreeContext from "../contexts/MissionTreeContext";
@@ -34,6 +34,10 @@ const MissionList = (props) => {
         visibility: "visible",
       });
     console.log(closedTabsList);
+  };
+
+  const handleRemoveTabList = (id) => {
+    console.log("Clicked RemoveTabList");
   };
 
   useEffect(() => {}, []);
@@ -77,6 +81,7 @@ const MissionList = (props) => {
                       key={missionTree.id}
                       style={{
                         width: "inherit",
+                        marginRight: "10px",
                       }}
                     >
                       <Nav.Link eventKey={missionTree.id}>

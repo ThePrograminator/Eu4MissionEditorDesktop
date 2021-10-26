@@ -180,7 +180,7 @@ const Writer = {
     }
     return tabsText;
   },
-  exportLocalization: function (series) {
+  exportLocalization: function (series, missions) {
     var localisationText = "l_english:\n";
     for (let index = 0; index < series.length; index++) {
       const serie = series[index];
@@ -194,9 +194,13 @@ const Writer = {
       localisationText +=
         " #---------------------------------------------------------\n\n";
 
-      var sortedObjs = serie.missions.sort(
-        (a, b) => (a.data.position > b.data.position && 1) || -1
-      );
+        var seriesMissionsOne = missions.filter(x => isNode(x));
+        var seriesMissionsTwo = seriesMissionsOne.filter(x => x.data.selectedSeries === serie.id);
+  
+        var sortedObjs = seriesMissionsTwo.sort(
+          (a, b) => (a.data.position > b.data.position && 1) || -1
+        );
+
       for (let index = 0; index < sortedObjs.length; index++) {
         const mission = sortedObjs[index];
         if (!isNode(mission) || serie.id !== mission.data.selectedSeries)

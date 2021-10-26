@@ -72,7 +72,7 @@ const MissionTabHeader = (props) => {
     );
     let localizationFileData = "";
     if (exportLocalisation) {
-      localizationFileData = Writer.exportLocalization(missionTab.series);
+      localizationFileData = Writer.exportLocalization(missionTab.series, missionTab.missions);
     }
 
     var options = {

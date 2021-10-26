@@ -41,7 +41,7 @@ const Version = (props) => {
                   </Row>
                   <Row lg={true}>
                     <Col lg={true}>
-                    <p>- Fixed Issue with Exporting mission only exporting series</p>
+                    <p>- Fixed Issue with Exporting mission only exporting series and also not Localization</p>
                     </Col>
                   </Row>
                 </Card.Body>

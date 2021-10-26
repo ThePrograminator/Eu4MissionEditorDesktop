@@ -53,9 +53,16 @@ const Writer = {
       tabs += 1;
       tabsText = Writer.updateTabsText(tabs);
 
-      var sortedObjs = serie.missions.sort(
+      var seriesMissionsOne = missions.filter(x => isNode(x));
+      var seriesMissionsTwo = seriesMissionsOne.filter(x => x.data.selectedSeries === serie.id);
+
+      var sortedObjs = seriesMissionsTwo.sort(
         (a, b) => (a.data.position > b.data.position && 1) || -1
       );
+
+     /* var sortedObjs = serie.missions.sort(
+        (a, b) => (a.data.position > b.data.position && 1) || -1
+      );*/
       for (let index = 0; index < sortedObjs.length; index++) {
         const mission = sortedObjs[index];
         if (!isNode(mission) || serie.id !== mission.data.selectedSeries)

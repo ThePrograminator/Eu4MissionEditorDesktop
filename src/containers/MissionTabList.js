@@ -12,7 +12,6 @@ const MissionList = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
   const [key, setKey] = useState(null);
   const [inProgressID, setinProgressID] = useState(0);
-  const [show, setShow] = useState(0);
   const [closedTabsList, setClosedTabsList] = useState({
     maxWidth: "15%",
     visibility: "visible",
@@ -47,8 +46,8 @@ const MissionList = (props) => {
       <Row style={{ marginBottom: "10px" }}>
         <Col lg={true} className="mr-2">
           <MissionTabHeader
-            show={show}
-            setShow={setShow}
+            show={props.show}
+            setShow={props.setShow}
             inProgressID={inProgressID}
             setinProgressID={setinProgressID}
             fileKey={key}
@@ -105,8 +104,8 @@ const MissionList = (props) => {
                           <MissionTab
                             missionTree={missionTree}
                             edges={missionTree.edges}
-                            show={show}
-                            setShow={setShow}
+                            show={props.show}
+                            setShow={props.setShow}
                             inProgressID={inProgressID}
                             setinProgressID={setinProgressID}
                             closedTabsList={closedTabsList}

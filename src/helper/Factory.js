@@ -71,7 +71,8 @@ const Factory = {
     const newWorkspace = {
       id: id,
       name: name,
-      type: type
+      type: type,
+      filePaths: []
     };
 
     return newWorkspace;

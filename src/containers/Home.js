@@ -2,8 +2,11 @@ import React, { useState } from "react";
 import MissionTabList from "./MissionTabList";
 import Settings from "./Settings";
 import { Container, Row, Tabs, Tab } from "react-bootstrap";
+import WorkspaceModal from "../components/Modals/WorkspaceModal";
 
 const Home = (props) => {
+  const [show, setShow] = useState(12);
+  console.log("props.show home", show);
   return (
     <Container fluid style={{ minHeight: "inherit" }}>
       <Tabs defaultActiveKey="missions" id="uncontrolled-tab-example">
@@ -21,7 +24,7 @@ const Home = (props) => {
             }}
           >
             <Row style={{ minHeight: "83vh" }}>
-              <MissionTabList />
+              <MissionTabList show={show} setShow={setShow} />
             </Row>
           </Container>
         </Tab>
@@ -41,6 +44,10 @@ const Home = (props) => {
           </Container>
         </Tab>
       </Tabs>
+      <WorkspaceModal
+        show={show}
+        setShow={setShow}
+      />
     </Container>
   );
 };

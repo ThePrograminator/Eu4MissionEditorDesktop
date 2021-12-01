@@ -9,6 +9,8 @@ class SettingsProvider extends React.Component {
     maxSlot: settings.get("maxSlot"),
     startYear: settings.get("startYear"),
     endYear: settings.get("endYear"),
+    workspaces: settings.get("workspaces"),
+    currentWorkspace: null,
   };
 
   componentDidMount() {
@@ -17,6 +19,8 @@ class SettingsProvider extends React.Component {
         maxSlot: settings.get("maxSlot"),
         startYear: settings.get("startYear"),
         endYear: settings.get("endYear"),
+        workspaces: settings.get("workspaces"),
+        currentWorkspace: null,
       },
       () => console.log("SettingsProvider state change: ", this.state)
     );
@@ -35,6 +39,8 @@ class SettingsProvider extends React.Component {
           maxSlot: this.state.maxSlot,
           startYear: this.state.startYear,
           endYear: this.state.endYear,
+          workspaces: this.state.workspaces,
+          currentWorkspace: this.state.currentWorkspace,
           updateState: this.updateState,
         }}
       >

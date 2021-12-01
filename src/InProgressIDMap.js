@@ -10,5 +10,6 @@ const inProgressIDMap = {
   addSeries: 9,
   removeSeries: 10,
   duplicateSeries: 11,
+  createSelectWorkspace: 12,
 };
 export default inProgressIDMap;

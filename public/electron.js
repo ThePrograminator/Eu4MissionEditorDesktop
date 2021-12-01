@@ -107,6 +107,7 @@ function createWindow() {
     settings.set("maxSlot", "5");
     settings.set("startYear", "1444");
     settings.set("endYear", "1821");
+    settings.set("workspaces", []);
   }
 
   mainWindow.setMenuBarVisibility(false);

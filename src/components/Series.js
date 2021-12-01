@@ -106,7 +106,7 @@ const Series = (props) => {
   return (
     <Form>
       <Form.Group controlId="formName">
-        <Form.Label>Container Name</Form.Label>
+        <Form.Label>Series Name</Form.Label>
         <FormControl
           className="mb-2"
           placeholder="name"

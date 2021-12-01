@@ -94,6 +94,10 @@ const WorkspaceSelect = (props) => {
     props.setErrorMessage("Name is Empty");
   }, []);
 
+  const getName = (type) => {
+    return settingsContext.getText("name", type)
+  }
+
   return (
     <Form>
       <Form.Group as={Row} controlId="formContainer">
@@ -108,7 +112,7 @@ const WorkspaceSelect = (props) => {
           >
             {selectAbleList.map((workspace, index) => (
               <option key={index} value={workspace.id}>
-                {(workspace.type !== undefined ? workspace.type + " - " : "") +
+                {(workspace.type !== undefined ? getName(workspace.type) + " - " : "") +
                   workspace.name}
               </option>
             ))}

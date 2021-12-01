@@ -65,7 +65,9 @@ const Mission = (props) => {
   }, [props.selectedElement]);
 
   useEffect(() => {
-    console.log("update mission [props.selectedElement.data.selectedContainer]");
+    console.log(
+      "update mission [props.selectedElement.data.selectedContainer]"
+    );
     setSelectedContainer(props.selectedElement.data.selectedContainer);
   }, [props.selectedElement.data.selectedContainer]);
 
@@ -78,7 +80,8 @@ const Mission = (props) => {
         // in order to notify react flow about the change
         var pos = position;
         if (selectedContainer != null) {
-          pos = props.container.find((x) => x.id === selectedContainer).slot * 150;
+          pos =
+            props.container.find((x) => x.id === selectedContainer).slot * 150;
         }
         let incomers = getIncomers(
           props.selectedElement,
@@ -118,7 +121,8 @@ const Mission = (props) => {
         ) {
           el.style = {
             ...el.style,
-            background: props.container.find((x) => x.id === selectedContainer).color,
+            background: props.container.find((x) => x.id === selectedContainer)
+              .color,
           };
         }
         console.log("data", el);
@@ -172,12 +176,14 @@ const Mission = (props) => {
   return (
     <Form>
       <Form.Group controlId="formContainer">
-        <Form.Label>Selected Container</Form.Label>
+        <Form.Label>
+          {"Selected " + settingsContext.getText("containerName")}
+        </Form.Label>
         <Form.Control
           as="select"
           onChange={(evt) => setSelectedContainer(evt.target.value)}
           value={selectedContainer}
-          placeholder={"Select Container"}
+          placeholder={"Select " + settingsContext.getText("containerName")}
         >
           {props.container.map((container) => (
             <option key={container.id} value={container.id}>
@@ -186,14 +192,15 @@ const Mission = (props) => {
           ))}
         </Form.Control>
         <Form.Text className="text-muted">
-          (Required) A mission needs a Container
+          {"(Required) A mission needs a " +
+            settingsContext.getText("containerName")}
         </Form.Text>
       </Form.Group>
 
       <Accordion defaultActiveKey="0">
         <Card>
           <Accordion.Toggle as={Card.Header} eventKey="0">
-            Container (Read Only)
+            {settingsContext.getText("containerName") + " (Read Only)"}
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="0">
             <Card.Body>
@@ -204,7 +211,7 @@ const Mission = (props) => {
                   )}
                 />
               ) : (
-                "No Selected Container"
+                "No Selected " + settingsContext.getText("containerName")
               )}
             </Card.Body>
           </Accordion.Collapse>

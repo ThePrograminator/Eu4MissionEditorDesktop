@@ -34,21 +34,24 @@ class SettingsProvider extends React.Component {
     });
   };
 
-  getText = (variable) => {
+  getText = (variable, type = null) => {
     console.log("settingsContext getText", this.state.currentWorkspace);
-    
-    var workspaceText = null;
-    for (let index = 0; index < WorkspaceTypes.length; index++) {
-      const element = WorkspaceTypes[index].id;
-      if(this.state.currentWorkspace.type === element)
-      {
-        workspaceText = WorkspaceTypes[index];
+
+    if (type === null) {
+      var workspaceText = null;
+      for (let index = 0; index < WorkspaceTypes.length; index++) {
+        const element = WorkspaceTypes[index].id;
+        if (this.state.currentWorkspace.type === element) {
+          workspaceText = WorkspaceTypes[index];
+        }
       }
+      console.log("settingsContext currentType", workspaceText[variable]);
+      if (workspaceText === null) return "Missing text";
+      return workspaceText[variable];
+    } else {
+      var workspaceText = WorkspaceTypes[type];
+      return workspaceText[variable];
     }
-    console.log("settingsContext currentType", workspaceText[variable]);
-    if(workspaceText === null)
-      return "Missing text"
-    return workspaceText[variable];
   };
 
   render() {

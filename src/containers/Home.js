@@ -55,7 +55,24 @@ const Home = (props) => {
             defaultActiveKey={settingsContext.currentWorkspace.type}
             id="uncontrolled-tab-example"
           >
-            {switchTabType(settingsContext.currentWorkspace.type)}
+            <Tab
+              eventKey={0}
+              title={settingsContext.getText("tabTitle")}
+              style={{ minHeight: "inherit" }}
+            >
+              <Container
+                fluid
+                style={{
+                  minHeight: "83vh",
+                  padding: "20px",
+                  paddingLeft: "0px",
+                }}
+              >
+                <Row style={{ minHeight: "83vh" }}>
+                  <MissionTabList show={show} setShow={setShow} />
+                </Row>
+              </Container>
+            </Tab>
             <Tab
               eventKey="settings"
               title="Settings"
@@ -83,6 +100,7 @@ const Home = (props) => {
 export default Home;
 
 /*
+{switchTabType(settingsContext.currentWorkspace.type)}
 <Tab
               eventKey="missions"
               title="Missions"

@@ -3,15 +3,17 @@ import { Tabs, Tab } from "react-bootstrap";
 import Mission from "../../components/Mission";
 import ContainerEditor from "./ContainerEditor";
 import { isNode } from "react-flow-renderer";
+import SettingsContext from "../../contexts/SettingsContext";
 
 const CodeEditor = (props) => {
+  const settingsContext = useContext(SettingsContext);
   return (
     <aside style={props.closed}>
       <Tabs defaultActiveKey="mission" id="uncontrolled-tab-example">
         {props.selectedElement != null && isNode(props.selectedElement) ? (
           <Tab
             eventKey="mission"
-            title="Mission"
+            title={settingsContext.getText("nodeName")}
             style={{
               minHeight: "inherit",
               overflowY: "auto",
@@ -33,7 +35,7 @@ const CodeEditor = (props) => {
         ) : null}
         <Tab
           eventKey="container"
-          title="Container"
+          title={settingsContext.getText("containerName")}
           style={{
             minHeight: "inherit",
             overflowY: "auto",

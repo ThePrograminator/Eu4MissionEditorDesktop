@@ -11,7 +11,8 @@ const CreateMissionModal = (props) => {
   const [validatedContainerName, setValidatedContainerName] = useState(false);
   const [validatedForm, setValidatedForm] = useState(false);
   const [errorMessageFileName, setErrorMessageFileName] = useState("");
-  const [errorMessageContainerName, setErrorMessageContainerName] = useState("");
+  const [errorMessageContainerName, setErrorMessageContainerName] =
+    useState("");
 
   const handleFileNameInput = (event) => {
     var name = event.target.value;
@@ -110,7 +111,7 @@ const CreateMissionModal = (props) => {
               {settingsContext.getText("filename") + " Name"}
             </Form.Label>
             <FormControl
-              placeholder="name"
+              placeholder="name..."
               aria-label="label"
               value={fileName}
               aria-describedby="basic-addon1"
@@ -128,7 +129,9 @@ const CreateMissionModal = (props) => {
             </Form.Label>
             <FormControl
               className="mb-2"
-              placeholder="containerName"
+              placeholder={
+                settingsContext.getText("containerName") + " Name..."
+              }
               aria-label="containerName"
               value={containerName}
               aria-describedby="basic-addon1"
@@ -155,7 +158,7 @@ const CreateMissionModal = (props) => {
           )}
           disabled={!validatedFileName || !validatedContainerName}
         >
-          Create Mission File
+          {"Create" + settingsContext.getText("filename")}
         </Button>
       </Modal.Footer>
     </Modal>

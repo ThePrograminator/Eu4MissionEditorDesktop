@@ -7,46 +7,46 @@ const Writer = {
     var tabs = 0;
     var tabsText = "";
     for (let index = 0; index < container.length; index++) {
-      const serie = container[index];
+      const container = container[index];
       //name
-      missionTreeText += serie.name + " " + Writer.addEqualBracket();
+      missionTreeText += container.name + " " + Writer.addEqualBracket();
 
       tabs += 1;
       tabsText = Writer.updateTabsText(tabs);
 
       //slot
-      missionTreeText += tabsText + "slot = " + serie.slot + "\n";
+      missionTreeText += tabsText + "slot = " + container.slot + "\n";
 
       //gerneric
       missionTreeText +=
-        tabsText + "generic = " + Writer.boolToYesNo(serie.generic) + "\n";
+        tabsText + "generic = " + Writer.boolToYesNo(container.generic) + "\n";
 
       //ai
       missionTreeText +=
-        tabsText + "ai = " + Writer.boolToYesNo(serie.ai) + "\n";
+        tabsText + "ai = " + Writer.boolToYesNo(container.ai) + "\n";
 
       //has_country_shield (Optional)
-      if (serie.has_country_shield) {
+      if (container.has_country_shield) {
         missionTreeText +=
           tabsText +
           "has_country_shield = " +
-          Writer.boolToYesNo(serie.has_country_shield) +
+          Writer.boolToYesNo(container.has_country_shield) +
           "\n";
       }
 
       //potentialOnLoad (Optional)
-      if (Writer.isCorrectValue(serie.potential_on_load)) {
+      if (Writer.isCorrectValue(container.potential_on_load)) {
         missionTreeText +=
           tabsText +
           "potential_on_load = " +
-          Writer.handleBlockInput(serie.potential_on_load, tabs + 1);
+          Writer.handleBlockInput(container.potential_on_load, tabs + 1);
       }
 
       //potential
       missionTreeText +=
         tabsText +
         "potential = " +
-        Writer.handleBlockInput(serie.potential, tabs + 1);
+        Writer.handleBlockInput(container.potential, tabs + 1);
 
       missionTreeText += "\n";
 
@@ -54,18 +54,18 @@ const Writer = {
       tabsText = Writer.updateTabsText(tabs);
 
       var containerMissionsOne = missions.filter(x => isNode(x));
-      var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === serie.id);
+      var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === container.id);
 
       var sortedObjs = containerMissionsTwo.sort(
         (a, b) => (a.data.position > b.data.position && 1) || -1
       );
 
-     /* var sortedObjs = serie.missions.sort(
+     /* var sortedObjs = container.missions.sort(
         (a, b) => (a.data.position > b.data.position && 1) || -1
       );*/
       for (let index = 0; index < sortedObjs.length; index++) {
         const mission = sortedObjs[index];
-        if (!isNode(mission) || serie.id !== mission.data.selectedContainer)
+        if (!isNode(mission) || container.id !== mission.data.selectedContainer)
           continue;
 
         //name
@@ -183,19 +183,19 @@ const Writer = {
   exportLocalization: function (container, missions) {
     var localisationText = "l_english:\n";
     for (let index = 0; index < container.length; index++) {
-      const serie = container[index];
+      const container = container[index];
 
-      let serieName = serie.name.replace(/_/g, " ");
-      serieName = Writer.titleCase(serieName);
+      let containerName = container.name.replace(/_/g, " ");
+      containerName = Writer.titleCase(containerName);
 
       localisationText +=
         "\n #---------------------------------------------------------\n";
-      localisationText += " # " + serieName + "\n";
+      localisationText += " # " + containerName + "\n";
       localisationText +=
         " #---------------------------------------------------------\n\n";
 
         var containerMissionsOne = missions.filter(x => isNode(x));
-        var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === serie.id);
+        var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === container.id);
   
         var sortedObjs = containerMissionsTwo.sort(
           (a, b) => (a.data.position > b.data.position && 1) || -1
@@ -203,7 +203,7 @@ const Writer = {
 
       for (let index = 0; index < sortedObjs.length; index++) {
         const mission = sortedObjs[index];
-        if (!isNode(mission) || serie.id !== mission.data.selectedContainer)
+        if (!isNode(mission) || container.id !== mission.data.selectedContainer)
           continue;
 
         let name = mission.data.label.replace(/_/g, " ");

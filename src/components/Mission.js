@@ -179,9 +179,9 @@ const Mission = (props) => {
           value={selectedContainer}
           placeholder={"Select Container"}
         >
-          {props.container.map((serie) => (
-            <option key={serie.id} value={serie.id}>
-              {serie.name}
+          {props.container.map((container) => (
+            <option key={container.id} value={container.id}>
+              {container.name}
             </option>
           ))}
         </Form.Control>

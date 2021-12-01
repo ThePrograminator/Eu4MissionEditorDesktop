@@ -6,7 +6,9 @@ import SettingsContext from "../../contexts/SettingsContext";
 const AddMissionModal = (props) => {
   const settingsContext = useContext(SettingsContext);
   const [name, setName] = useState("");
-  const [selectedContainer, setSelectedContainer] = useState(props.container[0].id);
+  const [selectedContainer, setSelectedContainer] = useState(
+    props.container[0].id
+  );
   const [validated, setValidated] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -53,14 +55,18 @@ const AddMissionModal = (props) => {
   return (
     <Modal show={props.show === 6} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add {settingsContext.getText("nodeName")}</Modal.Title>
+        <Modal.Title>
+          {"Add " + settingsContext.getText("nodeName")}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Form.Group controlId="formLabel">
-            <Form.Label>{settingsContext.getText("fileName") + " Name"}</Form.Label>
+            <Form.Label>
+              {settingsContext.getText("nodeName") + " Name"}
+            </Form.Label>
             <FormControl
-              placeholder="name"
+              placeholder="name..."
               aria-label="label"
               value={name}
               aria-describedby="basic-addon1"
@@ -74,23 +80,28 @@ const AddMissionModal = (props) => {
               </Form.Control.Feedback>
             ) : null}
           </Form.Group>
-          <Form.Group controlId="formSeries">
-            <Form.Label>Selected Series</Form.Label>
+          <Form.Group controlId="formContainers">
+            <Form.Label>
+              {"Selected " + settingsContext.getText("containerName")}
+            </Form.Label>
             <Form.Control
               as="select"
               //onChange={(evt) => setSelectedContainer(parseInt(evt.target.value))}
               onChange={(evt) => setSelectedContainer(evt.target.value)}
               value={selectedContainer}
-              placeholder={"Select Series"}
+              placeholder={
+                "Selected " + settingsContext.getText("containerName")
+              }
             >
-              {props.container.map((serie) => (
-                <option key={serie.id} value={serie.id}>
-                  {serie.name}
+              {props.container.map((container) => (
+                <option key={container.id} value={container.id}>
+                  {container.name}
                 </option>
               ))}
             </Form.Control>
             <Form.Text className="text-muted">
-              (Required) A mission needs a Series
+              {"(Required) A mission needs a " +
+                settingsContext.getText("containerName")}
             </Form.Text>
           </Form.Group>
         </Form>
@@ -106,7 +117,7 @@ const AddMissionModal = (props) => {
           )}
           disabled={!validated}
         >
-          Add Mission
+          {"Add " + settingsContext.getText("nodeName")}
         </Button>
       </Modal.Footer>
     </Modal>

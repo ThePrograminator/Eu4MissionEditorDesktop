@@ -99,7 +99,7 @@ const DuplicateMissionFileModal = (props) => {
               {"New " + settingsContext.getText("filename") + " Name"}
             </Form.Label>
             <FormControl
-              placeholder="name"
+              placeholder="name..."
               aria-label="label"
               value={fileName}
               aria-describedby="basic-addon1"

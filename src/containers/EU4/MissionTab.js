@@ -324,7 +324,7 @@ const MissionTab = (props) => {
     }
 
     let containerCopy = container.slice();
-    let containerIndex = container.findIndex((serie) => serie.id === containerId);
+    let containerIndex = container.findIndex((container) => container.id === containerId);
 
     console.log("containerCopy", containerCopy);
     containerCopy.splice(containerIndex, 1);

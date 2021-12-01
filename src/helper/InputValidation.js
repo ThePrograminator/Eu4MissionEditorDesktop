@@ -13,8 +13,8 @@ const InputValidation = {
       };
 
     let nameUsed = false;
-    allContainer.map((serie) => {
-      if (serie.id !== id && serie.name === name) {
+    allContainer.map((container) => {
+      if (container.id !== id && container.name === name) {
         console.log("validateContainerName name used");
         nameUsed = true;
       }

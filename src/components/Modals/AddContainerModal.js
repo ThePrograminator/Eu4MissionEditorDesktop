@@ -22,8 +22,8 @@ const AddContainerModal = (props) => {
     var valid = true;
     console.log("props.container", props.container);
     if (props.container !== null && props.container.length !== 0) {
-      props.container.map((serie) => {
-        if (serie.name !== undefined && serie.name === name) {
+      props.container.map((container) => {
+        if (container.name !== undefined && container.name === name) {
           console.log("Same Name");
           setValidated(false);
           setErrorMessage(
@@ -64,7 +64,7 @@ const AddContainerModal = (props) => {
               {settingsContext.getText("containerName") + " Name"}
             </Form.Label>
             <FormControl
-              placeholder="name"
+              placeholder="name..."
               aria-label="label"
               value={name}
               aria-describedby="basic-addon1"

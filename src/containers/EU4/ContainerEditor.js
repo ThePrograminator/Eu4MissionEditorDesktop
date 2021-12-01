@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import Container from "../../components/Container";
+import Series from "../../components/Series";
 import { Tab, Row, Col, ListGroup, ButtonGroup, Button } from "react-bootstrap";
 
 let id = 0;
@@ -45,7 +45,7 @@ const ContainerEditor = (props) => {
             <Tab.Content>
               {props.container.map((container) => (
                 <Tab.Pane key={container.id} eventKey={"#link" + container.id}>
-                  <Container
+                  <Series
                     missionTree={props.missionTree}
                     container={container}
                     allContainer={props.container}

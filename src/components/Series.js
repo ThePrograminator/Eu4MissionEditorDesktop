@@ -12,7 +12,7 @@ import InputValidation from "../helper/InputValidation";
 
 import SettingsContext from "../contexts/SettingsContext";
 
-const Container = (props) => {
+const Series = (props) => {
   const settingsContext = useContext(SettingsContext);
   const mounted = useRef(false);
   const [name, setName] = useState(props.container.name);
@@ -221,4 +221,4 @@ const Container = (props) => {
   );
 };
 
-export default Container;
+export default Series;

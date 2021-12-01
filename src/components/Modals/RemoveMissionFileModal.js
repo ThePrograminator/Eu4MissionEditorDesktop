@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Modal, Button, Form } from "react-bootstrap";
+import SettingsContext from "../../contexts/SettingsContext";
 
 const RemoveMissionFileModal = (props) => {
+  const settingsContext = useContext(SettingsContext);
   const [selectedMissionTab, setSelectedMissionTab] = useState(
     props.missionTabs.length > 0 ? props.missionTabs[0].id : 0
   );
@@ -22,12 +24,16 @@ const RemoveMissionFileModal = (props) => {
   return (
     <Modal show={props.show === 5} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Remove Mission File</Modal.Title>
+        <Modal.Title>
+          {"Remove " + settingsContext.getText("filename")}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="formMission">
-            <Form.Label>Select Mission File To Remove</Form.Label>
+            <Form.Label>
+              {"Select " + settingsContext.getText("filename") + " To Remove"}
+            </Form.Label>
             <Form.Control
               as="select"
               onChange={(evt) => setSelectedMissionTab(evt.target.value)}
@@ -40,7 +46,9 @@ const RemoveMissionFileModal = (props) => {
               ))}
             </Form.Control>
             <Form.Text className="text-muted">
-              This does not remove the mission file from your directory
+              {"This does not remove the " +
+                settingsContext.getText("filename") +
+                " from your directory"}
             </Form.Text>
             <Form.Text className="text-muted">
               Your changes not exported will be lost
@@ -58,7 +66,7 @@ const RemoveMissionFileModal = (props) => {
             props.setShow(0), props.removeFile(selectedMissionTab)
           )}
         >
-          Remove Mission File
+          {"Remove " + settingsContext.getText("filename")}
         </Button>
       </Modal.Footer>
     </Modal>

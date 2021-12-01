@@ -1,10 +1,12 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import InProgressIDMap from "../../InProgressIDMap";
+import SettingsContext from "../../contexts/SettingsContext";
 
 import { Modal, Button, Form } from "react-bootstrap";
 
 const RemoveSeriesModal = (props) => {
+  const settingsContext = useContext(SettingsContext);
   const [selectedSeries, setSelectedSeries] = useState(props.series[0].id);
   const [selectedReplaceSeries, setSelectedReplaceSeries] = useState(
     props.series[1].id
@@ -43,12 +45,18 @@ const RemoveSeriesModal = (props) => {
       onHide={handleClose}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Remove Series</Modal.Title>
+        <Modal.Title>
+          {"Remove " + settingsContext.getText("containerName")}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="formMission">
-            <Form.Label>Select Series To Remove</Form.Label>
+            <Form.Label>
+              {"Select " +
+                settingsContext.getText("containerName") +
+                " To Remove"}
+            </Form.Label>
             <Form.Control
               as="select"
               onChange={(evt) => handleChange(false, evt.target.value)}
@@ -64,7 +72,11 @@ const RemoveSeriesModal = (props) => {
             </Form.Control>
           </Form.Group>
           <Form.Group controlId="formMission">
-            <Form.Label>Select Series To Replace</Form.Label>
+            <Form.Label>
+              {"Select " +
+                settingsContext.getText("containerName") +
+                " To Replace"}
+            </Form.Label>
             <Form.Control
               as="select"
               onChange={(evt) => handleChange(true, evt.target.value)}
@@ -81,8 +93,16 @@ const RemoveSeriesModal = (props) => {
                 : null}
             </Form.Control>
             <Form.Text className="text-muted">
-              All missions need a series, therefore missions linked to a removed
-              series need a new series
+              {"All " +
+                settingsContext.getText("nodeNameAdj") +
+                " need a " +
+                settingsContext.getText("containerName") +
+                ", therefore " +
+                settingsContext.getText("nodeNameAdj") +
+                " linked to a removed " +
+                settingsContext.getText("containerName") +
+                " need a new " +
+                settingsContext.getText("containerName")}
             </Form.Text>
           </Form.Group>
         </Form>
@@ -99,7 +119,7 @@ const RemoveSeriesModal = (props) => {
             props.removeSeries(selectedSeries, selectedReplaceSeries)
           )}
         >
-          Remove Series
+          {"Remove " + settingsContext.getText("containerName")}
         </Button>
       </Modal.Footer>
     </Modal>

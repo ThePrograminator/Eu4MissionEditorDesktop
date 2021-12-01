@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Modal, Button, Form, FormControl } from "react-bootstrap";
+import SettingsContext from "../../contexts/SettingsContext";
 
 const AddMissionModal = (props) => {
+  const settingsContext = useContext(SettingsContext);
   const [name, setName] = useState("");
   const [selectedSeries, setSelectedSeries] = useState(props.series[0].id);
   const [validated, setValidated] = useState(false);
@@ -24,7 +26,9 @@ const AddMissionModal = (props) => {
         if (mission.data !== undefined && mission.data.label === name) {
           console.log("Same Name");
           setValidated(false);
-          setErrorMessage("Mission name already in use.");
+          setErrorMessage(
+            settingsContext.getText("nodeName") + " name already in use."
+          );
           valid = false;
           return;
         }
@@ -49,7 +53,7 @@ const AddMissionModal = (props) => {
   return (
     <Modal show={props.show === 6} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Mission</Modal.Title>
+        <Modal.Title>Add {settingsContext.getText("nodeName")}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated}>

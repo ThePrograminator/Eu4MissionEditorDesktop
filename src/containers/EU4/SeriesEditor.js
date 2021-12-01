@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import Series from "../components/Series";
+import Series from "../../components/Series";
 import { Tab, Row, Col, ListGroup, ButtonGroup, Button } from "react-bootstrap";
 
 let id = 0;

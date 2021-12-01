@@ -1,6 +1,6 @@
 import React, { useContext } from "react";
 import { Tabs, Tab } from "react-bootstrap";
-import Mission from "../components/Mission";
+import Mission from "../../components/Mission";
 import SeriesEditor from "./SeriesEditor";
 import { isNode } from "react-flow-renderer";
 

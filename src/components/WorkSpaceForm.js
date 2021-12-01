@@ -6,7 +6,7 @@ import {
   ButtonGroup,
   ToggleButton,
 } from "react-bootstrap";
-import { WorkspaceTypes } from "../constants/WorkspaceConstant";
+import { WorkspaceTypes } from "../constants/WorkspaceTypes";
 import SettingsContext from "../contexts/SettingsContext";
 import Factory from "../helper/Factory";
 
@@ -16,7 +16,7 @@ const settings = electron.remote.require("electron-settings");
 const WorkspaceForm = (props) => {
   const settingsContext = useContext(SettingsContext);
   const [name, setName] = useState("");
-  const [selectedGame, setSelectedGame] = useState(WorkspaceTypes[0]);
+  const [selectedGame, setSelectedGame] = useState(WorkspaceTypes[0].id);
 
   const handleInput = (event) => {
     var name = event.target.value;
@@ -91,12 +91,12 @@ const WorkspaceForm = (props) => {
               id={`radio-${idx}`}
               type="radio"
               name="radio"
-              value={radio}
-              checked={selectedGame === radio}
-              onChange={(e) => setSelectedGame(e.currentTarget.value)}
+              value={radio.id}
+              checked={selectedGame === radio.id}
+              onChange={(e) => setSelectedGame(parseInt(e.currentTarget.value))}
               style ={{WebkitAppearance: "none"}}
             >
-              {radio}
+              {radio.name}
             </ToggleButton>
           ))}
         </ButtonGroup>

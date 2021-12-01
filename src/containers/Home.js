@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import MissionTabList from "./MissionTabList";
+import React, { useState, useEffect, useContext } from "react";
+import MissionTabList from "./EU4/MissionTabList";
 import Settings from "./Settings";
 import { Container, Row, Tabs, Tab } from "react-bootstrap";
 import WorkspaceModal from "../components/Modals/WorkspaceModal";
@@ -8,33 +8,51 @@ import SettingsContext from "../contexts/SettingsContext";
 const Home = (props) => {
   const settingsContext = useContext(SettingsContext);
   const [show, setShow] = useState(12);
-  console.log("props.show home", show);
+
+  const switchTabType = (type) => {
+    switch (type) {
+      //EU4
+      case 0:
+        return (
+          <Tab eventKey={0} title={settingsContext.getText("tabTitle")} style={{ minHeight: "inherit" }}>
+            <Container
+              fluid
+              style={{
+                minHeight: "83vh",
+                padding: "20px",
+                paddingLeft: "0px",
+              }}
+            >
+              <Row style={{ minHeight: "83vh" }}>
+                <MissionTabList show={show} setShow={setShow} />
+              </Row>
+            </Container>
+          </Tab>
+        );
+      //HOI4
+      case 1:
+        return <button>Login</button>;
+      default:
+        return null;
+    }
+  };
+
+
   return (
     <Container fluid style={{ minHeight: "inherit" }}>
       {settingsContext.currentWorkspace !== null ? (
         <div>
           <div>
-            <p>Workspace - {settingsContext.currentWorkspace.type} - {settingsContext.currentWorkspace.name}</p>
+            <p>
+              Workspace - {settingsContext.currentWorkspace.type} -{" "}
+              {settingsContext.currentWorkspace.name}
+            </p>
           </div>
-          <Tabs defaultActiveKey="missions" id="uncontrolled-tab-example">
-            <Tab
-              eventKey="missions"
-              title="Missions"
-              style={{ minHeight: "inherit" }}
-            >
-              <Container
-                fluid
-                style={{
-                  minHeight: "83vh",
-                  padding: "20px",
-                  paddingLeft: "0px",
-                }}
-              >
-                <Row style={{ minHeight: "83vh" }}>
-                  <MissionTabList show={show} setShow={setShow} />
-                </Row>
-              </Container>
-            </Tab>
+          <Tabs
+            defaultActiveKey={settingsContext.currentWorkspace.type}
+            id="uncontrolled-tab-example"
+          >
+            {switchTabType(settingsContext.currentWorkspace.type)}
             <Tab
               eventKey="settings"
               title="Settings"
@@ -60,3 +78,25 @@ const Home = (props) => {
 };
 
 export default Home;
+
+/*
+<Tab
+              eventKey="missions"
+              title="Missions"
+              style={{ minHeight: "inherit" }}
+            >
+              <Container
+                fluid
+                style={{
+                  minHeight: "83vh",
+                  padding: "20px",
+                  paddingLeft: "0px",
+                }}
+              >
+                <Row style={{ minHeight: "83vh" }}>
+                  <MissionTabList show={show} setShow={setShow} />
+                </Row>
+              </Container>
+            </Tab>
+
+*/

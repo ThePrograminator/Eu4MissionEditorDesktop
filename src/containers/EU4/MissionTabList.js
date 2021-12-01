@@ -1,17 +1,13 @@
 import React, { useState, useContext, useEffect } from "react";
 import MissionTab from "./MissionTab";
 import MissionTabHeader from "./MissionTabHeader";
-import { Container, Row, Tab, Nav, Col, Button } from "react-bootstrap";
-import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import MissionTabButton from "../components/MissionTabButton";
-import MissionTreeContext from "../contexts/MissionTreeContext";
-import SettingsContext from "../contexts/SettingsContext";
+import { Container, Row, Tab, Nav, Col } from "react-bootstrap";
+import MissionTreeContext from "../../contexts/MissionTreeContext";
 
-import "../tabs.css";
+import "../../tabs.css";
 
 const MissionList = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
-  const settingsContext = useContext(SettingsContext);
   const [key, setKey] = useState(null);
   const [inProgressID, setinProgressID] = useState(0);
   const [closedTabsList, setClosedTabsList] = useState({
@@ -35,10 +31,6 @@ const MissionList = (props) => {
         visibility: "visible",
       });
     console.log(closedTabsList);
-  };
-
-  const handleRemoveTabList = (id) => {
-    console.log("Clicked RemoveTabList");
   };
 
   useEffect(() => {}, []);

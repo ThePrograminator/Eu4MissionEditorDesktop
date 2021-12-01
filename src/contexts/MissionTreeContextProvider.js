@@ -11,7 +11,6 @@ class MissionTreeProvider extends React.Component {
     availableTreeId: 0,
     availableNodeId: 0,
     availableSeriesId: 0,
-    missionTabListKeyCallback: null,
   };
 
   getAvailableTreeId = () => {
@@ -91,7 +90,6 @@ class MissionTreeProvider extends React.Component {
           addMissionTree: this.addMissionTree,
           editMissionTree: this.editMissionTree,
           removeMissionTree: this.removeMissionTree,
-          missionTabListKeyCallback: this.missionTabListKeyCallback,
         }}
       >
         {this.props.children}

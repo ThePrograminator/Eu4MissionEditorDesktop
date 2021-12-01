@@ -11,20 +11,20 @@ import ReactFlow, {
 } from "react-flow-renderer";
 
 import { FaAngleLeft, FaAngleRight } from "react-icons/fa";
-import MissionTabButton from "../components/MissionTabButton";
+import MissionTabButton from "../../components/MissionTabButton";
 
-import AddMissionModal from "../components/Modals/AddMissionModal";
-import DuplicateMissionModal from "../components/Modals/DuplicateMissionModal";
-import RemoveMissionModal from "../components/Modals/RemoveMissionModal";
-import AddSeriesModal from "../components/Modals/AddSeriesModal";
-import RemoveSeriesModal from "../components/Modals/RemoveSeriesModal";
+import AddMissionModal from "../../components/Modals/AddMissionModal";
+import DuplicateMissionModal from "../../components/Modals/DuplicateMissionModal";
+import RemoveMissionModal from "../../components/Modals/RemoveMissionModal";
+import AddSeriesModal from "../../components/Modals/AddSeriesModal";
+import RemoveSeriesModal from "../../components/Modals/RemoveSeriesModal";
 
 import CodeEditor from "./CodeEditor";
-import Factory from "../helper/Factory";
-import MissionTreeContext from "../contexts/MissionTreeContext";
-import SettingsContext from "../contexts/SettingsContext";
-import "../Provider.css";
-import inProgressIDMap from "../InProgressIDMap";
+import Factory from "../../helper/Factory";
+import MissionTreeContext from "../../contexts/MissionTreeContext";
+import SettingsContext from "../../contexts/SettingsContext";
+import "../../Provider.css";
+import inProgressIDMap from "../../InProgressIDMap";
 
 const onLoad = (reactFlowInstance) =>
   console.log("flow loaded:", reactFlowInstance);
@@ -287,49 +287,6 @@ const MissionTab = (props) => {
     console.log("removeSeries seriesId", seriesId);
     console.log("removeSeries seriesReplaceId", seriesReplaceId);
 
-    /*  const ele = elements.map((el) => {
-      if (isNode(el)) {
-        if (el.data.selectedSeries === seriesId) {
-          el = {
-            ...el,
-            data: {
-              ...el.data,
-              selectedSeries: seriesReplaceId,
-            },
-          };
-        }
-      }
-      return el;
-    });
-    setElements(ele);
-
-    if (selectedElement !== null) {
-      elements.map((el) => {
-        if (isNode(el)) {
-          if (
-            el.id === selectedElement.id &&
-            el.data.selectedSeries === seriesId
-          ) {
-            el = {
-              ...el,
-              data: {
-                ...el.data,
-                selectedSeries: seriesReplaceId,
-              },
-            };
-            setSelectedElement((selEL) => ({
-              ...selEL,
-              data: {
-                ...selEL.data,
-                selectedSeries: seriesReplaceId,
-              },
-            }));
-          }
-        }
-        return el;
-      });
-    }*/
-
     const elementsCopy = elements.map((el) => {
       if (isNode(el)) {
         if (el.data.selectedSeries === seriesId) {
@@ -365,31 +322,6 @@ const MissionTab = (props) => {
     } else {
       setElements(elementsCopy);
     }
-
-    /*elements.map((el) => {
-      console.log("loop el", el);
-      if (isNode(el) && el.data.selectedSeries === seriesId) {
-        console.log("updating position for seletected element el", el);
-        setSelectedElement(el);
-        console.log(
-          "updating position for seletected element",
-          selectedElement
-        );
-      }
-    });*/
-    /*console.log("layoutedElements 2", layoutedElements);
-    let missionTreesCopy = missionTreeContext.missionTrees.slice();
-    let index = missionTreesCopy.findIndex(
-      (missionTree) => missionTree.id === props.missionTree.id
-    );
-    console.log("index", index);
-    if (index !== -1) {
-      console.log("missiontab.js onNodeDragStop updating");
-      missionTreesCopy[index].missions = layoutedElements;
-      console.log("onNodeDragStop missionTabsCopy", missionTreesCopy);
-      missionTreeContext.editMissionTree(missionTreesCopy[index]);
-      console.log("elemeents", elements);
-    }*/
 
     let seriesCopy = series.slice();
     let seriesIndex = series.findIndex((serie) => serie.id === seriesId);
@@ -547,4 +479,3 @@ const MissionTab = (props) => {
 };
 
 export default MissionTab;
-/*style={{background: "#2A353C"}}*/

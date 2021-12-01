@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Modal, Button, Form, FormControl } from "react-bootstrap";
 import InProgressIDMap from "../../InProgressIDMap";
+import SettingsContext from "../../contexts/SettingsContext";
 
 const AddSeriesModal = (props) => {
+  const settingsContext = useContext(SettingsContext);
   const [name, setName] = useState("");
   const [validated, setValidated] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -24,7 +26,9 @@ const AddSeriesModal = (props) => {
         if (serie.name !== undefined && serie.name === name) {
           console.log("Same Name");
           setValidated(false);
-          setErrorMessage("Serie name already in use.");
+          setErrorMessage(
+            settingsContext.getText("containerName") + " name already in use."
+          );
           valid = false;
           return;
         }
@@ -49,12 +53,16 @@ const AddSeriesModal = (props) => {
   return (
     <Modal show={props.show === InProgressIDMap.addSeries} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Series</Modal.Title>
+        <Modal.Title>
+          {"Add" + settingsContext.getText("containerName")}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Form.Group controlId="formLabel">
-            <Form.Label>Series Name</Form.Label>
+            <Form.Label>
+              {settingsContext.getText("containerName") + " Name"}
+            </Form.Label>
             <FormControl
               placeholder="name"
               aria-label="label"

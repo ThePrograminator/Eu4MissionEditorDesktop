@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Modal, Button, Form } from "react-bootstrap";
+import SettingsContext from "../../contexts/SettingsContext";
 
 const ExportMissionModal = (props) => {
+  const settingsContext = useContext(SettingsContext);
   const [selectedMissionTab, setSelectedMissionTab] = useState(
     props.missionTabs[0].id
   );
@@ -21,12 +23,16 @@ const ExportMissionModal = (props) => {
   return (
     <Modal show={props.show === 2} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Export Mission</Modal.Title>
+        <Modal.Title>
+          {"Export " + settingsContext.getText("filename")}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form>
           <Form.Group controlId="formMission">
-            <Form.Label>Select Mission To Export</Form.Label>
+            <Form.Label>
+              {"Select " + settingsContext.getText("filename") + " To Export"}
+            </Form.Label>
             <Form.Control
               as="select"
               onChange={(evt) => setSelectedMissionTab(evt.target.value)}
@@ -46,9 +52,7 @@ const ExportMissionModal = (props) => {
               checked={exportLocalisation}
               onChange={(evt) => setExportLocalisation(evt.target.checked)}
             />
-            <Form.Text className="text-muted">
-              (Only English).
-            </Form.Text>
+            <Form.Text className="text-muted">(Only English).</Form.Text>
           </Form.Group>
         </Form>
       </Modal.Body>
@@ -59,10 +63,11 @@ const ExportMissionModal = (props) => {
         <Button
           variant="primary"
           onClick={() => (
-            props.setShow(0), props.exportFile(selectedMissionTab, exportLocalisation)
+            props.setShow(0),
+            props.exportFile(selectedMissionTab, exportLocalisation)
           )}
         >
-          Export Mission
+          {"Export " + settingsContext.getText("filename")}
         </Button>
       </Modal.Footer>
     </Modal>

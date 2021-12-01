@@ -7,7 +7,7 @@ import MissionTreeContext from "../../contexts/MissionTreeContext";
 const electron = window.require("electron");
 const settings = electron.remote.require("electron-settings");
 
-const ConfigurationDefaults = (props) => {
+const EU4ConfigurationDefaults = (props) => {
   const settingsContext = useContext(SettingsContext);
   const missionTreeContext = useContext(MissionTreeContext);
   const [maxSlot, setMaxSlot] = useState(settingsContext.maxSlot);
@@ -115,4 +115,4 @@ const ConfigurationDefaults = (props) => {
 /*
  */
 
-export default ConfigurationDefaults;
+export default EU4ConfigurationDefaults;

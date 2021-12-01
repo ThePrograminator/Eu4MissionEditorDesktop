@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 
 import { Modal, Button, Form, FormControl } from "react-bootstrap";
+import SettingsContext from "../../contexts/SettingsContext";
 
 const DuplicateMissionModal = (props) => {
+  const settingsContext = useContext(SettingsContext);
   const [selectedMissionTab, setSelectedMissionTab] = useState(0);
   const [fileName, setFileName] = useState(0);
   const [validated, setValidated] = useState(false);
@@ -22,7 +24,9 @@ const DuplicateMissionModal = (props) => {
       if (mission.data.label === name) {
         console.log("Same Name");
         setValidated(false);
-        setErrorMessage("Mission file name already in use.");
+        setErrorMessage(
+          settingsContext.getText("filename") + " name already in use."
+        );
         valid = false;
         return;
       }
@@ -59,12 +63,18 @@ const DuplicateMissionModal = (props) => {
   return (
     <Modal show={props.show === 8} onHide={handleClose}>
       <Modal.Header closeButton>
-        <Modal.Title>Duplicate Mission</Modal.Title>
+        <Modal.Title>
+          {"Duplicate " + settingsContext.getText("nodeName")}
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Form.Group controlId="formMission">
-            <Form.Label>Select Mission To Duplicate</Form.Label>
+            <Form.Label>
+              {"Select " +
+                settingsContext.getText("nodeName") +
+                " To Duplicate"}
+            </Form.Label>
             <Form.Control
               as="select"
               onChange={(evt) => setSelectedMissionTab(evt.target.value)}
@@ -82,12 +92,14 @@ const DuplicateMissionModal = (props) => {
             </Form.Control>
             {selectedMissionTab === 0 ? (
               <Form.Control.Feedback type="invalid">
-                No Mission to Duplicate
+                {"No " + settingsContext.getText("nodeName") + " To Duplicate"}
               </Form.Control.Feedback>
             ) : null}
           </Form.Group>
           <Form.Group controlId="formLabel">
-            <Form.Label>New Mission Name</Form.Label>
+            <Form.Label>
+              {"New " + settingsContext.getText("nodeName") + " Name"}
+            </Form.Label>
             <FormControl
               placeholder="name"
               aria-label="label"
@@ -114,7 +126,7 @@ const DuplicateMissionModal = (props) => {
           disabled={!validated || selectedMissionTab === 0}
           onClick={() => (props.setShow(0), handleAction())}
         >
-          Duplicate Mission
+          {"Duplicate " + settingsContext.getText("nodeName")}
         </Button>
       </Modal.Footer>
     </Modal>

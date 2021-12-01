@@ -1,21 +1,21 @@
 import React, { useContext } from "react";
-import Reader from "../Reader";
-import Writer from "../Writer";
+import Reader from "../../Reader";
+import Writer from "../../Writer";
 import { ButtonToolbar } from "react-bootstrap";
-import MissionTreeContext from "../contexts/MissionTreeContext";
-import SettingsContext from "../contexts/SettingsContext";
+import MissionTreeContext from "../../contexts/MissionTreeContext";
+import SettingsContext from "../../contexts/SettingsContext";
 
-import InProgressIDMap from "../InProgressIDMap";
-import FileTabHeader from "../components/TabHeader/FileTabHeader";
-import ImportExportFileTabHeader from "../components/TabHeader/ImportExportFileTabHeader";
-import EuFourMissionTabHeader from "../components/TabHeader/EuFourMissionTabHeader";
-import EuFourSeriesTabHeader from "../components/TabHeader/EuFourSeriesTabHeader";
+import InProgressIDMap from "../../InProgressIDMap";
+import FileTabHeader from "../../components/TabHeader/FileTabHeader";
+import ImportExportFileTabHeader from "../../components/TabHeader/ImportExportFileTabHeader";
+import EuFourMissionTabHeader from "../../components/TabHeader/EuFourMissionTabHeader";
+import EuFourSeriesTabHeader from "../../components/TabHeader/EuFourSeriesTabHeader";
 
-import Factory from "../helper/Factory";
-import ExportMissionModal from "../components/Modals/ExportMissionModal";
-import CreateMissionModal from "../components/Modals/CreateMissionModal";
-import DuplicateMissionFileModal from "../components/Modals/DuplicateMissionFileModal";
-import RemoveMissionFileModal from "../components/Modals/RemoveMissionFileModal";
+import Factory from "../../helper/Factory";
+import ExportMissionModal from "../../components/Modals/ExportMissionModal";
+import CreateMissionModal from "../../components/Modals/CreateMissionModal";
+import DuplicateMissionFileModal from "../../components/Modals/DuplicateMissionFileModal";
+import RemoveMissionFileModal from "../../components/Modals/RemoveMissionFileModal";
 
 const electron = window.require("electron");
 const fs = electron.remote.require("fs");

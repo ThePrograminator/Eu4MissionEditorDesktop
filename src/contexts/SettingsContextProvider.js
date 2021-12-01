@@ -30,7 +30,7 @@ class SettingsProvider extends React.Component {
   updateState = (variable, value, callback) => {
     this.setState({ ...this.state, [variable]: value }, function () {
       console.log("SettingsProvider state change: ", this.state);
-      callback();
+      if (callback) callback();
     });
   };
 

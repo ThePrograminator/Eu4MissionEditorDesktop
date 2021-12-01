@@ -12,44 +12,44 @@ import InputValidation from "../helper/InputValidation";
 
 import SettingsContext from "../contexts/SettingsContext";
 
-const Series = (props) => {
+const Container = (props) => {
   const settingsContext = useContext(SettingsContext);
   const mounted = useRef(false);
-  const [name, setName] = useState(props.series.name);
+  const [name, setName] = useState(props.container.name);
   const [nameErrorMessage, setNameErrorMessage] = useState("");
-  const [slot, setSlot] = useState(props.series.slot);
-  const [generic, setGeneric] = useState(props.series.generic);
-  const [ai, setAi] = useState(props.series.ai);
+  const [slot, setSlot] = useState(props.container.slot);
+  const [generic, setGeneric] = useState(props.container.generic);
+  const [ai, setAi] = useState(props.container.ai);
   const [hasCountryShield, setHasCountryShield] = useState(
-    props.series.has_country_shield
+    props.container.has_country_shield
   );
   const [potentialOnLoad, setPotentialOnLoad] = useState(
-    props.series.potential_on_load
+    props.container.potential_on_load
   );
-  const [potential, setPotential] = useState(props.series.potential);
-  const [color, setColor] = useState(props.series.color);
+  const [potential, setPotential] = useState(props.container.potential);
+  const [color, setColor] = useState(props.container.color);
 
   useEffect(() => {
-    console.log("useEffect series [props.missionTree, props.series]");
-    setName(props.series.name);
-    setSlot(props.series.slot);
-    setGeneric(props.series.generic);
-    setAi(props.series.ai);
-    setHasCountryShield(props.series.hasCountryShield);
-    setPotentialOnLoad(props.series.potentialOnLoad);
-    setPotential(props.series.potential);
-    setColor(props.series.color);
-  }, [props.missionTree, props.series, props.allSeries]);
+    console.log("useEffect container [props.missionTree, props.container]");
+    setName(props.container.name);
+    setSlot(props.container.slot);
+    setGeneric(props.container.generic);
+    setAi(props.container.ai);
+    setHasCountryShield(props.container.hasCountryShield);
+    setPotentialOnLoad(props.container.potentialOnLoad);
+    setPotential(props.container.potential);
+    setColor(props.container.color);
+  }, [props.missionTree, props.container, props.allContainer]);
 
   useEffect(() => {
     if (!mounted.current) {
       mounted.current = true;
       return;
     }
-    console.log("Series useEffect");
-    props.setSeries((els) =>
+    console.log("Container useEffect");
+    props.setContainer((els) =>
       els.map((el) => {
-        if (el.id === props.series.id) {
+        if (el.id === props.container.id) {
           // it's important that you create a new object here
           // in order to notify react flow about the change
           el = {
@@ -88,10 +88,10 @@ const Series = (props) => {
   );
 
   const handleSetName = (name) => {
-    let { valid, errorMessage } = InputValidation.validateSeriesName(
+    let { valid, errorMessage } = InputValidation.validateContainerName(
       props.id,
       name,
-      props.allSeries
+      props.allContainer
     );
     console.log("handleSetName valid", valid);
     console.log("handleSetName errorMessage", errorMessage);
@@ -106,7 +106,7 @@ const Series = (props) => {
   return (
     <Form>
       <Form.Group controlId="formName">
-        <Form.Label>Series Name</Form.Label>
+        <Form.Label>Container Name</Form.Label>
         <FormControl
           className="mb-2"
           placeholder="name"
@@ -149,7 +149,7 @@ const Series = (props) => {
           onChange={(evt) => setGeneric(evt.target.checked)}
         />
         <Form.Text className="text-muted">
-          Whether missions within this series are considered generic.
+          Whether missions within this container are considered generic.
         </Form.Text>
       </Form.Group>
 
@@ -161,7 +161,7 @@ const Series = (props) => {
           onChange={(evt) => setAi(evt.target.checked)}
         />
         <Form.Text className="text-muted">
-          Whether the AI will claim missions in this series.
+          Whether the AI will claim missions in this container.
         </Form.Text>
       </Form.Group>
 
@@ -188,7 +188,7 @@ const Series = (props) => {
           onChange={(evt) => setPotentialOnLoad(evt.target.value)}
         />
         <Form.Text className="text-muted">
-          Determines whether a series is loaded at all. Used to limit series to
+          Determines whether a container is loaded at all. Used to limit container to
           DLC.
         </Form.Text>
       </Form.Group>
@@ -204,7 +204,7 @@ const Series = (props) => {
           onChange={(evt) => setPotential(evt.target.value)}
         />
         <Form.Text className="text-muted">
-          Determines whether a series is loaded at all. Used to limit series to
+          Determines whether a container is loaded at all. Used to limit container to
           DLC.
         </Form.Text>
       </Form.Group>
@@ -221,4 +221,4 @@ const Series = (props) => {
   );
 };
 
-export default Series;
+export default Container;

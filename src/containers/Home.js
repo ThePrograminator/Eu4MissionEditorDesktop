@@ -14,7 +14,11 @@ const Home = (props) => {
       //EU4
       case 0:
         return (
-          <Tab eventKey={0} title={settingsContext.getText("tabTitle")} style={{ minHeight: "inherit" }}>
+          <Tab
+            eventKey={0}
+            title={settingsContext.getText("tabTitle")}
+            style={{ minHeight: "inherit" }}
+          >
             <Container
               fluid
               style={{
@@ -37,14 +41,13 @@ const Home = (props) => {
     }
   };
 
-
   return (
     <Container fluid style={{ minHeight: "inherit" }}>
       {settingsContext.currentWorkspace !== null ? (
         <div>
           <div>
             <p>
-              Workspace - {settingsContext.currentWorkspace.type} -{" "}
+              Workspace - {settingsContext.getText("name")} -{" "}
               {settingsContext.currentWorkspace.name}
             </p>
           </div>

@@ -12,10 +12,10 @@ const Configuration = (props) => {
     var type = settingsContext.currentWorkspace.type;
     switch (type) {
       //EU4
-      case "EU4":
+      case 0:
         return <EU4ConfigurationDefaults />;
       //HOI4
-      case "HOI4":
+      case 1:
         return <button>Login</button>;
       default:
         return null;

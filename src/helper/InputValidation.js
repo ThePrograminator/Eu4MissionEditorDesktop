@@ -1,7 +1,7 @@
 import React from "react";
 
 const InputValidation = {
-  validateSeriesName: function (id, name, allSeries) {
+  validateContainerName: function (id, name, allContainer) {
     let nameInvalid = false;
 
     nameInvalid = InputValidation.checkIllegalCharacters(name);
@@ -13,9 +13,9 @@ const InputValidation = {
       };
 
     let nameUsed = false;
-    allSeries.map((serie) => {
+    allContainer.map((serie) => {
       if (serie.id !== id && serie.name === name) {
-        console.log("validateSeriesName name used");
+        console.log("validateContainerName name used");
         nameUsed = true;
       }
     });

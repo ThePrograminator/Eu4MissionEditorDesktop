@@ -2,52 +2,54 @@ import React, { useContext } from "react";
 import MissionTabButton from "../MissionTabButton";
 import { ButtonGroup, Container, Row } from "react-bootstrap";
 import MissionTreeContext from "../../contexts/MissionTreeContext";
+import SettingsContext from "../../contexts/SettingsContext";
 
 import InProgressIDMap from "../../InProgressIDMap";
 
 import { FaPlusSquare, FaTrashAlt } from "react-icons/fa";
 
-const EuFourSeriesTabHeader = (props) => {
+const EuFourContainerTabHeader = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
+  const settingsContext = useContext(SettingsContext);
   const handleClick = (id) => {
     console.log("clicked id", id);
     switch (id) {
-      //Add Series
+      //Add Container
       case 9:
-        handleAddSeries();
+        handleAddContainer();
         break;
-      //Remove Series
+      //Remove Container
       case 10:
-        handleRemoveSeries();
+        handleRemoveContainer();
         break;
-      //Duplicate Series
+      //Duplicate Container
       case 11:
-        handleDuplicateSeries();
+        handleDuplicateContainer();
         break;
       default:
         break;
     }
   };
 
-  const handleAddSeries = () => {
-    console.log("Add Series");
+  const handleAddContainer = () => {
+    console.log("Add Container");
 
     props.setShow(9);
   };
 
-  const handleRemoveSeries = () => {
-    console.log("Remove Series");
+  const handleRemoveContainer = () => {
+    console.log("Remove Container");
 
     props.setShow(10);
   };
 
-  const handleDuplicateSeries = () => {
-    console.log("Duplicate Series");
+  const handleDuplicateContainer = () => {
+    console.log("Duplicate Container");
 
     props.setShow(11);
   };
 
-  const checkRemoveSeriesDisabled = () => {
+  const checkRemoveContainerDisabled = () => {
     if (
       missionTreeContext.missionTrees === undefined ||
       missionTreeContext.missionTrees === null
@@ -64,24 +66,25 @@ const EuFourSeriesTabHeader = (props) => {
 
     if (index === -1) return false;
 
-    if (missionTreeContext.missionTrees[index].series.length > 1) return false;
+    if (missionTreeContext.missionTrees[index].container.length > 1)
+      return false;
 
     return true;
   };
 
   return (
-    <ButtonGroup className="mr-2" aria-label="Series group">
+    <ButtonGroup className="mr-2" aria-label="Container group">
       <Container>
         <Row className="mr-2" style={{ maxHeight: "35%" }}>
-          <p>Series</p>
+          <p>{settingsContext.getText("containerName")}</p>
         </Row>
         <Row className="mr-2">
           <MissionTabButton
-            id={InProgressIDMap.addSeries}
+            id={InProgressIDMap.addContainer}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Add Series"}
-            toolTipText={"Add Series"}
+            buttonText={"Add " + settingsContext.getText("containerName")}
+            toolTipText={"Add " + settingsContext.getText("containerName")}
             icon={<FaPlusSquare />}
             disabled={
               missionTreeContext.missionTrees.length === 0 ||
@@ -89,13 +92,13 @@ const EuFourSeriesTabHeader = (props) => {
             }
           />
           <MissionTabButton
-            id={InProgressIDMap.removeSeries}
+            id={InProgressIDMap.removeContainer}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Remove Series"}
-            toolTipText={"Remove Series"}
+            buttonText={"Remove " + settingsContext.getText("containerName")}
+            toolTipText={"Remove " + settingsContext.getText("containerName")}
             icon={<FaTrashAlt />}
-            disabled={checkRemoveSeriesDisabled()}
+            disabled={checkRemoveContainerDisabled()}
           />
         </Row>
       </Container>
@@ -103,7 +106,7 @@ const EuFourSeriesTabHeader = (props) => {
   );
 };
 
-export default EuFourSeriesTabHeader;
+export default EuFourContainerTabHeader;
 
 /*
 

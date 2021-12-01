@@ -16,8 +16,8 @@ import MissionTabButton from "../../components/MissionTabButton";
 import AddMissionModal from "../../components/Modals/AddMissionModal";
 import DuplicateMissionModal from "../../components/Modals/DuplicateMissionModal";
 import RemoveMissionModal from "../../components/Modals/RemoveMissionModal";
-import AddSeriesModal from "../../components/Modals/AddSeriesModal";
-import RemoveSeriesModal from "../../components/Modals/RemoveSeriesModal";
+import AddContainerModal from "../../components/Modals/AddContainerModal";
+import RemoveContainerModal from "../../components/Modals/RemoveContainerModal";
 
 import CodeEditor from "./CodeEditor";
 import Factory from "../../helper/Factory";
@@ -43,7 +43,7 @@ const MissionTab = (props) => {
   const settingsContext = useContext(SettingsContext);
   const [elements, setElements] = useState(props.missionTree.missions);
   const [selectedElement, setSelectedElement] = useState(null);
-  const [series, setSeries] = useState(props.missionTree.series);
+  const [container, setContainer] = useState(props.missionTree.container);
 
   const [closed, setClosed] = useState({
     maxWidth: "40%",
@@ -78,19 +78,19 @@ const MissionTab = (props) => {
   };
 
   useEffect(() => {
-    console.log("MissionTab useEffect, [series, setSelectedElement]");
-    console.log("series", series);
+    console.log("MissionTab useEffect, [container, setSelectedElement]");
+    console.log("container", container);
     const ele = elements.map((el) => {
-      if (isNode(el) && el.data.selectedSeries != null) {
+      if (isNode(el) && el.data.selectedContainer != null) {
         // unfortunately we need this little hack to pass a slighltiy different position
         // in order to notify react flow about the change
         el.position = {
-          x: series.find((x) => x.id === el.data.selectedSeries).slot * 150,
+          x: container.find((x) => x.id === el.data.selectedContainer).slot * 150,
           y: el.position.y,
         };
         el.style = {
           ...el.style,
-          background: series.find((x) => x.id === el.data.selectedSeries).color,
+          background: container.find((x) => x.id === el.data.selectedContainer).color,
         };
       }
       return el;
@@ -102,12 +102,12 @@ const MissionTab = (props) => {
     );
     if (index != -1) {
       console.log(
-        "missiontab.js useEffect[series, setSelectedElement] updating"
+        "missiontab.js useEffect[container, setSelectedElement] updating"
       );
-      missionTreesCopy[index].series = series;
+      missionTreesCopy[index].container = container;
       missionTreeContext.editMissionTree(missionTreesCopy[index]);
     }
-  }, [series, setSelectedElement]);
+  }, [container, setSelectedElement]);
 
   const updateElementsAfterConnection = (params, copyElements) => {
     let indexMission = copyElements.findIndex(
@@ -161,7 +161,7 @@ const MissionTab = (props) => {
   const onNodeDragStop = (event, node) => {
     console.log("onNodeDragStop");
     console.log("node", node);
-    if (isNode(node) && node.data.selectedSeries != null) {
+    if (isNode(node) && node.data.selectedContainer != null) {
       let layoutedElements = getLayoutedElements(elements, node);
       setElements(layoutedElements);
       console.log("layoutedElements", layoutedElements);
@@ -191,17 +191,17 @@ const MissionTab = (props) => {
     }
   };
 
-  const onAdd = (name, selectedSeries) => {
+  const onAdd = (name, selectedContainer) => {
     console.log("Elements start", elements);
     console.log("newNode name", name);
-    console.log("newNode selectedSeries", selectedSeries);
+    console.log("newNode selectedContainer", selectedContainer);
 
-    const selectedSeriesObj = series.find((x) => x.id === selectedSeries);
+    const selectedContainerObj = container.find((x) => x.id === selectedContainer);
 
     const newNode = Factory.createDefaultMission(
       missionTreeContext.getAvailableNodeId(),
       name,
-      selectedSeriesObj
+      selectedContainerObj
     );
 
     console.log("new node", newNode);
@@ -212,18 +212,18 @@ const MissionTab = (props) => {
     console.log("Elements End", elements);
   };
 
-  const addSeries = (name) => {
+  const addContainer = (name) => {
     console.log("name", name);
 
-    let newSeries = Factory.createDefaultSeries(
-      missionTreeContext.getAvailableSeriesId(),
+    let newContainer = Factory.createDefaultContainer(
+      missionTreeContext.getAvailableContainerId(),
       name
     );
 
-    console.log("newSeries", newSeries);
-    let seriesCopy = [...series];
-    seriesCopy.push(newSeries);
-    setSeries(seriesCopy);
+    console.log("newContainer", newContainer);
+    let containerCopy = [...container];
+    containerCopy.push(newContainer);
+    setContainer(containerCopy);
   };
 
   useEffect(() => {
@@ -282,20 +282,20 @@ const MissionTab = (props) => {
     setElements((els) => removeElements(elementsToRemove, els), onUpdate());
   };
 
-  const removeSeries = (seriesId, seriesReplaceId) => {
-    if (series.length === 1) return;
-    console.log("removeSeries seriesId", seriesId);
-    console.log("removeSeries seriesReplaceId", seriesReplaceId);
+  const removeContainer = (containerId, containerReplaceId) => {
+    if (container.length === 1) return;
+    console.log("removeContainer containerId", containerId);
+    console.log("removeContainer containerReplaceId", containerReplaceId);
 
     const elementsCopy = elements.map((el) => {
       if (isNode(el)) {
-        if (el.data.selectedSeries === seriesId) {
-          console.log("found node with id:", seriesId);
+        if (el.data.selectedContainer === containerId) {
+          console.log("found node with id:", containerId);
           el = {
             ...el,
             data: {
               ...el.data,
-              selectedSeries: seriesReplaceId,
+              selectedContainer: containerReplaceId,
             },
           };
         }
@@ -323,12 +323,12 @@ const MissionTab = (props) => {
       setElements(elementsCopy);
     }
 
-    let seriesCopy = series.slice();
-    let seriesIndex = series.findIndex((serie) => serie.id === seriesId);
+    let containerCopy = container.slice();
+    let containerIndex = container.findIndex((serie) => serie.id === containerId);
 
-    console.log("seriesCopy", seriesCopy);
-    seriesCopy.splice(seriesIndex, 1);
-    setSeries(seriesCopy);
+    console.log("containerCopy", containerCopy);
+    containerCopy.splice(containerIndex, 1);
+    setContainer(containerCopy);
   };
 
   const onElementsRemove = (elementsToRemove) => (
@@ -417,8 +417,8 @@ const MissionTab = (props) => {
           setMissions={setElements}
           selectedElement={selectedElement}
           setSelectedElement={setSelectedElement}
-          series={series}
-          setSeries={setSeries}
+          container={container}
+          setContainer={setContainer}
           onUpdate={onUpdate}
           fileId={props.missionTree.id}
         />
@@ -430,7 +430,7 @@ const MissionTab = (props) => {
             setShow={props.setShow}
             addMission={onAdd}
             missions={elements}
-            series={series}
+            container={container}
           />
         </div>
       ) : null}
@@ -454,23 +454,23 @@ const MissionTab = (props) => {
           />
         </div>
       ) : null}
-      {props.show === inProgressIDMap.addSeries ? (
+      {props.show === inProgressIDMap.addContainer ? (
         <div>
-          <AddSeriesModal
+          <AddContainerModal
             show={props.show}
             setShow={props.setShow}
-            addSeries={addSeries}
-            series={series}
+            addContainer={addContainer}
+            container={container}
           />
         </div>
       ) : null}
-      {props.show === inProgressIDMap.removeSeries ? (
+      {props.show === inProgressIDMap.removeContainer ? (
         <div>
-          <RemoveSeriesModal
+          <RemoveContainerModal
             show={props.show}
             setShow={props.setShow}
-            removeSeries={removeSeries}
-            series={series}
+            removeContainer={removeContainer}
+            container={container}
           />
         </div>
       ) : null}

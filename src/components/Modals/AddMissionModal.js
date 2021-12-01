@@ -6,7 +6,7 @@ import SettingsContext from "../../contexts/SettingsContext";
 const AddMissionModal = (props) => {
   const settingsContext = useContext(SettingsContext);
   const [name, setName] = useState("");
-  const [selectedSeries, setSelectedSeries] = useState(props.series[0].id);
+  const [selectedContainer, setSelectedContainer] = useState(props.container[0].id);
   const [validated, setValidated] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
 
@@ -58,7 +58,7 @@ const AddMissionModal = (props) => {
       <Modal.Body>
         <Form noValidate validated={validated}>
           <Form.Group controlId="formLabel">
-            <Form.Label>Mission File Name</Form.Label>
+            <Form.Label>{settingsContext.getText("fileName") + " Name"}</Form.Label>
             <FormControl
               placeholder="name"
               aria-label="label"
@@ -78,12 +78,12 @@ const AddMissionModal = (props) => {
             <Form.Label>Selected Series</Form.Label>
             <Form.Control
               as="select"
-              //onChange={(evt) => setSelectedSeries(parseInt(evt.target.value))}
-              onChange={(evt) => setSelectedSeries(evt.target.value)}
-              value={selectedSeries}
+              //onChange={(evt) => setSelectedContainer(parseInt(evt.target.value))}
+              onChange={(evt) => setSelectedContainer(evt.target.value)}
+              value={selectedContainer}
               placeholder={"Select Series"}
             >
-              {props.series.map((serie) => (
+              {props.container.map((serie) => (
                 <option key={serie.id} value={serie.id}>
                   {serie.name}
                 </option>
@@ -102,7 +102,7 @@ const AddMissionModal = (props) => {
         <Button
           variant="primary"
           onClick={() => (
-            props.setShow(0), props.addMission(name, selectedSeries)
+            props.setShow(0), props.addMission(name, selectedContainer)
           )}
           disabled={!validated}
         >

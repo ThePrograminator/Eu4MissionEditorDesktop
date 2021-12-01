@@ -4,7 +4,7 @@ import { Modal, Button, Form, FormControl } from "react-bootstrap";
 import InProgressIDMap from "../../InProgressIDMap";
 import SettingsContext from "../../contexts/SettingsContext";
 
-const AddSeriesModal = (props) => {
+const AddContainerModal = (props) => {
   const settingsContext = useContext(SettingsContext);
   const [name, setName] = useState("");
   const [validated, setValidated] = useState(false);
@@ -20,9 +20,9 @@ const AddSeriesModal = (props) => {
       return;
     }
     var valid = true;
-    console.log("props.series", props.series);
-    if (props.series !== null && props.series.length !== 0) {
-      props.series.map((serie) => {
+    console.log("props.container", props.container);
+    if (props.container !== null && props.container.length !== 0) {
+      props.container.map((serie) => {
         if (serie.name !== undefined && serie.name === name) {
           console.log("Same Name");
           setValidated(false);
@@ -51,7 +51,7 @@ const AddSeriesModal = (props) => {
   }, [props.show]);
 
   return (
-    <Modal show={props.show === InProgressIDMap.addSeries} onHide={handleClose}>
+    <Modal show={props.show === InProgressIDMap.addContainer} onHide={handleClose}>
       <Modal.Header closeButton>
         <Modal.Title>
           {"Add" + settingsContext.getText("containerName")}
@@ -86,14 +86,14 @@ const AddSeriesModal = (props) => {
         </Button>
         <Button
           variant="primary"
-          onClick={() => (props.setShow(0), props.addSeries(name))}
+          onClick={() => (props.setShow(0), props.addContainer(name))}
           disabled={!validated}
         >
-          Add Series
+          {"Add " + settingsContext.getText("containerName")}
         </Button>
       </Modal.Footer>
     </Modal>
   );
 };
 
-export default AddSeriesModal;
+export default AddContainerModal;

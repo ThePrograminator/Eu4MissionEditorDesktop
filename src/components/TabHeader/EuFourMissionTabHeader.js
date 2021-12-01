@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import MissionTabButton from "../MissionTabButton";
 import { ButtonGroup, Container, Row } from "react-bootstrap";
 import MissionTreeContext from "../../contexts/MissionTreeContext";
+import SettingsContext from "../../contexts/SettingsContext";
 
 import InProgressIDMap from "../../InProgressIDMap";
 
@@ -9,6 +10,7 @@ import { FaPlusSquare, FaTrashAlt } from "react-icons/fa";
 
 const EuFourMissionTabHeader = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
+  const settingsContext = useContext(SettingsContext);
   const handleClick = (id) => {
     console.log("clicked id", id);
     switch (id) {
@@ -79,15 +81,15 @@ const EuFourMissionTabHeader = (props) => {
     <ButtonGroup className="mr-2" aria-label="Mission group">
       <Container>
         <Row className="mr-2" style={{ maxHeight: "35%" }}>
-          <p>Mission</p>
+          <p>{settingsContext.getText("nodeName")}</p>
         </Row>
         <Row className="mr-2">
           <MissionTabButton
             id={InProgressIDMap.addMission}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Add Mission"}
-            toolTipText={"Add Mission"}
+            buttonText={"Add " + settingsContext.getText("nodeName")}
+            toolTipText={"Add " + settingsContext.getText("nodeName")}
             icon={<FaPlusSquare />}
             disabled={
               missionTreeContext.missionTrees.length === 0 ||
@@ -98,8 +100,8 @@ const EuFourMissionTabHeader = (props) => {
             id={InProgressIDMap.removeMission}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Remove Mission"}
-            toolTipText={"Remove Mission"}
+            buttonText={"Remove " + settingsContext.getText("nodeName")}
+            toolTipText={"Remove " + settingsContext.getText("nodeName")}
             icon={<FaTrashAlt />}
             disabled={checkDuplicateMissionDisabled()}
           />
@@ -114,18 +116,18 @@ export default EuFourMissionTabHeader;
 /*
 
 <div className="mr-2" style={{ borderLeft: "2px solid lightgrey" }} />
-        <ButtonGroup className="mr-2" aria-label="Series group">
+        <ButtonGroup className="mr-2" aria-label="Container group">
           <Container>
             <Row className="mr-2" style={{ maxHeight: "35%" }}>
-              <p>Series</p>
+              <p>Container</p>
             </Row>
             <Row className="mr-2">
               <MissionTabButton
-                id={InProgressIDMap.addSeries}
+                id={InProgressIDMap.addContainer}
                 inProgress={props.inProgressID}
                 handleClick={handleClick}
-                buttonText={"Add Series"}
-                toolTipText={"Add Series"}
+                buttonText={"Add Container"}
+                toolTipText={"Add Container"}
                 icon={<FaPlusSquare />}
                 disabled={
                   missionTreeContext.missionTrees.length === 0 ||
@@ -133,13 +135,13 @@ export default EuFourMissionTabHeader;
                 }
               />
               <MissionTabButton
-                id={InProgressIDMap.removeSeries}
+                id={InProgressIDMap.removeContainer}
                 inProgress={props.inProgressID}
                 handleClick={handleClick}
-                buttonText={"Remove Series"}
-                toolTipText={"Remove Series"}
+                buttonText={"Remove Container"}
+                toolTipText={"Remove Container"}
                 icon={<FaTrashAlt />}
-                disabled={checkRemoveSeriesDisabled()}
+                disabled={checkRemoveContainerDisabled()}
               />
             </Row>
           </Container>

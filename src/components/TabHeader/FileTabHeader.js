@@ -2,6 +2,7 @@ import React, { useContext } from "react";
 import MissionTabButton from "../MissionTabButton";
 import { ButtonGroup, Container, Row } from "react-bootstrap";
 import MissionTreeContext from "../../contexts/MissionTreeContext";
+import SettingsContext from "../../contexts/SettingsContext";
 
 import InProgressIDMap from "../../InProgressIDMap";
 
@@ -9,6 +10,7 @@ import { FaFileImport, FaFileMedical, FaFileExcel } from "react-icons/fa";
 
 const FileTabHeader = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
+  const settingsContext = useContext(SettingsContext);
   const handleClick = (id) => {
     console.log("clicked id", id);
     switch (id) {
@@ -60,16 +62,16 @@ const FileTabHeader = (props) => {
             id={InProgressIDMap.create}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Create Mission File"}
-            toolTipText={"Create Mission File"}
+            buttonText={"Create " + settingsContext.getText("filename")}
+            toolTipText={"Create " + settingsContext.getText("filename")}
             icon={<FaFileMedical />}
           />
           <MissionTabButton
             id={InProgressIDMap.duplicate}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Duplicate Mission File"}
-            toolTipText={"Duplicate Mission File"}
+            buttonText={"Duplicate " + settingsContext.getText("filename")}
+            toolTipText={"Duplicate " + settingsContext.getText("filename")}
             icon={<FaFileImport />}
             disabled={missionTreeContext.missionTrees.length === 0}
           />
@@ -77,8 +79,8 @@ const FileTabHeader = (props) => {
             id={InProgressIDMap.remove}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Remove Mission File"}
-            toolTipText={"Remove Mission File"}
+            buttonText={"Remove " + settingsContext.getText("filename")}
+            toolTipText={"Remove " + settingsContext.getText("filename")}
             icon={<FaFileExcel />}
             disabled={missionTreeContext.missionTrees.length === 0}
           />

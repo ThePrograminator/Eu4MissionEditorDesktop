@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, FormControl, Row, Col } from "react-bootstrap";
 
-const SeriesReadOnly = (props) => {
+const ContainerReadOnly = (props) => {
   return (
     <div style={{ maxWidth: "750px" }}>
         <Row>
@@ -15,7 +15,7 @@ const SeriesReadOnly = (props) => {
                 type="number"
                 placeholder="slot"
                 aria-label="slot"
-                value={props.selectedSeries.slot}
+                value={props.selectedContainer.slot}
                 aria-describedby="basic-addon1"
                 readOnly
               />
@@ -28,7 +28,7 @@ const SeriesReadOnly = (props) => {
                 maxHeight: "100%",
                 minWidth: "100%",
                 minHeight: "100%",
-                background: props.selectedSeries.color,
+                background: props.selectedContainer.color,
               }}
             ></div>
           </Col>
@@ -37,4 +37,4 @@ const SeriesReadOnly = (props) => {
   );
 };
 
-export default SeriesReadOnly;
+export default ContainerReadOnly;

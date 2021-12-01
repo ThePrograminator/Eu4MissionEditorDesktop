@@ -10,7 +10,7 @@ const Factory = {
       id: id,
       name: name,
       fileName: name + extName,
-      series: [],
+      container: [],
       missions: [],
       edges: [],
     };
@@ -20,7 +20,7 @@ const Factory = {
   createDefaultMission: function (
     id,
     name = "newMission",
-    selectedSeries = null
+    selectedContainer = null
   ) {
     const newMission = {
       id: id,
@@ -37,22 +37,22 @@ const Factory = {
         provinces_to_highlight: "",
         trigger: "",
         effect: "",
-        selectedSeries: selectedSeries !== null ? selectedSeries.id : null,
+        selectedContainer: selectedContainer !== null ? selectedContainer.id : null,
       },
       position: {
-        x: selectedSeries !== null ? selectedSeries.slot * 150 : 0,
+        x: selectedContainer !== null ? selectedContainer.slot * 150 : 0,
         y: 150,
       },
       style: {
-        background: selectedSeries !== null ? selectedSeries.color : null,
+        background: selectedContainer !== null ? selectedContainer.color : null,
       },
       type: "default",
     };
 
     return newMission;
   },
-  createDefaultSeries: function (id, name = "newSeries") {
-    const newSeries = {
+  createDefaultContainer: function (id, name = "newContainer") {
+    const newContainer = {
       id: id,
       name: name,
       slot: 1,
@@ -65,7 +65,7 @@ const Factory = {
       missions: [],
     };
 
-    return newSeries;
+    return newContainer;
   },
   createDefaultWorkspace: function (id, name = "newWorkspace", type) {
     const newWorkspace = {

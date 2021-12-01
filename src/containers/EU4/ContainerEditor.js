@@ -1,27 +1,27 @@
 import React, { useCallback } from "react";
-import Series from "../../components/Series";
+import Container from "../../components/Container";
 import { Tab, Row, Col, ListGroup, ButtonGroup, Button } from "react-bootstrap";
 
 let id = 0;
 
-const SeriesEditor = (props) => {
+const ContainerEditor = (props) => {
   /*const onAdd = useCallback(() => {
     const newNode = {
       id: id,
-      name: "new Series",
+      name: "new Container",
       slot: 1,
       generic: false,
       ai: true,
       has_country_shield: false,
       potentialOnLoad: "",
       potential: "",
-      selectedSeries: null,
+      selectedContainer: null,
       color: "",
     };
-    props.setSeries((els) => els.concat(newNode));
+    props.setContainer((els) => els.concat(newNode));
     id++;
-    console.log(props.series.length);
-  }, [props.setSeries, props.setMissionTabs]);*/
+    console.log(props.container.length);
+  }, [props.setContainer, props.setMissionTabs]);*/
 
   return (
     <div>
@@ -29,27 +29,27 @@ const SeriesEditor = (props) => {
         <Row>
           <Col lg={true} style={{ maxWidth: "250px" }}>
             <ListGroup>
-              {props.series.map((series) => (
+              {props.container.map((container) => (
                 <ListGroup.Item
-                  key={series.id}
+                  key={container.id}
                   action
-                  href={"#link" + series.id}
+                  href={"#link" + container.id}
                   style={{ minWidth: "200px" }}
                 >
-                  {series.name}
+                  {container.name}
                 </ListGroup.Item>
               ))}
             </ListGroup>
           </Col>
           <Col lg={true}>
             <Tab.Content>
-              {props.series.map((series) => (
-                <Tab.Pane key={series.id} eventKey={"#link" + series.id}>
-                  <Series
+              {props.container.map((container) => (
+                <Tab.Pane key={container.id} eventKey={"#link" + container.id}>
+                  <Container
                     missionTree={props.missionTree}
-                    series={series}
-                    allSeries={props.series}
-                    setSeries={props.setSeries}
+                    container={container}
+                    allContainer={props.container}
+                    setContainer={props.setContainer}
                   />
                 </Tab.Pane>
               ))}
@@ -61,4 +61,4 @@ const SeriesEditor = (props) => {
   );
 };
 
-export default SeriesEditor;
+export default ContainerEditor;

@@ -10,7 +10,7 @@ class MissionTreeProvider extends React.Component {
     missionTrees: [],
     availableTreeId: 0,
     availableNodeId: 0,
-    availableSeriesId: 0,
+    availableContainerId: 0,
   };
 
   getAvailableTreeId = () => {
@@ -31,15 +31,15 @@ class MissionTreeProvider extends React.Component {
     this.setState({ availableNodeId: value });
   };
 
-  getAvailableSeriesId = () => {
-    var availableId = `series_${this.state.availableSeriesId.toString()}`;
-    var newId = this.state.availableSeriesId + 1;
-    this.setState({ availableSeriesId: newId });
+  getAvailableContainerId = () => {
+    var availableId = `container_${this.state.availableContainerId.toString()}`;
+    var newId = this.state.availableContainerId + 1;
+    this.setState({ availableContainerId: newId });
     return availableId;
   };
 
-  setAvailableSeriesId = (value) => {
-    this.setState({ availableSeriesId: value });
+  setAvailableContainerId = (value) => {
+    this.setState({ availableContainerId: value });
   };
 
   addMissionTree = (missionTree) => {
@@ -84,8 +84,8 @@ class MissionTreeProvider extends React.Component {
           getAvailableTreeId: this.getAvailableTreeId,
           getAvailableNodeId: this.getAvailableNodeId,
           setAvailableNodeId: this.setAvailableNodeId,
-          getAvailableSeriesId: this.getAvailableSeriesId,
-          setAvailableSeriesId: this.setAvailableSeriesId,
+          getAvailableContainerId: this.getAvailableContainerId,
+          setAvailableContainerId: this.setAvailableContainerId,
           missionTrees: this.state.missionTrees,
           addMissionTree: this.addMissionTree,
           editMissionTree: this.editMissionTree,

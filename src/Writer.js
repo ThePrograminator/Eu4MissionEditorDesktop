@@ -2,12 +2,12 @@ import React from "react";
 import ReactFlow, { isNode } from "react-flow-renderer";
 
 const Writer = {
-  exportMissionTree: function (series, missions) {
+  exportMissionTree: function (container, missions) {
     var missionTreeText = "";
     var tabs = 0;
     var tabsText = "";
-    for (let index = 0; index < series.length; index++) {
-      const serie = series[index];
+    for (let index = 0; index < container.length; index++) {
+      const serie = container[index];
       //name
       missionTreeText += serie.name + " " + Writer.addEqualBracket();
 
@@ -53,10 +53,10 @@ const Writer = {
       tabs += 1;
       tabsText = Writer.updateTabsText(tabs);
 
-      var seriesMissionsOne = missions.filter(x => isNode(x));
-      var seriesMissionsTwo = seriesMissionsOne.filter(x => x.data.selectedSeries === serie.id);
+      var containerMissionsOne = missions.filter(x => isNode(x));
+      var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === serie.id);
 
-      var sortedObjs = seriesMissionsTwo.sort(
+      var sortedObjs = containerMissionsTwo.sort(
         (a, b) => (a.data.position > b.data.position && 1) || -1
       );
 
@@ -65,7 +65,7 @@ const Writer = {
       );*/
       for (let index = 0; index < sortedObjs.length; index++) {
         const mission = sortedObjs[index];
-        if (!isNode(mission) || serie.id !== mission.data.selectedSeries)
+        if (!isNode(mission) || serie.id !== mission.data.selectedContainer)
           continue;
 
         //name
@@ -180,10 +180,10 @@ const Writer = {
     }
     return tabsText;
   },
-  exportLocalization: function (series, missions) {
+  exportLocalization: function (container, missions) {
     var localisationText = "l_english:\n";
-    for (let index = 0; index < series.length; index++) {
-      const serie = series[index];
+    for (let index = 0; index < container.length; index++) {
+      const serie = container[index];
 
       let serieName = serie.name.replace(/_/g, " ");
       serieName = Writer.titleCase(serieName);
@@ -194,16 +194,16 @@ const Writer = {
       localisationText +=
         " #---------------------------------------------------------\n\n";
 
-        var seriesMissionsOne = missions.filter(x => isNode(x));
-        var seriesMissionsTwo = seriesMissionsOne.filter(x => x.data.selectedSeries === serie.id);
+        var containerMissionsOne = missions.filter(x => isNode(x));
+        var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === serie.id);
   
-        var sortedObjs = seriesMissionsTwo.sort(
+        var sortedObjs = containerMissionsTwo.sort(
           (a, b) => (a.data.position > b.data.position && 1) || -1
         );
 
       for (let index = 0; index < sortedObjs.length; index++) {
         const mission = sortedObjs[index];
-        if (!isNode(mission) || serie.id !== mission.data.selectedSeries)
+        if (!isNode(mission) || serie.id !== mission.data.selectedContainer)
           continue;
 
         let name = mission.data.label.replace(/_/g, " ");

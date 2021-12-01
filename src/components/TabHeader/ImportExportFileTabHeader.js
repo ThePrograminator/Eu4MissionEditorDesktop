@@ -3,6 +3,7 @@ import MissionTabButton from "../MissionTabButton";
 
 import { ButtonGroup, Container, Row } from "react-bootstrap";
 import MissionTreeContext from "../../contexts/MissionTreeContext";
+import SettingsContext from "../../contexts/SettingsContext";
 
 import InProgressIDMap from "../../InProgressIDMap";
 
@@ -10,6 +11,7 @@ import { FaFileDownload, FaFileUpload } from "react-icons/fa";
 
 const ImportExportFileTabHeader = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
+  const settingsContext = useContext(SettingsContext);
   const handleClick = (id) => {
     console.log("clicked id", id);
     switch (id) {
@@ -48,22 +50,21 @@ const ImportExportFileTabHeader = (props) => {
             id={InProgressIDMap.import}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Import Mission File"}
-            toolTipText={"Import Mission File"}
+            buttonText={"Import " + settingsContext.getText("filename")}
+            toolTipText={"Import " + settingsContext.getText("filename")}
             icon={<FaFileDownload />}
           />
           <MissionTabButton
             id={InProgressIDMap.export}
             inProgress={props.inProgressID}
             handleClick={handleClick}
-            buttonText={"Export Mission File"}
-            toolTipText={"Export Mission File"}
+            buttonText={"Export " + settingsContext.getText("filename")}
+            toolTipText={"Export " + settingsContext.getText("filename")}
             icon={<FaFileUpload />}
             disabled={missionTreeContext.missionTrees.length === 0}
           />
         </Row>
       </Container>
-      
     </ButtonGroup>
   );
 };

@@ -15,7 +15,7 @@ const Preferences = (props) => {
 			<Row lg={true}>
 				<Col lg={true}>
 					<Form>
-						<Form.Group as={Row} controlId="formSeries">
+						<Form.Group as={Row} controlId="formContainer">
 							<Form.Label column sm="2">
 								Theme
 							</Form.Label>

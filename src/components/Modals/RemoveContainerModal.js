@@ -5,24 +5,24 @@ import SettingsContext from "../../contexts/SettingsContext";
 
 import { Modal, Button, Form } from "react-bootstrap";
 
-const RemoveSeriesModal = (props) => {
+const RemoveContainerModal = (props) => {
   const settingsContext = useContext(SettingsContext);
-  const [selectedSeries, setSelectedSeries] = useState(props.series[0].id);
-  const [selectedReplaceSeries, setSelectedReplaceSeries] = useState(
-    props.series[1].id
+  const [selectedContainer, setSelectedContainer] = useState(props.container[0].id);
+  const [selectedReplaceContainer, setSelectedReplaceContainer] = useState(
+    props.container[1].id
   );
 
-  const handleChange = (isReplaceSeries, value) => {
-    if (isReplaceSeries) {
-      if (value === selectedSeries) {
-        setSelectedSeries(selectedReplaceSeries);
+  const handleChange = (isReplaceContainer, value) => {
+    if (isReplaceContainer) {
+      if (value === selectedContainer) {
+        setSelectedContainer(selectedReplaceContainer);
       }
-      setSelectedReplaceSeries(value);
+      setSelectedReplaceContainer(value);
     } else {
-      if (value === selectedReplaceSeries) {
-        setSelectedReplaceSeries(selectedSeries);
+      if (value === selectedReplaceContainer) {
+        setSelectedReplaceContainer(selectedContainer);
       }
-      setSelectedSeries(value);
+      setSelectedContainer(value);
     }
   };
 
@@ -31,17 +31,17 @@ const RemoveSeriesModal = (props) => {
   };
 
   useEffect(() => {
-    if (props.show === InProgressIDMap.removeSeries) {
-      setSelectedSeries(props.series[0].id);
-      setSelectedReplaceSeries(props.series[1].id);
-      console.log("props.series", props.series[0]);
-      console.log("selectedSeries", selectedSeries);
+    if (props.show === InProgressIDMap.removeContainer) {
+      setSelectedContainer(props.container[0].id);
+      setSelectedReplaceContainer(props.container[1].id);
+      console.log("props.container", props.container[0]);
+      console.log("selectedContainer", selectedContainer);
     }
   }, [props.show]);
 
   return (
     <Modal
-      show={props.show === InProgressIDMap.removeSeries}
+      show={props.show === InProgressIDMap.removeContainer}
       onHide={handleClose}
     >
       <Modal.Header closeButton>
@@ -60,12 +60,12 @@ const RemoveSeriesModal = (props) => {
             <Form.Control
               as="select"
               onChange={(evt) => handleChange(false, evt.target.value)}
-              value={selectedSeries}
+              value={selectedContainer}
             >
-              {props.series.length != 1
-                ? props.series.map((series) => (
-                    <option key={series.id} value={series.id}>
-                      {series.name}
+              {props.container.length != 1
+                ? props.container.map((container) => (
+                    <option key={container.id} value={container.id}>
+                      {container.name}
                     </option>
                   ))
                 : null}
@@ -80,13 +80,13 @@ const RemoveSeriesModal = (props) => {
             <Form.Control
               as="select"
               onChange={(evt) => handleChange(true, evt.target.value)}
-              value={selectedReplaceSeries}
+              value={selectedReplaceContainer}
             >
-              {props.series.length != 1
-                ? props.series.map((series) =>
-                    series.id !== selectedSeries ? (
-                      <option key={series.id} value={series.id}>
-                        {series.name}
+              {props.container.length != 1
+                ? props.container.map((container) =>
+                    container.id !== selectedContainer ? (
+                      <option key={container.id} value={container.id}>
+                        {container.name}
                       </option>
                     ) : null
                   )
@@ -115,8 +115,8 @@ const RemoveSeriesModal = (props) => {
           variant="primary"
           onClick={() => (
             props.setShow(0),
-            console.log(selectedSeries),
-            props.removeSeries(selectedSeries, selectedReplaceSeries)
+            console.log(selectedContainer),
+            props.removeContainer(selectedContainer, selectedReplaceContainer)
           )}
         >
           {"Remove " + settingsContext.getText("containerName")}
@@ -126,4 +126,4 @@ const RemoveSeriesModal = (props) => {
   );
 };
 
-export default RemoveSeriesModal;
+export default RemoveContainerModal;

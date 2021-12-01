@@ -56,8 +56,8 @@ const WorkspaceSelect = (props) => {
             missionTreeContext.setAvailableNodeId(
               allMissionTabs[0].importedMissionLastId
             );
-            missionTreeContext.setAvailableSeriesId(
-              allMissionTabs[0].importedSeriesLastId
+            missionTreeContext.setAvailableContainerId(
+              allMissionTabs[0].importedContainerLastId
             );
             readFile = true;
           }
@@ -96,7 +96,7 @@ const WorkspaceSelect = (props) => {
 
   return (
     <Form>
-      <Form.Group as={Row} controlId="formSeries">
+      <Form.Group as={Row} controlId="formContainer">
         <Form.Label column sm="2">
           Workspace
         </Form.Label>

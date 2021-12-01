@@ -11,7 +11,7 @@ import {
   Spinner,
 } from "react-bootstrap";
 import { getIncomers } from "react-flow-renderer";
-import SeriesReadOnly from "./SeriesReadOnly";
+import ContainerReadOnly from "./ContainerReadOnly";
 import MissionTreeContext from "../contexts/MissionTreeContext";
 import SettingsContext from "../contexts/SettingsContext";
 
@@ -37,13 +37,13 @@ const Mission = (props) => {
   );
   const [trigger, setTrigger] = useState(props.selectedElement.data.trigger);
   const [effect, setEffect] = useState(props.selectedElement.data.effect);
-  const [selectedSeries, setSelectedSeries] = useState(
-    props.selectedElement.data.selectedSeries
+  const [selectedContainer, setSelectedContainer] = useState(
+    props.selectedElement.data.selectedContainer
   );
 
   useEffect(() => {
     console.log(
-      "useEffect Mission [props.selectedElement, props.missionTree, props.series]"
+      "useEffect Mission [props.selectedElement, props.missionTree, props.container]"
     );
     setIcon(props.selectedElement.data.icon);
     setNodeName(props.selectedElement.data.label);
@@ -53,21 +53,21 @@ const Mission = (props) => {
     setProvincesToHighLight(props.selectedElement.data.provinces_to_highlight);
     setTrigger(props.selectedElement.data.trigger);
     setEffect(props.selectedElement.data.effect);
-    setSelectedSeries(props.selectedElement.data.selectedSeries);
+    setSelectedContainer(props.selectedElement.data.selectedContainer);
     setYear(props.selectedElement.data.year);
     setMonth(props.selectedElement.data.month);
     setDay(props.selectedElement.data.day);
-  }, [props.selectedElement, props.missionTree, props.series]);
+  }, [props.selectedElement, props.missionTree, props.container]);
 
   useEffect(() => {
     console.log("update mission [props.selectedElement]");
-    setSelectedSeries(props.selectedElement.data.selectedSeries);
+    setSelectedContainer(props.selectedElement.data.selectedContainer);
   }, [props.selectedElement]);
 
   useEffect(() => {
-    console.log("update mission [props.selectedElement.data.selectedSeries]");
-    setSelectedSeries(props.selectedElement.data.selectedSeries);
-  }, [props.selectedElement.data.selectedSeries]);
+    console.log("update mission [props.selectedElement.data.selectedContainer]");
+    setSelectedContainer(props.selectedElement.data.selectedContainer);
+  }, [props.selectedElement.data.selectedContainer]);
 
   useEffect(() => {
     console.log("nodeName", nodeName);
@@ -77,8 +77,8 @@ const Mission = (props) => {
         // it's important that you create a new object here
         // in order to notify react flow about the change
         var pos = position;
-        if (selectedSeries != null) {
-          pos = props.series.find((x) => x.id === selectedSeries).slot * 150;
+        if (selectedContainer != null) {
+          pos = props.container.find((x) => x.id === selectedContainer).slot * 150;
         }
         let incomers = getIncomers(
           props.selectedElement,
@@ -104,7 +104,7 @@ const Mission = (props) => {
           provinces_to_highlight: provincesToHighLight,
           trigger: trigger,
           effect: effect,
-          selectedSeries: selectedSeries,
+          selectedContainer: selectedContainer,
         };
         el.position = {
           ...el.position,
@@ -112,13 +112,13 @@ const Mission = (props) => {
           y: position * 150,
         };
         if (
-          selectedSeries != undefined &&
-          selectedSeries != null &&
-          selectedSeries != "Select Series"
+          selectedContainer != undefined &&
+          selectedContainer != null &&
+          selectedContainer != "Select Container"
         ) {
           el.style = {
             ...el.style,
-            background: props.series.find((x) => x.id === selectedSeries).color,
+            background: props.container.find((x) => x.id === selectedContainer).color,
           };
         }
         console.log("data", el);
@@ -141,7 +141,7 @@ const Mission = (props) => {
     provincesToHighLight,
     trigger,
     effect,
-    selectedSeries,
+    selectedContainer,
   ]);
 
   const handleDateChange = (event) => {
@@ -171,40 +171,40 @@ const Mission = (props) => {
 
   return (
     <Form>
-      <Form.Group controlId="formSeries">
-        <Form.Label>Selected Series</Form.Label>
+      <Form.Group controlId="formContainer">
+        <Form.Label>Selected Container</Form.Label>
         <Form.Control
           as="select"
-          onChange={(evt) => setSelectedSeries(evt.target.value)}
-          value={selectedSeries}
-          placeholder={"Select Series"}
+          onChange={(evt) => setSelectedContainer(evt.target.value)}
+          value={selectedContainer}
+          placeholder={"Select Container"}
         >
-          {props.series.map((serie) => (
+          {props.container.map((serie) => (
             <option key={serie.id} value={serie.id}>
               {serie.name}
             </option>
           ))}
         </Form.Control>
         <Form.Text className="text-muted">
-          (Required) A mission needs a Series
+          (Required) A mission needs a Container
         </Form.Text>
       </Form.Group>
 
       <Accordion defaultActiveKey="0">
         <Card>
           <Accordion.Toggle as={Card.Header} eventKey="0">
-            Series (Read Only)
+            Container (Read Only)
           </Accordion.Toggle>
           <Accordion.Collapse eventKey="0">
             <Card.Body>
-              {props.selectedElement.data.selectedSeries != null ? (
-                <SeriesReadOnly
-                  selectedSeries={props.series.find(
-                    (x) => x.id === props.selectedElement.data.selectedSeries
+              {props.selectedElement.data.selectedContainer != null ? (
+                <ContainerReadOnly
+                  selectedContainer={props.container.find(
+                    (x) => x.id === props.selectedElement.data.selectedContainer
                   )}
                 />
               ) : (
-                "No Selected Series"
+                "No Selected Container"
               )}
             </Card.Body>
           </Accordion.Collapse>

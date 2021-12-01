@@ -2,7 +2,7 @@ import React from "react";
 import MissionTabList from "../containers/EU4/MissionTabList";
 import { Tab, Container, Row } from "react-bootstrap";
 
-const SeriesReadOnly = (props) => {
+const ContainerReadOnly = (props) => {
   switch (props.type) {
     //EU4
     case "EU4":
@@ -30,4 +30,4 @@ const SeriesReadOnly = (props) => {
   }
 };
 
-export default SeriesReadOnly;
+export default ContainerReadOnly;

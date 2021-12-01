@@ -21,7 +21,7 @@ const EU4ConfigurationDefaults = (props) => {
     settings.set("maxSlot", evt.target.value);
     missionTreeContext.missionTrees.map((missionTree) => {
       let copy = { ...missionTree };
-      copy.series.map((serie) => {
+      copy.container.map((serie) => {
         if (serie.slot > evt.target.value) {
           serie.slot = evt.target.value;
           console.log("handleUpdateMaxSlot updating serie");
@@ -45,7 +45,7 @@ const EU4ConfigurationDefaults = (props) => {
 
   return (
     <Form>
-      <h4>Series Properties</h4>
+      <h4>{settingsContext.getText("containerName") + " Properties"} </h4>
       <Form.Row style={{ width: "75%" }}>
         <Form.Group controlId="formMaxSlot">
           <Form.Label>Max Slot</Form.Label>

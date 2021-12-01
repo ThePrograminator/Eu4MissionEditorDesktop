@@ -1,7 +1,7 @@
 import React, { useContext } from "react";
 import { Tabs, Tab } from "react-bootstrap";
 import Mission from "../../components/Mission";
-import SeriesEditor from "./SeriesEditor";
+import ContainerEditor from "./ContainerEditor";
 import { isNode } from "react-flow-renderer";
 
 const CodeEditor = (props) => {
@@ -25,15 +25,15 @@ const CodeEditor = (props) => {
               setMissions={props.setMissions}
               selectedElement={props.selectedElement}
               setSelectedElement={props.setSelectedElement}
-              series={props.series}
+              container={props.container}
               onUpdate={props.onUpdate}
               fileID={props.fileID}
             />
           </Tab>
         ) : null}
         <Tab
-          eventKey="series"
-          title="Series"
+          eventKey="container"
+          title="Container"
           style={{
             minHeight: "inherit",
             overflowY: "auto",
@@ -41,10 +41,10 @@ const CodeEditor = (props) => {
             maxHeight: "75vh",
           }}
         >
-          <SeriesEditor
+          <ContainerEditor
             missionTree={props.missionTree}
-            series={props.series}
-            setSeries={props.setSeries}
+            container={props.container}
+            setContainer={props.setContainer}
           />
         </Tab>
       </Tabs>

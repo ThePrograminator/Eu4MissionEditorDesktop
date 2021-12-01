@@ -9,7 +9,7 @@ import InProgressIDMap from "../../InProgressIDMap";
 import FileTabHeader from "../../components/TabHeader/FileTabHeader";
 import ImportExportFileTabHeader from "../../components/TabHeader/ImportExportFileTabHeader";
 import EuFourMissionTabHeader from "../../components/TabHeader/EuFourMissionTabHeader";
-import EuFourSeriesTabHeader from "../../components/TabHeader/EuFourSeriesTabHeader";
+import EuFourContainerTabHeader from "../../components/TabHeader/EuFourContainerTabHeader";
 
 import Factory from "../../helper/Factory";
 import ExportMissionModal from "../../components/Modals/ExportMissionModal";
@@ -52,8 +52,8 @@ const MissionTabHeader = (props) => {
         missionTreeContext.setAvailableNodeId(
           allMissionTabs[0].importedMissionLastId
         );
-        missionTreeContext.setAvailableSeriesId(
-          allMissionTabs[0].importedSeriesLastId
+        missionTreeContext.setAvailableContainerId(
+          allMissionTabs[0].importedContainerLastId
         );
         props.setinProgressID(0);
       }
@@ -70,13 +70,13 @@ const MissionTabHeader = (props) => {
     var missionTab = missionTreeContext.missionTrees[index];
     console.log("missionTab", missionTab);
     const fileData = Writer.exportMissionTree(
-      missionTab.series,
+      missionTab.container,
       missionTab.missions
     );
     let localizationFileData = "";
     if (exportLocalisation) {
       localizationFileData = Writer.exportLocalization(
-        missionTab.series,
+        missionTab.container,
         missionTab.missions
       );
     }
@@ -129,18 +129,18 @@ const MissionTabHeader = (props) => {
     settingsContext.updateState("currentWorkspace", currentWorkspace);
   };
 
-  const createFile = (name, seriesName) => {
+  const createFile = (name, containerName) => {
     console.log("name", name);
 
-    let newSeries = Factory.createDefaultSeries(
-      missionTreeContext.getAvailableSeriesId(),
-      seriesName
+    let newContainer = Factory.createDefaultContainer(
+      missionTreeContext.getAvailableContainerId(),
+      containerName
     );
     let newMissionTab = Factory.createDefaultMissionTab(
       missionTreeContext.getAvailableTreeId(),
       name
     );
-    newMissionTab.series = [newSeries];
+    newMissionTab.container = [newContainer];
 
     missionTreeContext.addMissionTree(newMissionTab);
   };
@@ -206,7 +206,7 @@ const MissionTabHeader = (props) => {
           setShow={props.setShow}
         />
         <div className="mr-2" style={{ borderLeft: "2px solid lightgrey" }} />
-        <EuFourSeriesTabHeader
+        <EuFourContainerTabHeader
           inProgressID={props.inProgressID}
           fileKey={props.fileKey}
           setShow={props.setShow}
@@ -303,8 +303,8 @@ export default MissionTabHeader;
                 id={InProgressIDMap.duplicateMission}
                 inProgress={props.inProgressID}
                 handleClick={handleClick}
-                buttonText={"Duplicate Series"}
-                toolTipText={"Duplicate Series"}
+                buttonText={"Duplicate Container"}
+                toolTipText={"Duplicate Container"}
                 icon={<FaClone />}
                 disabled={
                   missionTreeContext.missionTrees.length === 0 ||

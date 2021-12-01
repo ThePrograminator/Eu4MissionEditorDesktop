@@ -16,7 +16,7 @@ const singleVariableMapping = [
   { name: "position", type: "int" },
   { name: "completed_by", type: "string" },
 ];
-let seriesId = 0;
+let containerId = 0;
 let missionId = 0;
 
 const Reader = {
@@ -31,7 +31,7 @@ const Reader = {
     }
     const correctedPath = file.replace(/\\/g, "/");
     var fileName = path.basename(correctedPath);
-    seriesId = 0;
+    containerId = 0;
     missionId = 0;
 
     const extName = path
@@ -46,7 +46,7 @@ const Reader = {
     };
     console.log("fileObj", fileObj);
 
-    let allSeries = [];
+    let allContainer = [];
     let allMissions = [];
     let allMissionTabs = [];
 
@@ -58,23 +58,23 @@ const Reader = {
       var first = wholeString.indexOf("{");
       if (first === -1) break;
 
-      //Find series
+      //Find container
       var index = Reader.findClosingBracketIndex(wholeString, first);
       var stringArr = wholeString.substring(0, ++index);
-      var seriesText = Reader.cleanUpSeries(stringArr);
-      const series = Reader.handleSeries(seriesText);
-      allSeries.push(series);
+      var containerText = Reader.cleanUpContainer(stringArr);
+      const container = Reader.handleContainer(containerText);
+      allContainer.push(container);
 
-      //remove series from string
+      //remove container from string
       wholeString = wholeString.substring(++index, wholeString.length);
       console.log("\n");
     }
 
-    console.log("allSeries", allSeries);
+    console.log("allContainer", allContainer);
 
-    allSeries.map((series) =>
-      series.missions.map((mission, index) => {
-        mission.position.x = series.slot * 150;
+    allContainer.map((container) =>
+      container.missions.map((mission, index) => {
+        mission.position.x = container.slot * 150;
         if (mission.data.position !== -1)
           mission.position.y = mission.data.position * 150;
         else {
@@ -90,7 +90,7 @@ const Reader = {
           mission.data.month = month;
           mission.data.day = day;
         }
-        mission.data.selectedSeries = series.id;
+        mission.data.selectedContainer = container.id;
 
         allMissions.push(mission);
       })
@@ -101,7 +101,7 @@ const Reader = {
       fileName.substring(0, fileName.indexOf(".")),
       extName
     );
-    newMissionTab.series = allSeries;
+    newMissionTab.container = allContainer;
     newMissionTab.missions = allMissions;
     newMissionTab.edges = connections;
     console.log("newMissionTab", newMissionTab);
@@ -109,7 +109,7 @@ const Reader = {
       newMissionTab.missions.push(edge);
     });
     newMissionTab.importedMissionLastId = missionId;
-    newMissionTab.importedSeriesLastId = seriesId;
+    newMissionTab.importedContainerLastId = containerId;
     console.log("newMissionTab", newMissionTab);
     allMissionTabs.push(newMissionTab);
 
@@ -216,7 +216,7 @@ const Reader = {
         return null;
     }
   },
-  findSeriesVariable: function (str) {
+  findContainerVariable: function (str) {
     if (str === "potential_on_load" || str === "potential") {
       return true;
     }
@@ -300,11 +300,11 @@ const Reader = {
     missionId++;
     return { lineStart, newMission, foundPosition };
   },
-  handleSeries: function (str) {
+  handleContainer: function (str) {
     var splitCleanedUp = str.split("\n");
     let first = true;
-    var availableId = `series_${seriesId.toString()}`;
-    let newSeries = Factory.createDefaultSeries(availableId);
+    var availableId = `container_${containerId.toString()}`;
+    let newContainer = Factory.createDefaultContainer(availableId);
     for (var line = 0; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
       if (!first && string.search("=") === -1) {
@@ -314,8 +314,8 @@ const Reader = {
       variable[0] = variable[0].trim();
       variable[1] = variable[1].trim();
       if (first) {
-        newSeries = {
-          ...newSeries,
+        newContainer = {
+          ...newContainer,
           name: variable[0],
         };
         first = false;
@@ -323,8 +323,8 @@ const Reader = {
       }
       // No Bracket
       if (string.search("{") === -1) {
-        newSeries = {
-          ...newSeries,
+        newContainer = {
+          ...newContainer,
           [variable[0]]: this.switchVariableType(variable[0], variable[1]),
         };
         continue;
@@ -332,16 +332,16 @@ const Reader = {
 
       // Bracket
       if (string.search("{") != -1) {
-        //Series Bracket Variable
-        if (this.findSeriesVariable(variable[0])) {
+        //Container Bracket Variable
+        if (this.findContainerVariable(variable[0])) {
           let { lineStart, stringConcat } = this.handleBlockBracketString(
             line,
             splitCleanedUp
           );
           line = lineStart;
 
-          newSeries = {
-            ...newSeries,
+          newContainer = {
+            ...newContainer,
             [variable[0]]: stringConcat,
           };
           continue;
@@ -352,23 +352,23 @@ const Reader = {
           splitCleanedUp
         );
         line = lineStart;
-        if (newSeries.missions.length === 0 && !foundPosition) {
+        if (newContainer.missions.length === 0 && !foundPosition) {
           newMission.data.position = 1;
           newMission.position.y = newMission.data.position * 150;
         } else if (!foundPosition) {
           let position =
-            newSeries.missions[newSeries.missions.length - 1].data.position;
+            newContainer.missions[newContainer.missions.length - 1].data.position;
           newMission.data.position = position + 1;
           newMission.position.y = newMission.data.position * 150;
         }
-        newSeries.missions.push(newMission);
+        newContainer.missions.push(newMission);
       }
     }
-    console.log("series", newSeries);
-    seriesId++;
-    return newSeries;
+    console.log("container", newContainer);
+    containerId++;
+    return newContainer;
   },
-  cleanUpSeries: function (str) {
+  cleanUpContainer: function (str) {
     var resNew = str.split("\n");
     var cleanedUpString = "";
     //Cleanup

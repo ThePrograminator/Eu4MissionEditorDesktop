@@ -6,12 +6,12 @@ import SettingsContext from "../../contexts/SettingsContext";
 const CreateMissionModal = (props) => {
   const settingsContext = useContext(SettingsContext);
   const [fileName, setFileName] = useState("");
-  const [seriesName, setSeriesName] = useState("");
+  const [containerName, setContainerName] = useState("");
   const [validatedFileName, setValidatedFileName] = useState(false);
-  const [validatedSeriesName, setValidatedSeriesName] = useState(false);
+  const [validatedContainerName, setValidatedContainerName] = useState(false);
   const [validatedForm, setValidatedForm] = useState(false);
   const [errorMessageFileName, setErrorMessageFileName] = useState("");
-  const [errorMessageSeriesName, setErrorMessageSeriesName] = useState("");
+  const [errorMessageContainerName, setErrorMessageContainerName] = useState("");
 
   const handleFileNameInput = (event) => {
     var name = event.target.value;
@@ -48,29 +48,29 @@ const CreateMissionModal = (props) => {
     if (!valid) return;
     console.log("Valid");
     setValidatedFileName(true);
-    handleValidatedForm(validatedSeriesName, true);
+    handleValidatedForm(validatedContainerName, true);
   };
 
-  const handleSeriesNameInput = (event) => {
+  const handleContainerNameInput = (event) => {
     var name = event.target.value;
 
-    setSeriesName(name);
+    setContainerName(name);
     const regex = /[\s={}()\[\]]/g;
     const found = name.match(regex);
     if (found) {
-      setValidatedSeriesName(false);
+      setValidatedContainerName(false);
       setValidatedForm(false);
-      setErrorMessageSeriesName("Name contains illegal characters");
+      setErrorMessageContainerName("Name contains illegal characters");
       return;
     }
     if (name === "") {
-      setValidatedSeriesName(false);
+      setValidatedContainerName(false);
       setValidatedForm(false);
-      setErrorMessageSeriesName("Name is Empty");
+      setErrorMessageContainerName("Name is Empty");
       return;
     }
-    setValidatedSeriesName(true);
-    console.log("validatedSeriesName", validatedSeriesName);
+    setValidatedContainerName(true);
+    console.log("validatedContainerName", validatedContainerName);
     handleValidatedForm(validatedFileName, true);
   };
 
@@ -87,11 +87,11 @@ const CreateMissionModal = (props) => {
 
   useEffect(() => {
     setFileName("");
-    setSeriesName("");
+    setContainerName("");
     setValidatedFileName(false);
-    setValidatedSeriesName(false);
+    setValidatedContainerName(false);
     setErrorMessageFileName("File Name is Empty");
-    setErrorMessageSeriesName(
+    setErrorMessageContainerName(
       settingsContext.getText("containerName") + " Name is Empty"
     );
   }, [props.show]);
@@ -128,17 +128,17 @@ const CreateMissionModal = (props) => {
             </Form.Label>
             <FormControl
               className="mb-2"
-              placeholder="seriesName"
-              aria-label="seriesName"
-              value={seriesName}
+              placeholder="containerName"
+              aria-label="containerName"
+              value={containerName}
               aria-describedby="basic-addon1"
-              onChange={(evt) => handleSeriesNameInput(evt)}
-              isInvalid={!validatedSeriesName}
+              onChange={(evt) => handleContainerNameInput(evt)}
+              isInvalid={!validatedContainerName}
               required
             />
-            {!validatedSeriesName ? (
+            {!validatedContainerName ? (
               <Form.Control.Feedback type="invalid">
-                {errorMessageSeriesName}
+                {errorMessageContainerName}
               </Form.Control.Feedback>
             ) : null}
           </Form.Group>
@@ -151,9 +151,9 @@ const CreateMissionModal = (props) => {
         <Button
           variant="primary"
           onClick={() => (
-            props.setShow(0), props.createFile(fileName, seriesName)
+            props.setShow(0), props.createFile(fileName, containerName)
           )}
-          disabled={!validatedFileName || !validatedSeriesName}
+          disabled={!validatedFileName || !validatedContainerName}
         >
           Create Mission File
         </Button>

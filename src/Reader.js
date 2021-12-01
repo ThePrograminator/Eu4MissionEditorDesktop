@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 
 import Factory from "./helper/Factory";
 
@@ -19,10 +19,16 @@ const singleVariableMapping = [
 let seriesId = 0;
 let missionId = 0;
 
-
 const Reader = {
   asyncHandleFile: async (file, availableId, callback) => {
-    const fileContent = fs.readFileSync(file).toString();
+    var fileContent;
+    try {
+      fileContent = fs.readFileSync(file).toString();
+    } catch (err) {
+      return;
+      // Here you get the error when the file was not found,
+      // but you also get any other error
+    }
     const correctedPath = file.replace(/\\/g, "/");
     var fileName = path.basename(correctedPath);
     seriesId = 0;
@@ -346,12 +352,10 @@ const Reader = {
           splitCleanedUp
         );
         line = lineStart;
-        if(newSeries.missions.length === 0 && !foundPosition)
-        {
+        if (newSeries.missions.length === 0 && !foundPosition) {
           newMission.data.position = 1;
           newMission.position.y = newMission.data.position * 150;
-        }
-        else if (!foundPosition) {
+        } else if (!foundPosition) {
           let position =
             newSeries.missions[newSeries.missions.length - 1].data.position;
           newMission.data.position = position + 1;

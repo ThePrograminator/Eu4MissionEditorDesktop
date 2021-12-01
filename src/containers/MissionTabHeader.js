@@ -3,6 +3,7 @@ import Reader from "../Reader";
 import Writer from "../Writer";
 import { ButtonToolbar } from "react-bootstrap";
 import MissionTreeContext from "../contexts/MissionTreeContext";
+import SettingsContext from "../contexts/SettingsContext";
 
 import InProgressIDMap from "../InProgressIDMap";
 import FileTabHeader from "../components/TabHeader/FileTabHeader";
@@ -19,9 +20,11 @@ import RemoveMissionFileModal from "../components/Modals/RemoveMissionFileModal"
 const electron = window.require("electron");
 const fs = electron.remote.require("fs");
 const dialog = electron.remote.dialog;
+const settings = electron.remote.require("electron-settings");
 
 const MissionTabHeader = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
+  const settingsContext = useContext(SettingsContext);
 
   const openFile = () => {
     var window = electron.remote.getCurrentWindow();
@@ -72,7 +75,10 @@ const MissionTabHeader = (props) => {
     );
     let localizationFileData = "";
     if (exportLocalisation) {
-      localizationFileData = Writer.exportLocalization(missionTab.series, missionTab.missions);
+      localizationFileData = Writer.exportLocalization(
+        missionTab.series,
+        missionTab.missions
+      );
     }
 
     var options = {
@@ -100,8 +106,27 @@ const MissionTabHeader = (props) => {
       }
 
       fs.writeFileSync(filePath, fileData, "utf-8");
+
+      saveFilePathToWorkspace(filePath);
+
       props.setinProgressID(0);
     });
+  };
+
+  const saveFilePathToWorkspace = (filePath) => {
+    //Save to workspace
+    var currentWorkspace = settingsContext.currentWorkspace;
+    let filePaths = [...currentWorkspace.filePaths];
+    filePaths.push(filePath);
+    currentWorkspace.filePaths = filePaths;
+
+    var workspaces = [...settingsContext.workspaces];
+    var index = workspaces.findIndex((x) => x.id === currentWorkspace.id);
+    workspaces[index] = currentWorkspace;
+
+    settingsContext.updateState("workspaces", workspaces);
+    settings.set("workspaces", workspaces);
+    settingsContext.updateState("currentWorkspace", currentWorkspace);
   };
 
   const createFile = (name, seriesName) => {

@@ -94,6 +94,7 @@ const WorkspaceForm = (props) => {
               value={radio}
               checked={selectedGame === radio}
               onChange={(e) => setSelectedGame(e.currentTarget.value)}
+              style ={{WebkitAppearance: "none"}}
             >
               {radio}
             </ToggleButton>

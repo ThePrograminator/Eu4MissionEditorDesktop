@@ -1,10 +1,13 @@
 import React, { useState, useEffect, useContext } from "react";
 import { Form, Col, Row, Button } from "react-bootstrap";
 import SettingsContext from "../contexts/SettingsContext";
+import MissionTreeContext from "../contexts/MissionTreeContext";
 import Factory from "../helper/Factory";
+import Reader from "../Reader";
 
 const WorkspaceSelect = (props) => {
   const settingsContext = useContext(SettingsContext);
+  const missionTreeContext = useContext(MissionTreeContext);
   var createDummy = () => {
     var workspace = Factory.createDefaultWorkspace(999999, "Select Workspace");
     var workSpaceList = [];
@@ -19,16 +22,13 @@ const WorkspaceSelect = (props) => {
   const handleInput = (event) => {
     var workspaceValue = event.target.value;
     var workspace = parseInt(workspaceValue);
-    console.log("workspace", workspace)
-    if (workspace === 999999)
-    {
+    console.log("workspace", workspace);
+    if (workspace === 999999) {
       setSelectedWorkSpace(workspace);
       console.log("Not Valid");
       props.setValidated(false);
       return;
-    } 
-    else
-    {
+    } else {
       setSelectedWorkSpace(workspace);
 
       console.log("Valid");
@@ -38,9 +38,47 @@ const WorkspaceSelect = (props) => {
 
   const setWorkspace = () => {
     if (!props.validated) return;
-    var workspaceIndex = selectAbleList.findIndex(x => x.id === selectedWorkSpace)
-    console.log("workspace", selectAbleList[workspaceIndex])
-    settingsContext.updateState("currentWorkspace", selectAbleList[workspaceIndex]);
+    var workspaceIndex = selectAbleList.findIndex(
+      (x) => x.id === selectedWorkSpace
+    );
+    var workspace = selectAbleList[workspaceIndex];
+
+    var filePathsIndexToDelete = [];
+    var readFile = false;
+    for (let index = 0; index < workspace.filePaths.length; index++) {
+      const filepath = workspace.filePaths[index];
+
+      Reader.asyncHandleFile(
+        filepath,
+        missionTreeContext.getAvailableTreeId(),
+        (allMissionTabs) => {
+          missionTreeContext.addMissionTree(allMissionTabs[0]);
+          missionTreeContext.setAvailableNodeId(
+            allMissionTabs[0].importedMissionLastId
+          );
+          missionTreeContext.setAvailableSeriesId(
+            allMissionTabs[0].importedSeriesLastId
+          );
+          readFile = true;
+        }
+      );
+      if (!readFile) {
+        filePathsIndexToDelete.push(index);
+      }
+      readFile = false;
+    }
+
+    //Delete filepaths which do not exist anymore
+    for (let index = 0; index < filePathsIndexToDelete.length; index++) {
+      const element = filePathsIndexToDelete[index];
+      workspace.filePaths = workspace.filePaths.filter(function(value, index, arr){ 
+        return index !== element;
+    });
+    }
+
+    console.log("workspace", workspace);
+    settingsContext.updateState("currentWorkspace", workspace);
+
     props.setShow(0);
   };
 
@@ -65,8 +103,8 @@ const WorkspaceSelect = (props) => {
           >
             {selectAbleList.map((workspace, index) => (
               <option key={index} value={workspace.id}>
-                {workspace.name +
-                  (workspace.type !== undefined ? " - " + workspace.type : "")}
+                {(workspace.type !== undefined ? workspace.type + " - " : "") +
+                  workspace.name}
               </option>
             ))}
           </Form.Control>

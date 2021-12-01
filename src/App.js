@@ -6,6 +6,7 @@ import Home from "./containers/Home";
 import "react-flow-renderer/dist/style.css";
 // additionally you can load the default theme
 import "react-flow-renderer/dist/theme-default.css";
+import "./App.css";
 import { ThemeProvider } from "styled-components";
 import { GlobalStyles } from "./components/GlobalStyles";
 import { lightTheme, darkTheme } from "./components/Themes";

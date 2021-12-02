@@ -2,12 +2,12 @@ import React from "react";
 import ReactFlow, { isNode } from "react-flow-renderer";
 
 const Writer = {
-  exportMissionTree: function (container, missions) {
+  exportMissionTree: function (containers, missions) {
     var missionTreeText = "";
     var tabs = 0;
     var tabsText = "";
-    for (let index = 0; index < container.length; index++) {
-      const container = container[index];
+    for (let index = 0; index < containers.length; index++) {
+      const container = containers[index];
       //name
       missionTreeText += container.name + " " + Writer.addEqualBracket();
 
@@ -53,14 +53,16 @@ const Writer = {
       tabs += 1;
       tabsText = Writer.updateTabsText(tabs);
 
-      var containerMissionsOne = missions.filter(x => isNode(x));
-      var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === container.id);
+      var containerMissionsOne = missions.filter((x) => isNode(x));
+      var containerMissionsTwo = containerMissionsOne.filter(
+        (x) => x.data.selectedContainer === container.id
+      );
 
       var sortedObjs = containerMissionsTwo.sort(
         (a, b) => (a.data.position > b.data.position && 1) || -1
       );
 
-     /* var sortedObjs = container.missions.sort(
+      /* var sortedObjs = container.missions.sort(
         (a, b) => (a.data.position > b.data.position && 1) || -1
       );*/
       for (let index = 0; index < sortedObjs.length; index++) {
@@ -180,10 +182,10 @@ const Writer = {
     }
     return tabsText;
   },
-  exportLocalization: function (container, missions) {
+  exportLocalization: function (containers, missions) {
     var localisationText = "l_english:\n";
-    for (let index = 0; index < container.length; index++) {
-      const container = container[index];
+    for (let index = 0; index < containers.length; index++) {
+      const container = containers[index];
 
       let containerName = container.name.replace(/_/g, " ");
       containerName = Writer.titleCase(containerName);
@@ -194,12 +196,14 @@ const Writer = {
       localisationText +=
         " #---------------------------------------------------------\n\n";
 
-        var containerMissionsOne = missions.filter(x => isNode(x));
-        var containerMissionsTwo = containerMissionsOne.filter(x => x.data.selectedContainer === container.id);
-  
-        var sortedObjs = containerMissionsTwo.sort(
-          (a, b) => (a.data.position > b.data.position && 1) || -1
-        );
+      var containerMissionsOne = missions.filter((x) => isNode(x));
+      var containerMissionsTwo = containerMissionsOne.filter(
+        (x) => x.data.selectedContainer === container.id
+      );
+
+      var sortedObjs = containerMissionsTwo.sort(
+        (a, b) => (a.data.position > b.data.position && 1) || -1
+      );
 
       for (let index = 0; index < sortedObjs.length; index++) {
         const mission = sortedObjs[index];

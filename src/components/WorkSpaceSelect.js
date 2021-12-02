@@ -43,46 +43,46 @@ const WorkspaceSelect = (props) => {
     );
     var workspace = selectAbleList[workspaceIndex];
     console.log("Change", settingsContext.currentWorkSpace);
-      var filePathsIndexToDelete = [];
-      var readFile = false;
-      for (let index = 0; index < workspace.filePaths.length; index++) {
-        const filepath = workspace.filePaths[index];
+    var filePathsIndexToDelete = [];
+    var readFile = false;
+    for (let index = 0; index < workspace.filePaths.length; index++) {
+      const filepath = workspace.filePaths[index];
 
-        Reader.asyncHandleFile(
-          filepath,
-          missionTreeContext.getAvailableTreeId(),
-          (allMissionTabs) => {
-            missionTreeContext.addMissionTree(allMissionTabs[0]);
-            missionTreeContext.setAvailableNodeId(
-              allMissionTabs[0].importedMissionLastId
-            );
-            missionTreeContext.setAvailableContainerId(
-              allMissionTabs[0].importedContainerLastId
-            );
-            readFile = true;
-          }
-        );
-        if (!readFile) {
-          filePathsIndexToDelete.push(index);
+      Reader.asyncHandleFile(
+        filepath,
+        missionTreeContext.getAvailableTreeId(),
+        workspace.id,
+        (allMissionTabs) => {
+          missionTreeContext.addMissionTree(allMissionTabs[0]);
+          missionTreeContext.setAvailableNodeId(
+            allMissionTabs[0].importedMissionLastId
+          );
+          missionTreeContext.setAvailableContainerId(
+            allMissionTabs[0].importedContainerLastId
+          );
+          readFile = true;
         }
-        readFile = false;
+      );
+      if (!readFile) {
+        filePathsIndexToDelete.push(index);
       }
+      readFile = false;
+    }
 
-      //Delete filepaths which do not exist anymore
-      for (let index = 0; index < filePathsIndexToDelete.length; index++) {
-        const element = filePathsIndexToDelete[index];
-        workspace.filePaths = workspace.filePaths.filter(function (
-          value,
-          index,
-          arr
-        ) {
-          return index !== element;
-        });
-      }
+    //Delete filepaths which do not exist anymore
+    for (let index = 0; index < filePathsIndexToDelete.length; index++) {
+      const element = filePathsIndexToDelete[index];
+      workspace.filePaths = workspace.filePaths.filter(function (
+        value,
+        index,
+        arr
+      ) {
+        return index !== element;
+      });
+    }
 
     console.log("workspace", workspace);
     settingsContext.updateState("currentWorkspace", workspace, () => {
-      
       props.setShow(0);
     });
   };
@@ -95,8 +95,8 @@ const WorkspaceSelect = (props) => {
   }, []);
 
   const getName = (type) => {
-    return settingsContext.getText("name", type)
-  }
+    return settingsContext.getText("name", type);
+  };
 
   return (
     <Form>
@@ -112,8 +112,9 @@ const WorkspaceSelect = (props) => {
           >
             {selectAbleList.map((workspace, index) => (
               <option key={index} value={workspace.id}>
-                {(workspace.type !== undefined ? getName(workspace.type) + " - " : "") +
-                  workspace.name}
+                {(workspace.type !== undefined
+                  ? getName(workspace.type) + " - "
+                  : "") + workspace.name}
               </option>
             ))}
           </Form.Control>

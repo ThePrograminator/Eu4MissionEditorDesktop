@@ -37,7 +37,8 @@ const Factory = {
         provinces_to_highlight: "",
         trigger: "",
         effect: "",
-        selectedContainer: selectedContainer !== null ? selectedContainer.id : null,
+        selectedContainer:
+          selectedContainer !== null ? selectedContainer.id : null,
       },
       position: {
         x: selectedContainer !== null ? selectedContainer.slot * 150 : 0,
@@ -67,12 +68,73 @@ const Factory = {
 
     return newContainer;
   },
+  createDefaultFocus: function (
+    id,
+    name = "newFocus",
+    selectedContainer = null
+  ) {
+    const newMission = {
+      id: id,
+      data: {
+        label: name,
+        icon: "mission_build_up_to_force_limit",
+        cost: 0,
+        allow_branch: "",
+        x: 0,
+        y: 0,
+        relative_position_id: "",
+        offset: "",
+        prerequisite: "",
+        mutually_exclusive: "",
+        available: "",
+        bypass: "",
+        historical_ai: "",
+        cancel: "",
+        available_if_capitulated: false,
+        cancel_if_invalid: false,
+        continue_if_invalid: false,
+        will_lead_to_war_with: "",
+        search_filters: "",
+        select_effect: "",
+        completion_reward: "",
+        complete_tooltip: "",
+        ai_will_do: "",
+        selectedContainer:
+          selectedContainer !== null ? selectedContainer.id : null,
+      },
+      position: {
+        x: 0,
+        y: 150,
+      },
+      style: {
+        background: selectedContainer !== null ? selectedContainer.color : null,
+      },
+      type: "default",
+    };
+
+    return newMission;
+  },
+  createDefaultFocusTree: function (id, name = "newContainer") {
+    const newContainer = {
+      id: id,
+      name: name,
+      country: "",
+      default: false,
+      reset_on_civil_war: false,
+      shared_focus: "",
+      continuous_focus_position: "",
+      initial_show_position: "",
+      missions: [],
+    };
+
+    return newContainer;
+  },
   createDefaultWorkspace: function (id, name = "newWorkspace", type) {
     const newWorkspace = {
       id: id,
       name: name,
       type: type,
-      filePaths: []
+      filePaths: [],
     };
 
     return newWorkspace;

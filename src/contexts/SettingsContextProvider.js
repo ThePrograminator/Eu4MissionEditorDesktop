@@ -35,8 +35,6 @@ class SettingsProvider extends React.Component {
   };
 
   getText = (variable, type = null) => {
-    console.log("settingsContext getText", this.state.currentWorkspace);
-
     if (type === null) {
       var workspaceText = null;
       for (let index = 0; index < WorkspaceTypes.length; index++) {
@@ -45,7 +43,6 @@ class SettingsProvider extends React.Component {
           workspaceText = WorkspaceTypes[index];
         }
       }
-      console.log("settingsContext currentType", workspaceText[variable]);
       if (workspaceText === null) return "Missing text";
       return workspaceText[variable];
     } else {

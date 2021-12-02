@@ -1,12 +1,46 @@
 import React, { useContext } from "react";
 import { Tabs, Tab } from "react-bootstrap";
 import Mission from "../../components/Mission";
+import Focus from "../../components/Focus";
 import ContainerEditor from "./ContainerEditor";
 import { isNode } from "react-flow-renderer";
 import SettingsContext from "../../contexts/SettingsContext";
 
 const CodeEditor = (props) => {
   const settingsContext = useContext(SettingsContext);
+
+  const getNodeType = () => {
+    switch (settingsContext.currentWorkspace.type) {
+      case 0:
+        return (
+          <Mission
+            key={props.selectedElement}
+            missionTree={props.missionTree}
+            setMissions={props.setMissions}
+            selectedElement={props.selectedElement}
+            setSelectedElement={props.setSelectedElement}
+            container={props.container}
+            onUpdate={props.onUpdate}
+            fileID={props.fileID}
+          />
+        );
+      case 1:
+        return (
+          <Focus
+            key={props.selectedElement}
+            missionTree={props.missionTree}
+            setMissions={props.setMissions}
+            selectedElement={props.selectedElement}
+            setSelectedElement={props.setSelectedElement}
+            container={props.container}
+            onUpdate={props.onUpdate}
+            fileID={props.fileID}
+          />
+        );
+      default:
+        break;
+    }
+  };
   return (
     <aside style={props.closed}>
       <Tabs defaultActiveKey="mission" id="uncontrolled-tab-example">
@@ -21,16 +55,7 @@ const CodeEditor = (props) => {
               maxHeight: "75vh",
             }}
           >
-            <Mission
-              key={props.selectedElement}
-              missionTree={props.missionTree}
-              setMissions={props.setMissions}
-              selectedElement={props.selectedElement}
-              setSelectedElement={props.setSelectedElement}
-              container={props.container}
-              onUpdate={props.onUpdate}
-              fileID={props.fileID}
-            />
+            {getNodeType()}
           </Tab>
         ) : null}
         <Tab

@@ -78,7 +78,7 @@ const Mission = (props) => {
       if (el.id === props.selectedElement.id) {
         // it's important that you create a new object here
         // in order to notify react flow about the change
-        var pos = position;
+         var pos = position;
         if (selectedContainer != null) {
           pos =
             props.container.find((x) => x.id === selectedContainer).slot * 150;

@@ -8,6 +8,7 @@ const dialog = electron.remote.dialog;
 var path = require("path");
 
 const singleVariableMapping = [
+  //EU4
   { name: "slot", type: "int" },
   { name: "generic", type: "boolean" },
   { name: "ai", type: "boolean" },
@@ -15,12 +16,36 @@ const singleVariableMapping = [
   { name: "icon", type: "string" },
   { name: "position", type: "int" },
   { name: "completed_by", type: "string" },
+  //HOI4
+  { name: "id", type: "string" },
+  { name: "default", type: "boolean" },
+  { name: "reset_on_civil_war", type: "boolean" },
+  { name: "shared_focus", type: "string" },
+  { name: "cost", type: "int" },
+  { name: "x", type: "int" },
+  { name: "y", type: "int" },
+  { name: "relative_position_id", type: "string" },
+  { name: "available_if_capitulated", type: "boolean" },
+  { name: "cancel_if_invalid", type: "boolean" },
+  { name: "continue_if_invalid", type: "boolean" },
+  { name: "will_lead_to_war_with", type: "boolean" },
 ];
+
+const containerVariableMapping = [
+  //EU4
+  "potential_on_load",
+  "potential",
+  //HOI4
+  "country",
+  "continuous_focus_position",
+  "initial_show_position",
+];
+
 let containerId = 0;
 let missionId = 0;
 
 const Reader = {
-  asyncHandleFile: async (file, availableId, callback) => {
+  asyncHandleFile: async (file, availableId, type, callback) => {
     var fileContent;
     try {
       fileContent = fs.readFileSync(file).toString();
@@ -62,7 +87,7 @@ const Reader = {
       var index = Reader.findClosingBracketIndex(wholeString, first);
       var stringArr = wholeString.substring(0, ++index);
       var containerText = Reader.cleanUpContainer(stringArr);
-      const container = Reader.handleContainer(containerText);
+      const container = Reader.handleContainer(containerText, type);
       allContainer.push(container);
 
       //remove container from string
@@ -74,28 +99,21 @@ const Reader = {
 
     allContainer.map((container) =>
       container.missions.map((mission, index) => {
-        mission.position.x = container.slot * 150;
-        if (mission.data.position !== -1)
-          mission.position.y = mission.data.position * 150;
-        else {
-          mission.data.position = index + 1;
-          mission.position.y = mission.data.position * 150;
+        switch (type) {
+          case 0:
+            mission = Reader.handleCleanUpMission(mission, container, index);
+            break;
+          case 1:
+            mission = Reader.handleCleanUpFocus(mission, container, index);
+            break;
+          default:
+            break;
         }
-        if (mission.data.completed_by !== "") {
-          let date = mission.data.completed_by.split(".");
-          let year = date[0];
-          let month = date[1];
-          let day = date[2];
-          mission.data.year = year;
-          mission.data.month = month;
-          mission.data.day = day;
-        }
-        mission.data.selectedContainer = container.id;
 
         allMissions.push(mission);
       })
     );
-    const connections = Reader.createConnections(allMissions);
+    const connections = Reader.createConnections(allMissions, type);
     const newMissionTab = Factory.createDefaultMissionTab(
       availableId,
       fileName.substring(0, fileName.indexOf(".")),
@@ -115,6 +133,37 @@ const Reader = {
 
     console.log("allMissionTabs", allMissionTabs);
     callback(allMissionTabs);
+  },
+  handleCleanUpMission: function (mission, container, index) {
+    mission.position.x = container.slot * 150;
+    if (mission.data.position !== -1)
+      mission.position.y = mission.data.position * 150;
+    else {
+      mission.data.position = index + 1;
+      mission.position.y = mission.data.position * 150;
+    }
+    if (mission.data.completed_by !== "") {
+      let date = mission.data.completed_by.split(".");
+      let year = date[0];
+      let month = date[1];
+      let day = date[2];
+      mission.data.year = year;
+      mission.data.month = month;
+      mission.data.day = day;
+    }
+    mission.data.selectedContainer = container.id;
+    return mission;
+  },
+  handleCleanUpFocus: function (mission, container, index) {
+    mission.position.x = mission.data.x * 150;
+    if (mission.data.y !== -1) mission.position.y = mission.data.y * 150;
+    else {
+      mission.data.y = index + 1;
+      mission.position.y = mission.data.y * 150;
+    }
+    mission.data.selectedContainer = container.id;
+    mission.data.label = mission.data.id;
+    return mission;
   },
   handleBlockBracketString: function (line, splitCleanedUp) {
     var stringConcat = "";
@@ -179,7 +228,7 @@ const Reader = {
 
     return { lineStart, arr };
   },
-  handleInlineBracket: function (string) {
+  handleInlineBracket: function (string, type) {
     var inlineString = string.trim();
     inlineString = inlineString.substring(
       inlineString.indexOf("{") + 1,
@@ -200,9 +249,6 @@ const Reader = {
         break;
       }
     }
-    if (variable === "has_country_shield") {
-      console.log("Reader has_country_shield value", value);
-    }
 
     switch (type) {
       case "int":
@@ -217,15 +263,26 @@ const Reader = {
     }
   },
   findContainerVariable: function (str) {
-    if (str === "potential_on_load" || str === "potential") {
-      return true;
+    for (let index = 0; index < containerVariableMapping.length; index++) {
+      const element = containerVariableMapping[index];
+      if (str === element) return true;
     }
     return false;
   },
-  handleMission: function (lineStart, splitCleanedUp) {
+  handleMission: function (lineStart, splitCleanedUp, type) {
     let first = true;
     var availableId = `node_${missionId.toString()}`;
-    let newMission = Factory.createDefaultMission(availableId);
+    let newMission = null;
+    switch (type) {
+      case 0:
+        newMission = Factory.createDefaultMission(availableId);
+        break;
+      case 1:
+        newMission = Factory.createDefaultFocus(availableId);
+        break;
+      default:
+        break;
+    }
     let foundPosition = false;
     for (var line = lineStart; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
@@ -254,7 +311,11 @@ const Reader = {
           ...newMission.data,
           [variable[0]]: this.switchVariableType(variable[0], variable[1]),
         };
-        if (variable[0] === "position") {
+        if (
+          variable[0] === "position" ||
+          variable[0] === "x" ||
+          variable[0] === "y"
+        ) {
           foundPosition = true;
         }
         continue;
@@ -262,16 +323,23 @@ const Reader = {
 
       //Inline Brackets
       if (string.search("{.+}") !== -1) {
+        var stringArray = this.handleInlineBracket(string);
+        if (type === 1) {
+          stringArray = Reader.cleanupHOIArray(stringArray);
+        }
         newMission.data = {
           ...newMission.data,
-          [variable[0]]: this.handleInlineBracket(string),
+          [variable[0]]: stringArray,
         };
         continue;
       }
 
       //Not inline Bracket
       if (string.search("{") !== -1) {
-        if (variable[0] !== "required_missions") {
+        if (
+          variable[0] !== "required_missions" &&
+          variable[0] !== "prerequisite"
+        ) {
           let { lineStart, stringConcat } = this.handleBlockBracketString(
             line,
             splitCleanedUp
@@ -288,6 +356,7 @@ const Reader = {
             splitCleanedUp
           );
           line = lineStart;
+          arr = Reader.cleanupHOIString(arr);
 
           newMission.data = {
             ...newMission.data,
@@ -300,11 +369,43 @@ const Reader = {
     missionId++;
     return { lineStart, newMission, foundPosition };
   },
-  handleContainer: function (str) {
+  cleanupHOIArray: function (stringArray) {
+    var copy = [...stringArray];
+    for (let index = 0; index < copy.length; index++) {
+      const element = copy[index];
+      if (element === "focus" || element === "=") {
+        copy.splice(element, 1);
+        index--;
+      }
+    }
+    stringArray = copy;
+    return stringArray;
+  },
+  cleanupHOIString: function (stringArray) {
+    var copy = [...stringArray];
+    var newArray = [];
+    for (let index = 0; index < copy.length; index++) {
+      const element = copy[index];
+      var variable = element.split(" ")[2];
+      newArray.push(variable);
+    }
+    return newArray;
+  },
+  handleContainer: function (str, type) {
     var splitCleanedUp = str.split("\n");
     let first = true;
     var availableId = `container_${containerId.toString()}`;
-    let newContainer = Factory.createDefaultContainer(availableId);
+    let newContainer = null;
+    switch (type) {
+      case 0:
+        newContainer = Factory.createDefaultContainer(availableId);
+        break;
+      case 1:
+        newContainer = Factory.createDefaultFocusTree(availableId);
+        break;
+      default:
+        break;
+    }
     for (var line = 0; line < splitCleanedUp.length; line++) {
       var string = splitCleanedUp[line];
       if (!first && string.search("=") === -1) {
@@ -349,7 +450,8 @@ const Reader = {
 
         let { lineStart, newMission, foundPosition } = this.handleMission(
           line,
-          splitCleanedUp
+          splitCleanedUp,
+          type
         );
         line = lineStart;
         if (newContainer.missions.length === 0 && !foundPosition) {
@@ -357,7 +459,8 @@ const Reader = {
           newMission.position.y = newMission.data.position * 150;
         } else if (!foundPosition) {
           let position =
-            newContainer.missions[newContainer.missions.length - 1].data.position;
+            newContainer.missions[newContainer.missions.length - 1].data
+              .position;
           newMission.data.position = position + 1;
           newMission.position.y = newMission.data.position * 150;
         }
@@ -407,15 +510,97 @@ const Reader = {
     }
     return -1;
   },
-  createConnections: function (missions) {
+  createConnections: function (missions, type) {
     var mappedConnections = [];
 
     for (let index = 0; index < missions.length; index++) {
       const target = missions[index];
       for (let inner = 0; inner < missions.length; inner++) {
         const source = missions[inner];
+        var connections = [];
+        switch (type) {
+          case 0:
+            connections = Reader.loopRequiredNodes(
+              target,
+              source,
+              target.data.required_missions,
+              type
+            );
+            break;
+          case 1:
+            connections = Reader.loopRequiredNodes(
+              target,
+              source,
+              target.data.prerequisite,
+              type
+            );
+            break;
+          default:
+            break;
+        }
+        if (connections.length !== 0)
+          mappedConnections = mappedConnections.concat(connections);
+      }
+    }
+
+    console.log("mappedConnections", mappedConnections);
+
+    return mappedConnections;
+  },
+  loopRequiredNodes: function (target, source, nodes, type) {
+    var mappedConnections = [];
+    for (let l = 0; l < nodes.length; l++) {
+      let element = nodes[l];
+
+      var isConnection = false;
+      switch (type) {
+        case 0:
+          if (element === source.data.label) {
+            isConnection = true;
+          }
+          break;
+        case 1:
+          if (element === source.data.id) {
+            isConnection = true;
+          }
+          break;
+        default:
+          break;
+      }
+      if (isConnection) {
+        const newConnectionMap = {
+          id: "e" + source.id + "-" + target.id,
+          source: source.id,
+          target: target.id,
+          type: "step",
+        };
+        mappedConnections.push(newConnectionMap);
+      }
+    }
+    return mappedConnections;
+  },
+};
+
+export default Reader;
+
+/*
+
+for (let index = 0; index < missions.length; index++) {
+      const target = missions[index];
+      for (let inner = 0; inner < missions.length; inner++) {
+        const source = missions[inner];
         for (let l = 0; l < target.data.required_missions.length; l++) {
-          const element = target.data.required_missions[l];
+          let element = null;
+          switch (type) {
+            case 0:
+              element = target.data.required_missions[l];
+              break;
+            case 1:
+              element = target.data.prerequisite[l];
+              break;
+            default:
+              break;
+          }
           if (element === source.data.label) {
             const newConnectionMap = {
               id: "e" + source.id + "-" + target.id,
@@ -429,10 +614,32 @@ const Reader = {
       }
     }
 
-    console.log("mappedConnections", mappedConnections);
 
-    return mappedConnections;
-  },
-};
 
-export default Reader;
+    for (let index = 0; index < missions.length; index++) {
+      const target = missions[index];
+      for (let inner = 0; inner < missions.length; inner++) {
+        const source = missions[inner];
+        var connections = [];
+        switch (type) {
+          case 0:
+            connections = Reader.loopRequiredNodes(
+              target,
+              source,
+              target.data.required_missions
+            );
+            break;
+          case 1:
+            connections = Reader.loopRequiredNodes(
+              target,
+              source,
+              target.data.prerequisite
+            );
+            break;
+          default:
+            break;
+        }
+        if (connections.length !== 0) mappedConnections.push([...connections]);
+      }
+    }
+*/

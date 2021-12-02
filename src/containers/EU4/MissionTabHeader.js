@@ -47,6 +47,7 @@ const MissionTabHeader = (props) => {
     Reader.asyncHandleFile(
       file,
       missionTreeContext.getAvailableTreeId(),
+      settingsContext.currentWorkspace.type,
       (allMissionTabs) => {
         missionTreeContext.addMissionTree(allMissionTabs[0]);
         missionTreeContext.setAvailableNodeId(

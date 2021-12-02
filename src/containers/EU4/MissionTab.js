@@ -51,6 +51,17 @@ const MissionTab = (props) => {
     maxHeight: "-webkit-fill-available",
   });
 
+  const calcMaxNodeExtent = () => {
+    switch (settingsContext.currentWorkspace.type) {
+      case 0:
+        return [settingsContext.maxSlot * 150, 90000];
+      case 1:
+        return [90000, 90000];
+      default:
+        break;
+    }
+  };
+
   const handleClose = () => {
     console.log("Clicked Closed");
     if (closed.maxWidth === "40%")
@@ -84,13 +95,27 @@ const MissionTab = (props) => {
       if (isNode(el) && el.data.selectedContainer != null) {
         // unfortunately we need this little hack to pass a slighltiy different position
         // in order to notify react flow about the change
+        var x = 0;
+        switch (settingsContext.currentWorkspace.type) {
+          case 0:
+            x =
+              container.find((x) => x.id === el.data.selectedContainer).slot *
+              150;
+            break;
+          case 1:
+            x = el.data.x * 150;
+            break;
+          default:
+            break;
+        }
         el.position = {
-          x: container.find((x) => x.id === el.data.selectedContainer).slot * 150,
+          x: x,
           y: el.position.y,
         };
         el.style = {
           ...el.style,
-          background: container.find((x) => x.id === el.data.selectedContainer).color,
+          background: container.find((x) => x.id === el.data.selectedContainer)
+            .color,
         };
       }
       return el;
@@ -196,7 +221,9 @@ const MissionTab = (props) => {
     console.log("newNode name", name);
     console.log("newNode selectedContainer", selectedContainer);
 
-    const selectedContainerObj = container.find((x) => x.id === selectedContainer);
+    const selectedContainerObj = container.find(
+      (x) => x.id === selectedContainer
+    );
 
     const newNode = Factory.createDefaultMission(
       missionTreeContext.getAvailableNodeId(),
@@ -324,7 +351,9 @@ const MissionTab = (props) => {
     }
 
     let containerCopy = container.slice();
-    let containerIndex = container.findIndex((container) => container.id === containerId);
+    let containerIndex = container.findIndex(
+      (container) => container.id === containerId
+    );
 
     console.log("containerCopy", containerCopy);
     containerCopy.splice(containerIndex, 1);
@@ -385,10 +414,7 @@ const MissionTab = (props) => {
             snapGrid={snapGrid}
             onNodeDragStop={onNodeDragStop}
             selectNodesOnDrag={false}
-            nodeExtent={[
-              [150, 0],
-              [settingsContext.maxSlot * 150, 90000],
-            ]}
+            nodeExtent={[[150, 0], calcMaxNodeExtent()]}
             deleteKeyCode={46}
           >
             <MiniMap nodeStrokeWidth={15} style={{ borderStyle: "solid" }} />

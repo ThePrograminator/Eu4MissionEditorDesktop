@@ -117,31 +117,10 @@ const Mission = (props) => {
           ))}
         </Form.Control>
         <Form.Text className="text-muted">
-          {"(Required) A mission needs a " +
+          {"(Required) A Focus needs a " +
             settingsContext.getText("containerName")}
         </Form.Text>
       </Form.Group>
-
-      <Accordion defaultActiveKey="0">
-        <Card>
-          <Accordion.Toggle as={Card.Header} eventKey="0">
-            {settingsContext.getText("containerName") + " (Read Only)"}
-          </Accordion.Toggle>
-          <Accordion.Collapse eventKey="0">
-            <Card.Body>
-              {props.selectedElement.data.selectedContainer != null ? (
-                <ContainerReadOnly
-                  selectedContainer={props.container.find(
-                    (x) => x.id === props.selectedElement.data.selectedContainer
-                  )}
-                />
-              ) : (
-                "No Selected " + settingsContext.getText("containerName")
-              )}
-            </Card.Body>
-          </Accordion.Collapse>
-        </Card>
-      </Accordion>
 
       <hr />
 

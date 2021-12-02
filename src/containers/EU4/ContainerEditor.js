@@ -1,10 +1,13 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useContext } from "react";
 import Series from "../../components/Series";
+import FocusTree from "../../components/FocusTree";
 import { Tab, Row, Col, ListGroup, ButtonGroup, Button } from "react-bootstrap";
+import SettingsContext from "../../contexts/SettingsContext";
 
 let id = 0;
 
 const ContainerEditor = (props) => {
+  const settingsContext = useContext(SettingsContext);
   /*const onAdd = useCallback(() => {
     const newNode = {
       id: id,
@@ -22,6 +25,31 @@ const ContainerEditor = (props) => {
     id++;
     console.log(props.container.length);
   }, [props.setContainer, props.setMissionTabs]);*/
+
+  const getContainerType = (container) => {
+    switch (settingsContext.currentWorkspace.type) {
+      case 0:
+        return (
+          <Series
+            missionTree={props.missionTree}
+            container={container}
+            allContainer={props.container}
+            setContainer={props.setContainer}
+          />
+        );
+      case 1:
+        return (
+          <FocusTree
+            missionTree={props.missionTree}
+            container={container}
+            allContainer={props.container}
+            setContainer={props.setContainer}
+          />
+        );
+      default:
+        break;
+    }
+  };
 
   return (
     <div>
@@ -45,12 +73,7 @@ const ContainerEditor = (props) => {
             <Tab.Content>
               {props.container.map((container) => (
                 <Tab.Pane key={container.id} eventKey={"#link" + container.id}>
-                  <Series
-                    missionTree={props.missionTree}
-                    container={container}
-                    allContainer={props.container}
-                    setContainer={props.setContainer}
-                  />
+                  {getContainerType(container)}
                 </Tab.Pane>
               ))}
             </Tab.Content>

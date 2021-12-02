@@ -41,6 +41,7 @@ const CodeEditor = (props) => {
         break;
     }
   };
+
   return (
     <aside style={props.closed}>
       <Tabs defaultActiveKey="mission" id="uncontrolled-tab-example">

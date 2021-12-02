@@ -97,7 +97,9 @@ const Reader = {
 
     console.log("allContainer", allContainer);
 
-    allContainer.map((container) =>
+    //Clean up
+    allContainer.map((container) => {
+      if (type === 1) container.name = container.id;
       container.missions.map((mission, index) => {
         switch (type) {
           case 0:
@@ -111,8 +113,8 @@ const Reader = {
         }
 
         allMissions.push(mission);
-      })
-    );
+      });
+    });
     const connections = Reader.createConnections(allMissions, type);
     const newMissionTab = Factory.createDefaultMissionTab(
       availableId,

@@ -155,7 +155,7 @@ const FocusTree = (props) => {
       <Form.Group controlId="formResetOnCivilWar">
         <Form.Check
           type="checkbox"
-          label="ResetOnCivilWar"
+          label="Reset On CivilWar"
           checked={ftDefault}
           onChange={(evt) => setDefault(evt.target.checked)}
         />

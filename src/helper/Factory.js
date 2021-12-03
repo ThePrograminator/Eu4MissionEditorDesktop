@@ -103,7 +103,7 @@ const Factory = {
           selectedContainer !== null ? selectedContainer.id : null,
       },
       position: {
-        x: 0,
+        x: 150,
         y: 150,
       },
       style: {

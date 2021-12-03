@@ -26,6 +26,8 @@ import SettingsContext from "../../contexts/SettingsContext";
 import "../../Provider.css";
 import inProgressIDMap from "../../InProgressIDMap";
 
+import CustomHOINode from "../../components/CustomHOINode";
+
 const onLoad = (reactFlowInstance) =>
   console.log("flow loaded:", reactFlowInstance);
 
@@ -37,6 +39,10 @@ function applyEdgeStyle(params) {
   params.arrowHeadType = "arrowclosed";
   return params;
 }
+
+const nodeTypes = {
+  hoiNode: CustomHOINode,
+};
 
 const MissionTab = (props) => {
   const missionTreeContext = useContext(MissionTreeContext);
@@ -50,6 +56,17 @@ const MissionTab = (props) => {
     visibility: "visible",
     maxHeight: "-webkit-fill-available",
   });
+
+  const calcMinNodeExtent = () => {
+    switch (settingsContext.currentWorkspace.type) {
+      case 0:
+        return [150, 0];
+      case 1:
+        return [0, 0];
+      default:
+        break;
+    }
+  };
 
   const calcMaxNodeExtent = () => {
     switch (settingsContext.currentWorkspace.type) {
@@ -170,14 +187,28 @@ const MissionTab = (props) => {
 
         if (node.position.y >= 150) y = node.position.y;
 
-        el.position = {
-          x: el.position.x + Math.random(),
-          y: y,
-        };
-        el.data = {
-          ...el.data,
-          position: y / 150,
-        };
+        if (settingsContext.currentWorkspace.type === 0) {
+          el.position = {
+            x: el.position.x + Math.random(),
+            y: y,
+          };
+          el.data = {
+            ...el.data,
+            position: y / 150,
+          };
+        } else if (settingsContext.currentWorkspace.type === 1) {
+          y = node.position.y;
+          var x = node.position.x;
+          el.position = {
+            x: el.position.x + Math.random(),
+            y: y,
+          };
+          el.data = {
+            ...el.data,
+            x: x / 150,
+            y: y / 150,
+          };
+        }
       }
       return el;
     });
@@ -217,6 +248,7 @@ const MissionTab = (props) => {
   };
 
   const onAdd = (name, selectedContainer) => {
+    //onAddHoi(name, selectedContainer);
     console.log("Elements start", elements);
     console.log("newNode name", name);
     console.log("newNode selectedContainer", selectedContainer);
@@ -225,11 +257,22 @@ const MissionTab = (props) => {
       (x) => x.id === selectedContainer
     );
 
-    const newNode = Factory.createDefaultMission(
-      missionTreeContext.getAvailableNodeId(),
-      name,
-      selectedContainerObj
-    );
+    let newNode = null;
+
+    if (settingsContext.currentWorkspace.type === 0) {
+      newNode = Factory.createDefaultMission(
+        missionTreeContext.getAvailableNodeId(),
+        name,
+        selectedContainerObj
+      );
+    } else if (settingsContext.currentWorkspace.type === 1) {
+      newNode = Factory.createDefaultFocus(
+        missionTreeContext.getAvailableNodeId(),
+        name,
+        selectedContainerObj
+      );
+      newNode.type = "hoiNode";
+    }
 
     console.log("new node", newNode);
     let elementsCopy = [...elements];
@@ -410,11 +453,12 @@ const MissionTab = (props) => {
             onElementsRemove={onElementsRemove}
             onPaneClick={() => setSelectedElement(null)}
             onLoad={onLoad}
+            nodeTypes={nodeTypes}
             snapToGrid={true}
             snapGrid={snapGrid}
             onNodeDragStop={onNodeDragStop}
             selectNodesOnDrag={false}
-            nodeExtent={[[150, 0], calcMaxNodeExtent()]}
+            nodeExtent={[calcMinNodeExtent(), calcMaxNodeExtent()]}
             deleteKeyCode={46}
           >
             <MiniMap nodeStrokeWidth={15} style={{ borderStyle: "solid" }} />

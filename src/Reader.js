@@ -323,6 +323,11 @@ const Reader = {
         continue;
       }
 
+      if(newMission.data.id === "albania_long_live_the_king")
+      {
+        var i = 0;
+      }
+
       //Inline Brackets
       if (string.search("{.+}") !== -1) {
         var stringArray = this.handleInlineBracket(string);
@@ -336,12 +341,11 @@ const Reader = {
         continue;
       }
 
+      
+
       //Not inline Bracket
       if (string.search("{") !== -1) {
-        if (
-          variable[0] !== "required_missions" &&
-          variable[0] !== "prerequisite"
-        ) {
+        if (!Reader.findNodeRequirementVariable(variable[0])) {
           let { lineStart, stringConcat } = this.handleBlockBracketString(
             line,
             splitCleanedUp
@@ -370,6 +374,18 @@ const Reader = {
     console.log("mission", newMission);
     missionId++;
     return { lineStart, newMission, foundPosition };
+  },
+  findNodeRequirementVariable: function (str) {
+    switch (str) {
+      case "required_missions":
+        return true;
+      case "prerequisite":
+        return true;
+      case "mutually_exclusive":
+        return true;
+      default:
+        return false;
+    }
   },
   cleanupHOIArray: function (stringArray) {
     var copy = [...stringArray];

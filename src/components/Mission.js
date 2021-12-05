@@ -78,7 +78,7 @@ const Mission = (props) => {
       if (el.id === props.selectedElement.id) {
         // it's important that you create a new object here
         // in order to notify react flow about the change
-         var pos = position;
+        var pos = position;
         if (selectedContainer != null) {
           pos =
             props.container.find((x) => x.id === selectedContainer).slot * 150;
@@ -386,7 +386,9 @@ const Mission = (props) => {
           )
         )}
         <Form.Text className="text-muted">
-          Which missions must be completed before this mission is active.
+          Which missions must be completed before this mission is active. To
+          create a Required Mission, drag from a Mission's grey circle to
+          another Mission's grey circle.
         </Form.Text>
       </Form.Group>
 

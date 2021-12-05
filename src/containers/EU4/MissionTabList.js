@@ -12,14 +12,14 @@ const MissionList = (props) => {
   const [inProgressID, setinProgressID] = useState(0);
   const [closedTabsList, setClosedTabsList] = useState({
     //maxWidth: "15%",
-    maxWidth: "215px",
+    maxWidth: "250px",
     visibility: "visible",
     maxHeight: "-webkit-fill-available",
   });
 
   const handleCloseTabList = () => {
     console.log("Clicked Closed");
-    if (closedTabsList.maxWidth === "215px")
+    if (closedTabsList.maxWidth === "250px")
       setClosedTabsList({
         ...closedTabsList,
         maxWidth: "1%",
@@ -29,7 +29,7 @@ const MissionList = (props) => {
       setClosedTabsList({
         ...closedTabsList,
         //maxWidth: "15%",
-        maxWidth: "215px",
+        maxWidth: "250px",
         visibility: "visible",
       });
     console.log(closedTabsList);

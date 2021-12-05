@@ -299,10 +299,10 @@ const Mission = (props) => {
       <hr />
 
       <Form.Group controlId="formLabel">
-        <Form.Label>Mission Name</Form.Label>
+        <Form.Label>Id (Name)</Form.Label>
         <FormControl
-          placeholder="name"
-          aria-label="label"
+          placeholder="id"
+          aria-label="id"
           value={nodeName}
           aria-describedby="basic-addon1"
           onChange={(evt) => setNodeName(evt.target.value)}
@@ -427,7 +427,7 @@ const Mission = (props) => {
           />
         ))}
         <Form.Text className="text-muted">
-          Which Focuses must be completed before this focus is active.
+          Which Focuses must be completed before this focus is active. To create a prerequisite drag from a focus' grey circle to another focus' grey circle.
         </Form.Text>
       </Form.Group>
 
@@ -442,7 +442,7 @@ const Mission = (props) => {
         ))}
         <Form.Text className="text-muted">
           Optional. Will make it so only one of the listed focuses can be done.
-          Can have more than one.
+          Can have more than one. To create Mutually Exclusive between two focus, drag from a focus' green circle to another focus's green circle.
         </Form.Text>
       </Form.Group>
 

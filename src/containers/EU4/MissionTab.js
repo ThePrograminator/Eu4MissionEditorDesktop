@@ -446,17 +446,17 @@ const MissionTab = (props) => {
           <MissionTabButton
             handleClick={props.handleCloseTabList}
             buttonText={
-              props.closedTabsList.maxWidth === "15%"
+              props.closedTabsList.maxWidth === "250px"
                 ? "Shrink Mission File List"
                 : "Expand Mission File List"
             }
             toolTipText={
-              props.closedTabsList.maxWidth === "15%"
+              props.closedTabsList.maxWidth === "250px"
                 ? "Shrink Mission File List"
                 : "Expand Mission File List"
             }
             icon={
-              props.closedTabsList.maxWidth === "15%" ? (
+              props.closedTabsList.maxWidth === "250px" ? (
                 <FaAngleLeft />
               ) : (
                 <FaAngleRight />
@@ -500,13 +500,13 @@ const MissionTab = (props) => {
           <MissionTabButton
             handleClick={handleClose}
             buttonText={
-              closed.maxWidth === "40%" ? "Shrink Editor" : "Expand Editor"
+              closed.maxWidth === "30%" ? "Shrink Editor" : "Expand Editor"
             }
             toolTipText={
-              closed.maxWidth === "40%" ? "Shrink Editor" : "Expand Editor"
+              closed.maxWidth === "30%" ? "Shrink Editor" : "Expand Editor"
             }
             icon={
-              closed.maxWidth === "40%" ? <FaAngleRight /> : <FaAngleLeft />
+              closed.maxWidth === "30%" ? <FaAngleRight /> : <FaAngleLeft />
             }
           />
         </div>

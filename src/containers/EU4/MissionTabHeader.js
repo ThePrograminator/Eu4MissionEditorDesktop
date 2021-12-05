@@ -101,9 +101,6 @@ const MissionTabHeader = (props) => {
         break;
     }
 
-    
-    
-
     var options = {
       title: "Save Mission File",
       defaultPath:
@@ -229,11 +226,13 @@ const MissionTabHeader = (props) => {
           setShow={props.setShow}
         />
         <div className="mr-2" style={{ borderLeft: "2px solid lightgrey" }} />
-        <EuFourContainerTabHeader
-          inProgressID={props.inProgressID}
-          fileKey={props.fileKey}
-          setShow={props.setShow}
-        />
+        {settingsContext.currentWorkspace.type === 0 ? (
+          <EuFourContainerTabHeader
+            inProgressID={props.inProgressID}
+            fileKey={props.fileKey}
+            setShow={props.setShow}
+          />
+        ) : null}
       </ButtonToolbar>
       {props.show === InProgressIDMap.export ? (
         <div>

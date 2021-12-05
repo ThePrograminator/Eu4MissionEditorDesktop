@@ -46,6 +46,14 @@
   }
 }
 
+.react-flow__minimap {
+  background-color: #1a192b;
+}
+
+.react-flow__node {
+  min-height: 58px;
+}
+
 .react-flow__node-hoiNode {
   padding: 10px;
   border-radius: 3px;

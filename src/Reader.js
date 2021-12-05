@@ -28,7 +28,7 @@ const singleVariableMapping = [
   { name: "available_if_capitulated", type: "boolean" },
   { name: "cancel_if_invalid", type: "boolean" },
   { name: "continue_if_invalid", type: "boolean" },
-  { name: "will_lead_to_war_with", type: "boolean" },
+  { name: "will_lead_to_war_with", type: "string" },
 ];
 
 const containerVariableMapping = [
@@ -43,6 +43,7 @@ const containerVariableMapping = [
 
 let containerId = 0;
 let missionId = 0;
+let mutuallyExclusiveIdList = [];
 
 const Reader = {
   asyncHandleFile: async (file, availableId, type, callback) => {
@@ -115,7 +116,13 @@ const Reader = {
         allMissions.push(mission);
       });
     });
-    const connections = Reader.createConnections(allMissions, type);
+    let connections = Reader.createConnections(allMissions, type);
+    //cleanup for mutually exclusive duplicates
+    if (type === 1) {
+      var cleanedConnections =
+        Reader.handleCleanUpMutuallyExclusive(connections);
+      connections = cleanedConnections;
+    }
     const newMissionTab = Factory.createDefaultMissionTab(
       availableId,
       fileName.substring(0, fileName.indexOf(".")),
@@ -135,6 +142,35 @@ const Reader = {
 
     console.log("allMissionTabs", allMissionTabs);
     callback(allMissionTabs);
+  },
+  handleCleanUpMutuallyExclusive: function (connections) {
+    var mutually_exclusiveArray = connections.filter(
+      (x) => x.isMutulallyExclusive
+    );
+    var cleanedMutuallyExclusiveArray = [];
+    for (let index = 0; index < mutually_exclusiveArray.length; index++) {
+      const first = mutually_exclusiveArray[index];
+
+      var found = false;
+      for (let j = 0; j < cleanedMutuallyExclusiveArray.length; j++) {
+        const second = cleanedMutuallyExclusiveArray[j];
+        if (index === j) continue;
+        if (first.source === second.target && first.target === second.source) {
+          found = true;
+          break;
+        }
+      }
+      if (!found) {
+        cleanedMutuallyExclusiveArray.push(first);
+      }
+    }
+    var notMutuallyExclusiveArray = connections.filter(
+      (x) => !x.isMutulallyExclusive
+    );
+    notMutuallyExclusiveArray = notMutuallyExclusiveArray.concat(
+      cleanedMutuallyExclusiveArray
+    );
+    return notMutuallyExclusiveArray;
   },
   handleCleanUpMission: function (mission, container, index) {
     mission.position.x = container.slot * 150;
@@ -237,7 +273,7 @@ const Reader = {
       inlineString.length - 1
     );
     inlineString = inlineString.trim();
-    if (inlineString === "") return "";
+    if (inlineString === "") return [];
     const elements = inlineString.split(" ");
 
     return elements;
@@ -323,8 +359,7 @@ const Reader = {
         continue;
       }
 
-      if(newMission.data.id === "albania_long_live_the_king")
-      {
+      if (newMission.data.id === "albania_long_live_the_king") {
         var i = 0;
       }
 
@@ -332,6 +367,7 @@ const Reader = {
       if (string.search("{.+}") !== -1) {
         var stringArray = this.handleInlineBracket(string);
         if (type === 1) {
+          console.log("testing", variable[0]);
           stringArray = Reader.cleanupHOIArray(stringArray);
         }
         newMission.data = {
@@ -340,8 +376,6 @@ const Reader = {
         };
         continue;
       }
-
-      
 
       //Not inline Bracket
       if (string.search("{") !== -1) {
@@ -388,16 +422,17 @@ const Reader = {
     }
   },
   cleanupHOIArray: function (stringArray) {
-    var copy = [...stringArray];
-    for (let index = 0; index < copy.length; index++) {
-      const element = copy[index];
+    /*var copy = [...stringArray];
+    for (let index = 0; index < stringArray.length; index++) {
+      const element = stringArray[index];
       if (element === "focus" || element === "=") {
         copy.splice(element, 1);
-        index--;
       }
-    }
-    stringArray = copy;
-    return stringArray;
+    }*/
+    var filteredAry = stringArray.filter(function (e) {
+      return e !== "focus" && e !== "=";
+    });
+    return filteredAry;
   },
   cleanupHOIString: function (stringArray) {
     var copy = [...stringArray];
@@ -542,7 +577,8 @@ const Reader = {
               target,
               source,
               target.data.required_missions,
-              type
+              type,
+              0
             );
             break;
           case 1:
@@ -550,8 +586,18 @@ const Reader = {
               target,
               source,
               target.data.prerequisite,
-              type
+              type,
+              0
             );
+            var mutually_exclusive = Reader.loopRequiredNodes(
+              target,
+              source,
+              target.data.mutually_exclusive,
+              type,
+              1
+            );
+            //connections = [...mutually_exclusive];
+            connections.push.apply(connections, mutually_exclusive);
             break;
           default:
             break;
@@ -565,11 +611,10 @@ const Reader = {
 
     return mappedConnections;
   },
-  loopRequiredNodes: function (target, source, nodes, type) {
+  loopRequiredNodes: function (target, source, nodes, type, edgeType) {
     var mappedConnections = [];
     for (let l = 0; l < nodes.length; l++) {
       let element = nodes[l];
-
       var isConnection = false;
       switch (type) {
         case 0:
@@ -586,16 +631,55 @@ const Reader = {
           break;
       }
       if (isConnection) {
-        const newConnectionMap = {
+        const newConnectionMap = Reader.createEdge(
+          edgeType,
+          source,
+          target,
+          type
+        );
+        mappedConnections.push(newConnectionMap);
+      }
+    }
+    return mappedConnections;
+  },
+  createEdge: function (edgetype, source, target, type) {
+    switch (edgetype) {
+      //default
+      case 0:
+        var defaultEdge = {
           id: "e" + source.id + "-" + target.id,
           source: source.id,
           target: target.id,
           type: "step",
         };
-        mappedConnections.push(newConnectionMap);
-      }
+        if (type === 1) {
+          defaultEdge.sourceHandle = "bottomExclusive";
+          defaultEdge.targetHandle = "topExclusive";
+          defaultEdge.isMutulallyExclusive = false;
+        }
+        return defaultEdge;
+      //mutually exclusive
+      case 1:
+        return {
+          id: "e" + source.id + "-" + target.id,
+          source: source.id,
+          sourceHandle: "rightExclusive",
+          target: target.id,
+          targetHandle: "leftExclusive",
+          type: "step",
+          style: { stroke: "#00A86B" },
+          label: "< ! >",
+          labelStyle: { fill: "red", fontWeight: 700 },
+          isMutulallyExclusive: true,
+        };
+      default:
+        return {
+          id: "e" + source.id + "-" + target.id,
+          source: source.id,
+          target: target.id,
+          type: "step",
+        };
     }
-    return mappedConnections;
   },
 };
 

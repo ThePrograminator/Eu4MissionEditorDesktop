@@ -5,9 +5,19 @@ import Focus from "../../components/Focus";
 import ContainerEditor from "./ContainerEditor";
 import { isNode } from "react-flow-renderer";
 import SettingsContext from "../../contexts/SettingsContext";
+import ReactFlow, { isEdge } from "react-flow-renderer";
 
 const CodeEditor = (props) => {
   const settingsContext = useContext(SettingsContext);
+
+  const getEdges = (nodes) => {
+    var edges = [];
+    for (let index = 0; index < props.missions.length; index++) {
+      const element = props.missions[index];
+      if (isEdge(element)) edges.push(element);
+    }
+    return edges;
+  };
 
   const getNodeType = () => {
     switch (settingsContext.currentWorkspace.type) {
@@ -29,6 +39,7 @@ const CodeEditor = (props) => {
           <Focus
             key={props.selectedElement}
             missionTree={props.missionTree}
+            edges={getEdges()}
             setMissions={props.setMissions}
             selectedElement={props.selectedElement}
             setSelectedElement={props.setSelectedElement}

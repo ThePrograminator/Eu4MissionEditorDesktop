@@ -91,7 +91,7 @@ const Factory = {
         historical_ai: "",
         cancel: "",
         available_if_capitulated: false,
-        cancel_if_invalid: false,
+        cancel_if_invalid: true,
         continue_if_invalid: false,
         will_lead_to_war_with: "",
         search_filters: "",
@@ -109,7 +109,7 @@ const Factory = {
       style: {
         background: selectedContainer !== null ? selectedContainer.color : null,
       },
-      type: "default",
+      type: "hoiNode",
     };
 
     return newMission;

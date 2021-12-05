@@ -33,10 +33,17 @@ const onLoad = (reactFlowInstance) =>
 
 const snapGrid = [150, 150];
 
-function applyEdgeStyle(params) {
+function applyEdgeStyle(params, type = 0) {
   params.type = "step";
+  if (type === 0) {
+    params.arrowHeadType = "arrowclosed";
+  }
+  if (type === 1) {
+    params.style = { stroke: "#00A86B" };
+    params.label = "< ! >";
+    params.labelStyle = { fill: "red", fontWeight: 700 };
+  }
 
-  params.arrowHeadType = "arrowclosed";
   return params;
 }
 
@@ -52,7 +59,7 @@ const MissionTab = (props) => {
   const [container, setContainer] = useState(props.missionTree.container);
 
   const [closed, setClosed] = useState({
-    maxWidth: "40%",
+    maxWidth: "30%",
     visibility: "visible",
     maxHeight: "-webkit-fill-available",
   });
@@ -81,7 +88,7 @@ const MissionTab = (props) => {
 
   const handleClose = () => {
     console.log("Clicked Closed");
-    if (closed.maxWidth === "40%")
+    if (closed.maxWidth === "30%")
       setClosed({
         ...closed,
         maxWidth: "5%",
@@ -90,14 +97,27 @@ const MissionTab = (props) => {
     else
       setClosed({
         ...closed,
-        maxWidth: "40%",
+        maxWidth: "30%",
         visibility: "visible",
       });
     console.log(closed);
   };
 
+  const isExclusiveConnection = (params) => {
+    if (
+      params.targetHandle === "leftExclusive" &&
+      params.sourceHandle === "rightExclusive"
+    ) {
+      return true;
+    }
+
+    return false;
+  };
+
   const onConnect = (params) => {
-    let newParams = applyEdgeStyle(params);
+    var type = 0;
+    if (isExclusiveConnection(params)) type = 1;
+    let newParams = applyEdgeStyle(params, type);
     let copyElements = addEdge(newParams, elements);
     console.log("newConnection:", newParams);
     console.log("copyElements:", copyElements);
@@ -461,7 +481,17 @@ const MissionTab = (props) => {
             nodeExtent={[calcMinNodeExtent(), calcMaxNodeExtent()]}
             deleteKeyCode={46}
           >
-            <MiniMap nodeStrokeWidth={15} style={{ borderStyle: "solid" }} />
+            <MiniMap
+              nodeStrokeWidth={5}
+              style={{ borderStyle: "solid" }}
+              nodeColor={(node) => {
+                if (node.style.background !== undefined) {
+                  //return node.data.color;
+                  return node.style.background;
+                } else return "#000";
+              }}
+              
+            />
             <Controls showInteractive={false} />
             <Background style={{ borderStyle: "solid" }} />
           </ReactFlow>

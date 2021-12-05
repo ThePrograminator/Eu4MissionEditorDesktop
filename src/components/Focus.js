@@ -1,7 +1,12 @@
 import React, { useEffect, useState, useContext } from "react";
-import { FormControl, Form } from "react-bootstrap";
-import { getIncomers } from "react-flow-renderer";
+import { FormControl, Form, Col } from "react-bootstrap";
+import {
+  getIncomers,
+  getConnectedEdges,
+  getOutgoers,
+} from "react-flow-renderer";
 import SettingsContext from "../contexts/SettingsContext";
+import { SketchPicker } from "react-color";
 
 const Mission = (props) => {
   const settingsContext = useContext(SettingsContext);
@@ -57,6 +62,7 @@ const Mission = (props) => {
   const [aiWillDo, setAiWillDo] = useState(
     props.selectedElement.data.ai_will_do
   );
+  const [color, setColor] = useState(props.selectedElement.data.color);
   const [selectedContainer, setSelectedContainer] = useState(
     props.selectedElement.data.selectedContainer
   );
@@ -89,11 +95,13 @@ const Mission = (props) => {
     setCompletionReward(props.selectedElement.data.completion_reward);
     setCompleteTooltip(props.selectedElement.data.complete_tooltip);
     setAiWillDo(props.selectedElement.data.ai_will_do);
+    setColor(props.selectedElement.data.color);
     setSelectedContainer(props.selectedElement.data.selectedContainer);
   }, [props.selectedElement, props.missionTree, props.container]);
 
   useEffect(() => {
     console.log("update mission [props.selectedElement]");
+    testFindEdges();
     setSelectedContainer(props.selectedElement.data.selectedContainer);
   }, [props.selectedElement]);
 
@@ -101,20 +109,93 @@ const Mission = (props) => {
     console.log(
       "update mission [props.selectedElement.data.selectedContainer]"
     );
+    testFindEdges();
     setSelectedContainer(props.selectedElement.data.selectedContainer);
   }, [props.selectedElement.data.selectedContainer]);
+
+  const testFindEdges = () => {
+    /*var array = [];
+    array.push(props.selectedElement);
+    var connectedEdges = getConnectedEdges(array, props.edges);
+
+    console.log("focus getConnectedEdges", connectedEdges);*/
+  };
+
+  const isExclusive = (edge) => {
+    if (
+      edge.sourceHandle === "rightExclusive" ||
+      edge.targetHandle === "leftExclusive"
+    )
+      return true;
+    if (
+      edge.targetHandle === "rightExclusive" ||
+      edge.sourceHandle === "leftExclusive"
+    )
+      return true;
+    return false;
+  };
+
+  const findConnectedOfType = (type) => {
+    var array = [];
+    array.push(props.selectedElement);
+    var connectedEdges = getConnectedEdges(array, props.edges);
+    let incomers = getIncomers(
+      props.selectedElement,
+      props.missionTree.missions
+    );
+    let outGoers = getOutgoers(
+      props.selectedElement,
+      props.missionTree.missions
+    );
+
+    console.log("focus getConnectedEdges", connectedEdges);
+    console.log("focus incomers", incomers);
+    console.log("focus outGoers", outGoers);
+
+    var arrayMutuallyExclusive = [];
+    var arrayPrerequisite = [];
+    for (let index = 0; index < connectedEdges.length; index++) {
+      const edge = connectedEdges[index];
+
+      for (let j = 0; j < incomers.length; j++) {
+        const incomer = incomers[j];
+        if (edge.source === incomer.id) {
+          if (isExclusive(edge)) {
+            arrayMutuallyExclusive.push(incomer);
+          } else {
+            arrayPrerequisite.push(incomer);
+          }
+        }
+      }
+      for (let j = 0; j < outGoers.length; j++) {
+        const outgoer = outGoers[j];
+        if (edge.target === outgoer.id) {
+          if (isExclusive(edge)) {
+            arrayMutuallyExclusive.push(outgoer);
+          }
+        }
+      }
+    }
+    console.log("arrayMutuallyExclusive", arrayMutuallyExclusive);
+    console.log("arrayPrerequisite", arrayPrerequisite);
+    if (type === "prerequisite") return arrayPrerequisite;
+    if (type === "mutually_exclusive") return arrayMutuallyExclusive;
+  };
 
   useEffect(() => {
     console.log("nodeName", nodeName);
     let missionsCopy = props.missionTree.missions.slice();
     missionsCopy.map((el) => {
       if (el.id === props.selectedElement.id) {
-        let incomers = getIncomers(
-          props.selectedElement,
-          props.missionTree.missions
+        let prerequisiteNames = findConnectedOfType("prerequisite").map(
+          (prerequisite) => {
+            return prerequisite.data.label;
+          }
         );
-        let incomerNames = incomers.map((incomer) => {
-          return incomer.data.label;
+        let mutuallyExclusiveNames = findConnectedOfType(
+          "mutually_exclusive"
+        ).map((mutuallyExclusive) => {
+          return mutuallyExclusive.data.label;
         });
         el.data = {
           ...el.data,
@@ -123,8 +204,8 @@ const Mission = (props) => {
           allow_branch: allowBranch,
           relative_position_id: relativePositionId,
           offset: offset,
-          prerequisite: incomerNames,
-          mutually_exclusive: mutuallyExclusive,
+          prerequisite: prerequisiteNames,
+          mutually_exclusive: mutuallyExclusiveNames,
           available: available,
           bypass: bypass,
           historical_ai: historicalAi,
@@ -138,6 +219,7 @@ const Mission = (props) => {
           completion_reward: completionReward,
           complete_tooltip: completeTooltip,
           ai_will_do: aiWillDo,
+          color: color,
           selectedContainer: selectedContainer,
         };
         el.position = {
@@ -152,8 +234,7 @@ const Mission = (props) => {
         ) {
           el.style = {
             ...el.style,
-            background: props.container.find((x) => x.id === selectedContainer)
-              .color,
+            background: color,
           };
         }
         console.log("data", el);
@@ -187,6 +268,7 @@ const Mission = (props) => {
     completionReward,
     completeTooltip,
     aiWillDo,
+    color,
     selectedContainer,
   ]);
 
@@ -258,40 +340,49 @@ const Mission = (props) => {
           forcibly refreshed by the mark_focus_tree_layout_dirty effect.
         </Form.Text>
       </Form.Group>
+      <Form.Row style={{ width: "100%" }}>
+        <Form.Group
+          controlId="formX"
+          as={Col}
+          style={{ minWidth: "50%", width: "50%" }}
+        >
+          <Form.Label>X</Form.Label>
+          <FormControl
+            type="number"
+            placeholder="x"
+            aria-label="x"
+            value={x}
+            aria-describedby="basic-addon1"
+            min={0}
+            onChange={(evt) => setX(evt.target.value)}
+            style={{ minWidth: "35%", width: "35%" }}
+          />
+          <Form.Text className="text-muted">
+            Which row the mission appears in. 0 is top.
+          </Form.Text>
+        </Form.Group>
 
-      <Form.Group controlId="formX">
-        <Form.Label>X</Form.Label>
-        <FormControl
-          type="number"
-          placeholder="x"
-          aria-label="x"
-          value={x}
-          aria-describedby="basic-addon1"
-          min={0}
-          onChange={(evt) => setX(evt.target.value)}
-          style={{ width: "20%" }}
-        />
-        <Form.Text className="text-muted">
-          Which row the mission appears in. 0 is top.
-        </Form.Text>
-      </Form.Group>
-
-      <Form.Group controlId="formY">
-        <Form.Label>Y</Form.Label>
-        <FormControl
-          type="number"
-          placeholder="y"
-          aria-label="y"
-          value={y}
-          aria-describedby="basic-addon1"
-          min={0}
-          onChange={(evt) => setY(evt.target.value)}
-          style={{ width: "20%" }}
-        />
-        <Form.Text className="text-muted">
-          Which colounm the mission appears in. 0 is top.
-        </Form.Text>
-      </Form.Group>
+        <Form.Group
+          controlId="formY"
+          as={Col}
+          style={{ minWidth: "50%", width: "50%" }}
+        >
+          <Form.Label>Y</Form.Label>
+          <FormControl
+            type="number"
+            placeholder="y"
+            aria-label="y"
+            value={y}
+            aria-describedby="basic-addon1"
+            min={0}
+            onChange={(evt) => setY(evt.target.value)}
+            style={{ minWidth: "35%", width: "35%" }}
+          />
+          <Form.Text className="text-muted">
+            Which colounm the mission appears in. 0 is top.
+          </Form.Text>
+        </Form.Group>
+      </Form.Row>
 
       <Form.Group controlId="formRelativePositionId">
         <Form.Label>Relative Position Id</Form.Label>
@@ -326,17 +417,15 @@ const Mission = (props) => {
         </Form.Text>
       </Form.Group>
 
-      <Form.Group controlId={"formIncomer"}>
-        <Form.Label>Required Focuses</Form.Label>
-        {getIncomers(props.selectedElement, props.missionTree.missions).map(
-          (incomer) => (
-            <Form.Control
-              key={incomer.id}
-              readOnly
-              defaultValue={incomer.data.label}
-            />
-          )
-        )}
+      <Form.Group controlId={"formPrerequisite"}>
+        <Form.Label>Prerequisite</Form.Label>
+        {findConnectedOfType("prerequisite").map((prerequisite) => (
+          <Form.Control
+            key={prerequisite.id}
+            readOnly
+            defaultValue={prerequisite.data.label}
+          />
+        ))}
         <Form.Text className="text-muted">
           Which Focuses must be completed before this focus is active.
         </Form.Text>
@@ -344,14 +433,13 @@ const Mission = (props) => {
 
       <Form.Group controlId="formMutuallyExclusive">
         <Form.Label>Mutually Exclusive</Form.Label>
-        <FormControl
-          as="textarea"
-          placeholder="Mutually Exclusive..."
-          aria-label="Mutually Exclusive"
-          value={mutuallyExclusive}
-          aria-describedby="basic-addon1"
-          onChange={(evt) => setOffset(evt.target.value)}
-        />
+        {findConnectedOfType("mutually_exclusive").map((connected) => (
+          <Form.Control
+            key={connected.id}
+            readOnly
+            defaultValue={connected.data.label}
+          />
+        ))}
         <Form.Text className="text-muted">
           Optional. Will make it so only one of the listed focuses can be done.
           Can have more than one.
@@ -563,8 +651,40 @@ const Mission = (props) => {
           the number you define.
         </Form.Text>
       </Form.Group>
+
+      <hr />
+      <Form.Group controlId="formColor">
+        <Form.Label>Color</Form.Label>
+        <SketchPicker
+          color={color}
+          onChangeComplete={(color) => setColor(color.hex)}
+        />
+        <Form.Text className="text-muted">
+          (Optional) This color is only used in the Focus Editor, and is not
+          part of the Focus tree file. Can be used, for instance to color
+          communist focus as red, to quickly find your communist chain.
+        </Form.Text>
+      </Form.Group>
     </Form>
   );
 };
 
 export default Mission;
+
+/*
+<Form.Group controlId="formMutuallyExclusive">
+        <Form.Label>Mutually Exclusive</Form.Label>
+        {findConnectedOfType("mutually_exclusive").map((connected) => (
+          <Form.Control
+            key={connected.id}
+            readOnly
+            defaultValue={connected.data.label}
+          />
+        ))}
+        <Form.Text className="text-muted">
+          Optional. Will make it so only one of the listed focuses can be done.
+          Can have more than one.
+        </Form.Text>
+      </Form.Group>
+
+*/

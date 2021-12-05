@@ -158,7 +158,7 @@ const CreateMissionModal = (props) => {
           )}
           disabled={!validatedFileName || !validatedContainerName}
         >
-          {"Create" + settingsContext.getText("filename")}
+          {"Create " + settingsContext.getText("filename")}
         </Button>
       </Modal.Footer>
     </Modal>

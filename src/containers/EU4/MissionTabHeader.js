@@ -70,17 +70,39 @@ const MissionTabHeader = (props) => {
     );
     var missionTab = missionTreeContext.missionTrees[index];
     console.log("missionTab", missionTab);
-    const fileData = Writer.exportMissionTree(
-      missionTab.container,
-      missionTab.missions
-    );
+    let fileData = "";
     let localizationFileData = "";
-    if (exportLocalisation) {
-      localizationFileData = Writer.exportLocalization(
-        missionTab.container,
-        missionTab.missions
-      );
+    switch (settingsContext.currentWorkspace.type) {
+      case 0:
+        fileData = Writer.exportMissionTree(
+          missionTab.container,
+          missionTab.missions
+        );
+        if (exportLocalisation) {
+          localizationFileData = Writer.exportEU4Localization(
+            missionTab.container,
+            missionTab.missions
+          );
+        }
+        break;
+      case 1:
+        fileData = Writer.exportFocusTree(
+          missionTab.container,
+          missionTab.missions
+        );
+        if (exportLocalisation) {
+          localizationFileData = Writer.exportHOILocalization(
+            missionTab.container,
+            missionTab.missions
+          );
+        }
+        break;
+      default:
+        break;
     }
+
+    
+    
 
     var options = {
       title: "Save Mission File",

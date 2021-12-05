@@ -19,20 +19,16 @@ export default memo(({ data, isConnectable }) => {
       <Handle
         type="target"
         position="top"
-        isValidConnection={(connection) =>
-          connection.sourceHandle !== "leftExclusive" &&
-          connection.sourceHandle !== "rightExclusive"
-        }
+        id="topExclusive"
+        isValidConnection={(connection) => connection.sourceHandle === "bottomExclusive"}
         isConnectable={isConnectable}
       />
       {data.label}
       <Handle
         type="source"
         position="bottom"
-        isValidConnection={(connection) =>
-          connection.sourceHandle !== "leftExclusive" &&
-          connection.sourceHandle !== "rightExclusive"
-        }
+        id="bottomExclusive"
+        isValidConnection={(connection) => connection.targetHandle === "topExclusive"}
         isConnectable={isConnectable}
       />
       <Handle
@@ -41,7 +37,7 @@ export default memo(({ data, isConnectable }) => {
         id="rightExclusive"
         style={{ background: "#00A86B" }}
         isValidConnection={(connection) =>
-          connection.sourceHandle === "leftExclusive"
+          connection.targetHandle === "leftExclusive"
         }
         isConnectable={isConnectable}
       />

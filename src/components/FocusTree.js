@@ -6,7 +6,6 @@ import React, {
   useContext,
 } from "react";
 import { Form, FormControl } from "react-bootstrap";
-import { SketchPicker } from "react-color";
 import "../Editor.css";
 import InputValidation from "../helper/InputValidation";
 
@@ -156,8 +155,8 @@ const FocusTree = (props) => {
         <Form.Check
           type="checkbox"
           label="Reset On CivilWar"
-          checked={ftDefault}
-          onChange={(evt) => setDefault(evt.target.checked)}
+          checked={resetOnCivilWar}
+          onChange={(evt) => setResetOnCivilWar(evt.target.checked)}
         />
         <Form.Text className="text-muted">
           If set to true, if a civil war occurs the breakout country will have
@@ -212,16 +211,6 @@ const FocusTree = (props) => {
           Optional. Decides the position of the camera when you first open the
           focus tree. The offset will modify the position if the trigger is
           true.
-        </Form.Text>
-      </Form.Group>
-
-      <hr />
-      <Form.Group controlId="formColor">
-        <Form.Label>Color</Form.Label>
-        <SketchPicker color={color} onChangeComplete={handleChangeComplete} />
-        <Form.Text className="text-muted">
-          (Optional) This color is only used in the Mission Editor, and is not
-          part of the mission file
         </Form.Text>
       </Form.Group>
     </Form>

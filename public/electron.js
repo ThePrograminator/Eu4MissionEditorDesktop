@@ -103,10 +103,16 @@ function createWindow() {
 
   autoUpdater.autoDownload = false;
 
-  if (!settings.has("startYear")) {
+  if (!settings.has("maxSlot")) {
     settings.set("maxSlot", "5");
+  }
+  if (!settings.has("startYear")) {
     settings.set("startYear", "1444");
+  }
+  if (!settings.has("endYear")) {
     settings.set("endYear", "1821");
+  }
+  if (!settings.has("workspaces")) {
     settings.set("workspaces", []);
   }
 

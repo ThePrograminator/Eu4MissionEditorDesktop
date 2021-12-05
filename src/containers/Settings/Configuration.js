@@ -16,7 +16,7 @@ const Configuration = (props) => {
         return <EU4ConfigurationDefaults />;
       //HOI4
       case 1:
-        return <button>Login</button>;
+        return null;
       default:
         return null;
     }

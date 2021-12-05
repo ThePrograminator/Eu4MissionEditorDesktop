@@ -41,7 +41,14 @@ const Version = (props) => {
                   </Row>
                   <Row lg={true}>
                     <Col lg={true}>
-                    <p>- Fixed Issue with Exporting mission only exporting series and also not Localization</p>
+                    <p>- Added Heart of Iron 4 Focus Tree Support, Import, export and create Focus tree for HOI4</p>
+                    <p>- Added Workspaces, when you export a file the Paradox Node Editor will remember the path a load the file automatically next time you start your workspace</p>
+                    <p>- Added Colored Nodes are also shown on minimap</p>
+                    <p>- Added Text to requiredments for mission to help understanding the concept of the dragging lines between the nodes</p>
+                    <p>- Changed height of nodes to a minimum size</p>
+                    <p>- Changed Background of Minimap to a darkish grey</p>
+                    <p>- Changed Size of File Tabs list to a smaller size</p>
+                    <p>- Changed Size of Mission/Focus editor (right side) to a smaller size</p>
                     </Col>
                   </Row>
                 </Card.Body>

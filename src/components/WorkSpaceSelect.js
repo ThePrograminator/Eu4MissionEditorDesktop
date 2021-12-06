@@ -51,7 +51,7 @@ const WorkspaceSelect = (props) => {
       Reader.asyncHandleFile(
         filepath,
         missionTreeContext.getAvailableTreeId(),
-        workspace.id,
+        workspace.type,
         (allMissionTabs) => {
           missionTreeContext.addMissionTree(allMissionTabs[0]);
           missionTreeContext.setAvailableNodeId(

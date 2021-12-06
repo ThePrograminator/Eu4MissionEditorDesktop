@@ -115,7 +115,9 @@ const Reader = {
 
         allMissions.push(mission);
       });
+      allMissions = Reader.handleCleanUpRelativePosition(allMissions);
     });
+
     let connections = Reader.createConnections(allMissions, type);
     //cleanup for mutually exclusive duplicates
     if (type === 1) {
@@ -171,6 +173,25 @@ const Reader = {
       cleanedMutuallyExclusiveArray
     );
     return notMutuallyExclusiveArray;
+  },
+  handleCleanUpRelativePosition: function (focuses) {
+    for (let index = 0; index < focuses.length; index++) {
+      const element = focuses[index];
+      if (
+        element.data.relative_position_id === undefined ||
+        element.data.relative_position_id === ""
+      )
+        continue;
+      var relativeId = focuses.findIndex(
+        (x) => x.data.id === element.data.relative_position_id
+      );
+      var relativeElement = focuses[relativeId];
+      element.data.x += relativeElement.data.x;
+      element.data.y += relativeElement.data.y;
+      element.position.x = element.data.x * 150;
+      element.position.y = element.data.y * 150;
+    }
+    return focuses;
   },
   handleCleanUpMission: function (mission, container, index) {
     mission.position.x = container.slot * 150;

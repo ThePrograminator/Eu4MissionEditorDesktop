@@ -137,6 +137,7 @@ const MissionTabHeader = (props) => {
     //Save to workspace
     var currentWorkspace = settingsContext.currentWorkspace;
     let filePaths = [...currentWorkspace.filePaths];
+    if (filePaths.includes(filePath)) return;
     filePaths.push(filePath);
     currentWorkspace.filePaths = filePaths;
 

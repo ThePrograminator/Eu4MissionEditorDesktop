@@ -434,6 +434,7 @@ const Writer = {
     if (variable === undefined) return false;
     else if (variable === null) return false;
     else if (variable === "" || variable === " ") return false;
+    else if (typeof variable !== 'string' || !variable instanceof String) return false;
     else if (variable.trim() === "") return false;
     return true;
   },
